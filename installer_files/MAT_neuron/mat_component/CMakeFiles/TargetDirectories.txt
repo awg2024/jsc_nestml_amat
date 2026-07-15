@@ -1,0 +1,10 @@
+/mnt/d/Users/ag399/JSC/installer_files/MAT_neuron/mat_component/CMakeFiles/dist.dir
+/mnt/d/Users/ag399/JSC/installer_files/MAT_neuron/mat_component/CMakeFiles/nestml_mat_module_module.dir
+/mnt/d/Users/ag399/JSC/installer_files/MAT_neuron/mat_component/CMakeFiles/package.dir
+/mnt/d/Users/ag399/JSC/installer_files/MAT_neuron/mat_component/CMakeFiles/package_source.dir
+/mnt/d/Users/ag399/JSC/installer_files/MAT_neuron/mat_component/CMakeFiles/edit_cache.dir
+/mnt/d/Users/ag399/JSC/installer_files/MAT_neuron/mat_component/CMakeFiles/rebuild_cache.dir
+/mnt/d/Users/ag399/JSC/installer_files/MAT_neuron/mat_component/CMakeFiles/list_install_components.dir
+/mnt/d/Users/ag399/JSC/installer_files/MAT_neuron/mat_component/CMakeFiles/install.dir
+/mnt/d/Users/ag399/JSC/installer_files/MAT_neuron/mat_component/CMakeFiles/install/local.dir
+/mnt/d/Users/ag399/JSC/installer_files/MAT_neuron/mat_component/CMakeFiles/install/strip.dir

@@ -1,0 +1,1 @@
+/home/allodilab/miniconda3/envs/nest_x86_64_V7/lib/nest/nestml_mat_module.so
