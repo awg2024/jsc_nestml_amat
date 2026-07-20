@@ -1,19 +1,3 @@
-
-#How to use in Jupyter notebook:
-
-#    from trace_plotter import TracePlotter
-#
-#    tp = TracePlotter(time)                      # time array, shape (N,)
-#    tp.add_spike(spike_time=50)                   # optional vertical spike marker
-#    tp.add_trace("theta", theta, color="crimson", label=r"$\theta(t)$")
-#    tp.add_trace("V",     V,     color="navy",    label="V(t)")
-#    tp.add_trace("dVdt",  dVdt,  color="gray",    label="dV/dt")
-#    tp.add_trace("conv",  conv,  color="firebrick", label=r"$\beta\int K(s)\,dV/dt(t-s)\,ds$")
-#    tp.add_trace("I",     I,     color="seagreen", label="I(t)")
-#    fig, axes = tp.plot(scalebar_ms=20)
-#    fig.savefig("my_figure.png", dpi=200)
-
-
 from __future__ import annotations
 from dataclasses import dataclass, field
 import numpy as np

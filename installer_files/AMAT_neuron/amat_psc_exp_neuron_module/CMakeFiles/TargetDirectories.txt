@@ -1,0 +1,10 @@
+/mnt/d/users/ag399/jsc/installer_files/AMAT_neuron/amat_psc_exp_neuron_module/CMakeFiles/dist.dir
+/mnt/d/users/ag399/jsc/installer_files/AMAT_neuron/amat_psc_exp_neuron_module/CMakeFiles/amat_module_module.dir
+/mnt/d/users/ag399/jsc/installer_files/AMAT_neuron/amat_psc_exp_neuron_module/CMakeFiles/package.dir
+/mnt/d/users/ag399/jsc/installer_files/AMAT_neuron/amat_psc_exp_neuron_module/CMakeFiles/package_source.dir
+/mnt/d/users/ag399/jsc/installer_files/AMAT_neuron/amat_psc_exp_neuron_module/CMakeFiles/edit_cache.dir
+/mnt/d/users/ag399/jsc/installer_files/AMAT_neuron/amat_psc_exp_neuron_module/CMakeFiles/rebuild_cache.dir
+/mnt/d/users/ag399/jsc/installer_files/AMAT_neuron/amat_psc_exp_neuron_module/CMakeFiles/list_install_components.dir
+/mnt/d/users/ag399/jsc/installer_files/AMAT_neuron/amat_psc_exp_neuron_module/CMakeFiles/install.dir
+/mnt/d/users/ag399/jsc/installer_files/AMAT_neuron/amat_psc_exp_neuron_module/CMakeFiles/install/local.dir
+/mnt/d/users/ag399/jsc/installer_files/AMAT_neuron/amat_psc_exp_neuron_module/CMakeFiles/install/strip.dir

@@ -19,7 +19,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with NEST.  If not, see <http://www.gnu.org/licenses/>.
  *
- *  Generated from NESTML 8.2.0 at time: 2026-07-20 11:13:41.080088
+ *  Generated from NESTML 8.2.0 at time: 2026-07-20 13:53:17.052787
 **/
 #ifndef MAT2_PSC_EXP_NEURON_NESTML
 #define MAT2_PSC_EXP_NEURON_NESTML

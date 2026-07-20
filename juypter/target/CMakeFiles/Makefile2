@@ -54,10 +54,10 @@ RM = /home/allodilab/miniconda3/envs/nest_x86_64_V7/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /mnt/d/users/ag399/JSC/juypter/target
+CMAKE_SOURCE_DIR = /mnt/d/users/ag399/jsc/juypter/target
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /mnt/d/users/ag399/JSC/juypter/target
+CMAKE_BINARY_DIR = /mnt/d/users/ag399/jsc/juypter/target
 
 #=============================================================================
 # Directory level rules for the build root directory
@@ -86,14 +86,14 @@ clean: CMakeFiles/nestml_mat_module_module.dir/clean
 CMakeFiles/dist.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/dist.dir/build.make CMakeFiles/dist.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/dist.dir/build.make CMakeFiles/dist.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/mnt/d/users/ag399/JSC/juypter/target/CMakeFiles --progress-num=1 "Built target dist"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/mnt/d/users/ag399/jsc/juypter/target/CMakeFiles --progress-num=1 "Built target dist"
 .PHONY : CMakeFiles/dist.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/dist.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /mnt/d/users/ag399/JSC/juypter/target/CMakeFiles 1
+	$(CMAKE_COMMAND) -E cmake_progress_start /mnt/d/users/ag399/jsc/juypter/target/CMakeFiles 1
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/dist.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /mnt/d/users/ag399/JSC/juypter/target/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /mnt/d/users/ag399/jsc/juypter/target/CMakeFiles 0
 .PHONY : CMakeFiles/dist.dir/rule
 
 # Convenience name for target.
@@ -103,7 +103,7 @@ dist: CMakeFiles/dist.dir/rule
 # codegen rule for target.
 CMakeFiles/dist.dir/codegen:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/dist.dir/build.make CMakeFiles/dist.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/mnt/d/users/ag399/JSC/juypter/target/CMakeFiles --progress-num=1 "Finished codegen for target dist"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/mnt/d/users/ag399/jsc/juypter/target/CMakeFiles --progress-num=1 "Finished codegen for target dist"
 .PHONY : CMakeFiles/dist.dir/codegen
 
 # clean rule for target.
@@ -118,14 +118,14 @@ CMakeFiles/dist.dir/clean:
 CMakeFiles/nestml_mat_module_module.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/nestml_mat_module_module.dir/build.make CMakeFiles/nestml_mat_module_module.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/nestml_mat_module_module.dir/build.make CMakeFiles/nestml_mat_module_module.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/mnt/d/users/ag399/JSC/juypter/target/CMakeFiles --progress-num=2,3,4 "Built target nestml_mat_module_module"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/mnt/d/users/ag399/jsc/juypter/target/CMakeFiles --progress-num=2,3,4 "Built target nestml_mat_module_module"
 .PHONY : CMakeFiles/nestml_mat_module_module.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/nestml_mat_module_module.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /mnt/d/users/ag399/JSC/juypter/target/CMakeFiles 3
+	$(CMAKE_COMMAND) -E cmake_progress_start /mnt/d/users/ag399/jsc/juypter/target/CMakeFiles 3
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/nestml_mat_module_module.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /mnt/d/users/ag399/JSC/juypter/target/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /mnt/d/users/ag399/jsc/juypter/target/CMakeFiles 0
 .PHONY : CMakeFiles/nestml_mat_module_module.dir/rule
 
 # Convenience name for target.
@@ -135,7 +135,7 @@ nestml_mat_module_module: CMakeFiles/nestml_mat_module_module.dir/rule
 # codegen rule for target.
 CMakeFiles/nestml_mat_module_module.dir/codegen:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/nestml_mat_module_module.dir/build.make CMakeFiles/nestml_mat_module_module.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/mnt/d/users/ag399/JSC/juypter/target/CMakeFiles --progress-num=2,3,4 "Finished codegen for target nestml_mat_module_module"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/mnt/d/users/ag399/jsc/juypter/target/CMakeFiles --progress-num=2,3,4 "Finished codegen for target nestml_mat_module_module"
 .PHONY : CMakeFiles/nestml_mat_module_module.dir/codegen
 
 # clean rule for target.

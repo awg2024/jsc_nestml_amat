@@ -1,5 +1,5 @@
 CMakeFiles/nestml_mat_module_module.dir/mat2_psc_exp_neuron_nestml.cpp.o: \
- /mnt/d/users/ag399/JSC/juypter/target/mat2_psc_exp_neuron_nestml.cpp \
+ /mnt/d/users/ag399/jsc/juypter/target/mat2_psc_exp_neuron_nestml.cpp \
  /home/allodilab/miniconda3/envs/nest_x86_64_V7/x86_64-conda-linux-gnu/sysroot/usr/include/stdc-predef.h \
  /home/allodilab/miniconda3/envs/nest_x86_64_V7/lib/gcc/x86_64-conda-linux-gnu/15.2.0/include/c++/limits \
  /home/allodilab/miniconda3/envs/nest_x86_64_V7/lib/gcc/x86_64-conda-linux-gnu/15.2.0/include/c++/x86_64-conda-linux-gnu/bits/c++config.h \
@@ -861,7 +861,7 @@ CMakeFiles/nestml_mat_module_module.dir/mat2_psc_exp_neuron_nestml.cpp.o: \
  /home/allodilab/miniconda3/envs/nest_x86_64_V7/include/nest/doubledatum.h \
  /home/allodilab/miniconda3/envs/nest_x86_64_V7/include/nest/integerdatum.h \
  /home/allodilab/miniconda3/envs/nest_x86_64_V7/include/nest/lockptrdatum.h \
- /mnt/d/users/ag399/JSC/juypter/target/mat2_psc_exp_neuron_nestml.h \
+ /mnt/d/users/ag399/jsc/juypter/target/mat2_psc_exp_neuron_nestml.h \
  /home/allodilab/miniconda3/envs/nest_x86_64_V7/include/nest/config.h \
  /home/allodilab/miniconda3/envs/nest_x86_64_V7/include/nest/structural_plasticity_node.h \
  /home/allodilab/miniconda3/envs/nest_x86_64_V7/include/nest/synaptic_element.h \

@@ -53,10 +53,10 @@ RM = /home/allodilab/miniconda3/envs/nest_x86_64_V7/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /mnt/d/users/ag399/JSC/juypter/target
+CMAKE_SOURCE_DIR = /mnt/d/users/ag399/jsc/juypter/target
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /mnt/d/users/ag399/JSC/juypter/target
+CMAKE_BINARY_DIR = /mnt/d/users/ag399/jsc/juypter/target
 
 # Utility rule file for dist.
 
@@ -67,7 +67,7 @@ include CMakeFiles/dist.dir/compiler_depend.make
 include CMakeFiles/dist.dir/progress.make
 
 CMakeFiles/dist:
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --blue --bold --progress-dir=/mnt/d/users/ag399/JSC/juypter/target/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Creating a source distribution from nestml_mat_module..."
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --blue --bold --progress-dir=/mnt/d/users/ag399/jsc/juypter/target/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Creating a source distribution from nestml_mat_module..."
 	/usr/bin/gmake package_source
 
 CMakeFiles/dist.dir/codegen:
@@ -86,6 +86,6 @@ CMakeFiles/dist.dir/clean:
 .PHONY : CMakeFiles/dist.dir/clean
 
 CMakeFiles/dist.dir/depend:
-	cd /mnt/d/users/ag399/JSC/juypter/target && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /mnt/d/users/ag399/JSC/juypter/target /mnt/d/users/ag399/JSC/juypter/target /mnt/d/users/ag399/JSC/juypter/target /mnt/d/users/ag399/JSC/juypter/target /mnt/d/users/ag399/JSC/juypter/target/CMakeFiles/dist.dir/DependInfo.cmake "--color=$(COLOR)" dist
+	cd /mnt/d/users/ag399/jsc/juypter/target && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /mnt/d/users/ag399/jsc/juypter/target /mnt/d/users/ag399/jsc/juypter/target /mnt/d/users/ag399/jsc/juypter/target /mnt/d/users/ag399/jsc/juypter/target /mnt/d/users/ag399/jsc/juypter/target/CMakeFiles/dist.dir/DependInfo.cmake "--color=$(COLOR)" dist
 .PHONY : CMakeFiles/dist.dir/depend
 

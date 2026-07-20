@@ -57,10 +57,10 @@ RM = /home/allodilab/miniconda3/envs/nest_x86_64_V7/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /mnt/d/users/ag399/JSC/juypter/target
+CMAKE_SOURCE_DIR = /mnt/d/users/ag399/jsc/juypter/target
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /mnt/d/users/ag399/JSC/juypter/target
+CMAKE_BINARY_DIR = /mnt/d/users/ag399/jsc/juypter/target
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -152,9 +152,9 @@ install/strip/fast: preinstall/fast
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /mnt/d/users/ag399/JSC/juypter/target/CMakeFiles /mnt/d/users/ag399/JSC/juypter/target//CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /mnt/d/users/ag399/jsc/juypter/target/CMakeFiles /mnt/d/users/ag399/jsc/juypter/target//CMakeFiles/progress.marks
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /mnt/d/users/ag399/JSC/juypter/target/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /mnt/d/users/ag399/jsc/juypter/target/CMakeFiles 0
 .PHONY : all
 
 # The main clean target

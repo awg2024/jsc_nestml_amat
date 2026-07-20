@@ -1,0 +1,7 @@
+{
+	"InstallScripts" : 
+	[
+		"/mnt/d/users/ag399/jsc/installer_files/AMAT_neuron/amat_psc_exp_neuron_module/cmake_install.cmake"
+	],
+	"Parallel" : false
+}

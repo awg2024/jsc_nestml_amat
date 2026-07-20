@@ -1,5 +1,5 @@
 CMakeFiles/nestml_mat_module_module.dir/nestml_mat_module.cpp.o: \
- /mnt/d/users/ag399/JSC/juypter/target/nestml_mat_module.cpp \
+ /mnt/d/users/ag399/jsc/juypter/target/nestml_mat_module.cpp \
  /home/allodilab/miniconda3/envs/nest_x86_64_V7/x86_64-conda-linux-gnu/sysroot/usr/include/stdc-predef.h \
  /home/allodilab/miniconda3/envs/nest_x86_64_V7/include/nest/nest_extension_interface.h \
  /home/allodilab/miniconda3/envs/nest_x86_64_V7/include/nest/config.h \
@@ -852,7 +852,7 @@ CMakeFiles/nestml_mat_module_module.dir/nestml_mat_module.cpp.o: \
  /home/allodilab/miniconda3/envs/nest_x86_64_V7/include/nest/target_identifier.h \
  /home/allodilab/miniconda3/envs/nest_x86_64_V7/include/nest/nest_impl.h \
  /home/allodilab/miniconda3/envs/nest_x86_64_V7/include/nest/sp_manager_impl.h \
- /mnt/d/users/ag399/JSC/juypter/target/mat2_psc_exp_neuron_nestml.h \
+ /mnt/d/users/ag399/jsc/juypter/target/mat2_psc_exp_neuron_nestml.h \
  /home/allodilab/miniconda3/envs/nest_x86_64_V7/include/nest/config.h \
  /home/allodilab/miniconda3/envs/nest_x86_64_V7/include/nest/structural_plasticity_node.h \
  /home/allodilab/miniconda3/envs/nest_x86_64_V7/include/nest/synaptic_element.h \
