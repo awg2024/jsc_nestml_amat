@@ -1,0 +1,77 @@
+[0m[0m
+[0m-------------------------------------------------------[0m
+[0mnestml_mat_module Configuration Summary[0m
+[0m-------------------------------------------------------[0m
+[0m[0m
+[0mC++ compiler         : /home/allodilab/miniconda3/envs/nest_x86_64_V7/bin/x86_64-conda-linux-gnu-c++[0m
+[0mBuild static libs    : OFF[0m
+[0mC++ compiler flags   : -fvisibility-inlines-hidden -fmessage-length=0 -march=nocona -mtune=haswell -ftree-vectorize -fPIC -fstack-protector-strong -fno-plt -O2 -ffunction-sections -pipe -isystem /home/allodilab/miniconda3/envs/nest_x86_64_V7/include[0m
+[0mNEST compiler flags  : -fvisibility-inlines-hidden -fmessage-length=0 -march=nocona -mtune=haswell -ftree-vectorize -fPIC -fstack-protector-strong -fno-plt -O2 -ffunction-sections -pipe -isystem /home/allodilab/miniconda3/envs/nest_x86_64_V7/include -fdebug-prefix-map=/home/conda/feedstock_root/build_artifacts/nest-simulator_1753334347263/work=/usr/local/src/conda/nest-simulator-3.8 -fdebug-prefix-map=/home/allodilab/miniconda3/envs/nest_x86_64_V7=/usr/local/src/conda-prefix -lrt -std=c++17 -Wall -fopenmp -O2 -fdiagnostics-color=auto[0m
+[0mNEST include dirs    :  -I/home/allodilab/miniconda3/envs/nest_x86_64_V7/include/nest -I/home/allodilab/miniconda3/envs/nest_x86_64_V7/include -I/home/allodilab/miniconda3/envs/nest_x86_64_V7/include -I/home/allodilab/miniconda3/envs/nest_x86_64_V7/include -I/home/allodilab/miniconda3/envs/nest_x86_64_V7/include[0m
+[0mNEST libraries flags : -L/home/allodilab/miniconda3/envs/nest_x86_64_V7/lib/nest -lnest -lsli /home/allodilab/miniconda3/envs/nest_x86_64_V7/x86_64-conda-linux-gnu/sysroot/usr/lib/libpthread.so[0m
+[0m[0m
+[0m-------------------------------------------------------[0m
+[0m[0m
+[0mYou can now build and install 'nestml_mat_module' using[0m
+[0m  make[0m
+[0m  make install[0m
+[0m[0m
+[0mThe library file libnestml_mat_module.so will be installed to[0m
+[0m  /tmp/nestml_target_mj9nucwo[0m
+[0mThe module can be loaded into NEST using[0m
+[0m  (nestml_mat_module) Install       (in SLI)[0m
+[0m  nest.Install(nestml_mat_module)   (in PyNEST)[0m
+[0m[0m
+make: Warning: File 'Makefile' has modification time 0.19 s in the future
+make[1]: Warning: File 'CMakeFiles/Makefile2' has modification time 0.099 s in the future
+make[2]: Warning: File 'CMakeFiles/nestml_mat_module_module.dir/progress.make' has modification time 0.085 s in the future
+make[2]: warning:  Clock skew detected.  Your build may be incomplete.
+make[2]: Warning: File 'CMakeFiles/nestml_mat_module_module.dir/compiler_depend.make' has modification time 1.7 s in the future
+In file included from /home/allodilab/miniconda3/envs/nest_x86_64_V7/include/nest/common_synapse_properties.h:30,
+                 from /home/allodilab/miniconda3/envs/nest_x86_64_V7/include/nest/connector_base.h:39,
+                 from /home/allodilab/miniconda3/envs/nest_x86_64_V7/include/nest/connection_manager.h:36,
+                 from /home/allodilab/miniconda3/envs/nest_x86_64_V7/include/nest/connection_manager_impl.h:26,
+                 from /home/allodilab/miniconda3/envs/nest_x86_64_V7/include/nest/nest_extension_interface.h:29,
+                 from /mnt/d/users/ag399/JSC/juypter/target/nestml_mat_module.cpp:26:
+/home/allodilab/miniconda3/envs/nest_x86_64_V7/include/nest/node.h:797:18: warning: 'virtual double nest::Node::get_C_m(int)' was hidden [-Woverloaded-virtual=]
+  797 |   virtual double get_C_m( int comp );
+      |                  ^~~~~~~
+In file included from /mnt/d/users/ag399/JSC/juypter/target/nestml_mat_module.cpp:31:
+/mnt/d/users/ag399/JSC/juypter/target/mat2_psc_exp_neuron_nestml.h:318:17: note:   by 'double mat2_psc_exp_neuron_nestml::get_C_m() const'
+  318 |   inline double get_C_m() const
+      |                 ^~~~~~~
+In file included from /home/allodilab/miniconda3/envs/nest_x86_64_V7/include/nest/common_synapse_properties.h:30,
+                 from /home/allodilab/miniconda3/envs/nest_x86_64_V7/include/nest/connector_base.h:39,
+                 from /home/allodilab/miniconda3/envs/nest_x86_64_V7/include/nest/connection_manager.h:36,
+                 from /home/allodilab/miniconda3/envs/nest_x86_64_V7/include/nest/kernel_manager.h:30,
+                 from /mnt/d/users/ag399/JSC/juypter/target/mat2_psc_exp_neuron_nestml.cpp:33:
+/home/allodilab/miniconda3/envs/nest_x86_64_V7/include/nest/node.h:797:18: warning: 'virtual double nest::Node::get_C_m(int)' was hidden [-Woverloaded-virtual=]
+  797 |   virtual double get_C_m( int comp );
+      |                  ^~~~~~~
+In file included from /mnt/d/users/ag399/JSC/juypter/target/mat2_psc_exp_neuron_nestml.cpp:44:
+/mnt/d/users/ag399/JSC/juypter/target/mat2_psc_exp_neuron_nestml.h:318:17: note:   by 'double mat2_psc_exp_neuron_nestml::get_C_m() const'
+  318 |   inline double get_C_m() const
+      |                 ^~~~~~~
+/mnt/d/users/ag399/JSC/juypter/target/mat2_psc_exp_neuron_nestml.cpp: In member function 'void mat2_psc_exp_neuron_nestml::init_state_internal_()':
+/mnt/d/users/ag399/JSC/juypter/target/mat2_psc_exp_neuron_nestml.cpp:203:16: warning: unused variable '__timestep' [-Wunused-variable]
+  203 |   const double __timestep = nest::Time::get_resolution().get_ms();  // do not remove, this is necessary for the timestep() function
+      |                ^~~~~~~~~~
+/mnt/d/users/ag399/JSC/juypter/target/mat2_psc_exp_neuron_nestml.cpp: In member function 'void mat2_psc_exp_neuron_nestml::recompute_internal_variables(bool)':
+/mnt/d/users/ag399/JSC/juypter/target/mat2_psc_exp_neuron_nestml.cpp:250:16: warning: unused variable '__timestep' [-Wunused-variable]
+  250 |   const double __timestep = nest::Time::get_resolution().get_ms();  // do not remove, this is necessary for the timestep() function
+      |                ^~~~~~~~~~
+/mnt/d/users/ag399/JSC/juypter/target/mat2_psc_exp_neuron_nestml.cpp: In member function 'virtual void mat2_psc_exp_neuron_nestml::update(const nest::Time&, long int, long int)':
+/mnt/d/users/ag399/JSC/juypter/target/mat2_psc_exp_neuron_nestml.cpp:323:24: warning: comparison of integer expressions of different signedness: 'long int' and 'const size_t' {aka 'const long unsigned int'} [-Wsign-compare]
+  323 |     for (long i = 0; i < NUM_SPIKE_RECEPTORS; ++i)
+      |                      ~~^~~~~~~~~~~~~~~~~~~~~
+/mnt/d/users/ag399/JSC/juypter/target/mat2_psc_exp_neuron_nestml.cpp:314:10: warning: variable 'get_t' set but not used [-Wunused-but-set-variable]
+  314 |     auto get_t = [origin, lag](){ return nest::Time( nest::Time::step( origin.get_steps() + lag + 1) ).get_ms(); };
+      |          ^~~~~
+/mnt/d/users/ag399/JSC/juypter/target/mat2_psc_exp_neuron_nestml.cpp:308:16: warning: unused variable '__timestep' [-Wunused-variable]
+  308 |   const double __timestep = nest::Time::get_resolution().get_ms();  // do not remove, this is necessary for the timestep() function
+      |                ^~~~~~~~~~
+make[2]: warning:  Clock skew detected.  Your build may be incomplete.
+make[1]: warning:  Clock skew detected.  Your build may be incomplete.
+make: warning:  Clock skew detected.  Your build may be incomplete.
+make[2]: Warning: File 'nestml_mat_module.so' has modification time 1.1 s in the future
+make[2]: warning:  Clock skew detected.  Your build may be incomplete.

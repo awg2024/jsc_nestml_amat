@@ -1,0 +1,17 @@
+-- The CXX compiler identification is GNU 15.2.0
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /home/allodilab/miniconda3/envs/nest_x86_64_V7/bin/x86_64-conda-linux-gnu-c++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Configuring done (1.7s)
+-- Generating done (0.2s)
+-- Build files have been written to: /mnt/d/users/ag399/JSC/juypter/target
+[ 33%] [32mBuilding CXX object CMakeFiles/nestml_mat_module_module.dir/mat2_psc_exp_neuron_nestml.cpp.o[0m
+[ 66%] [32mBuilding CXX object CMakeFiles/nestml_mat_module_module.dir/nestml_mat_module.cpp.o[0m
+[100%] [1m[32mLinking CXX shared module nestml_mat_module.so[0m
+[100%] Built target nestml_mat_module_module
+[100%] Built target nestml_mat_module_module
+[36mInstall the project...[0m
+-- Install configuration: ""
+-- Installing: /tmp/nestml_target_mj9nucwo/nestml_mat_module.so

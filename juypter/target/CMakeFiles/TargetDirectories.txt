@@ -1,0 +1,10 @@
+/mnt/d/users/ag399/JSC/juypter/target/CMakeFiles/dist.dir
+/mnt/d/users/ag399/JSC/juypter/target/CMakeFiles/nestml_mat_module_module.dir
+/mnt/d/users/ag399/JSC/juypter/target/CMakeFiles/package.dir
+/mnt/d/users/ag399/JSC/juypter/target/CMakeFiles/package_source.dir
+/mnt/d/users/ag399/JSC/juypter/target/CMakeFiles/edit_cache.dir
+/mnt/d/users/ag399/JSC/juypter/target/CMakeFiles/rebuild_cache.dir
+/mnt/d/users/ag399/JSC/juypter/target/CMakeFiles/list_install_components.dir
+/mnt/d/users/ag399/JSC/juypter/target/CMakeFiles/install.dir
+/mnt/d/users/ag399/JSC/juypter/target/CMakeFiles/install/local.dir
+/mnt/d/users/ag399/JSC/juypter/target/CMakeFiles/install/strip.dir

@@ -31,7 +31,7 @@ print(neuron.get())
 
 dc = nest.Create(
     "dc_generator",
-    {"amplitude":500.0}
+    {"amplitude":400.0}
 )
 
 nest.Connect(dc, neuron)
@@ -45,7 +45,8 @@ voltmeter.set(
         "interval": 0.1,
         "record_from": [
             "V_m",
-            "V_th"
+            "V_th",
+
         ]
     }
 )
@@ -66,8 +67,14 @@ t = events["times"]
 V = events["V_m"]
 theta = events["V_th"]
 
-plt.plot(t, V, label="V_m")
-plt.plot(t, theta, label="Adaptive threshold")
+fig, ax = plt.subplots(2, 1, sharex=True)
+
+ax[0].plot(t, V)
+ax[0].set_ylabel("V_m (mV)")
+
+ax[1].plot(t, theta)
+ax[1].set_ylabel("V_th (mV)")
+ax[1].set_xlabel("Time (ms)")
 plt.legend()
 plt.show()
 
