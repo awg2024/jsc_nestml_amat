@@ -195,65 +195,65 @@ dist/fast:
 .PHONY : dist/fast
 
 #=============================================================================
-# Target rules for targets named nestml_mat_module_module
+# Target rules for targets named nestml_amat_module_module
 
 # Build rule for target.
-nestml_mat_module_module: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 nestml_mat_module_module
-.PHONY : nestml_mat_module_module
+nestml_amat_module_module: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 nestml_amat_module_module
+.PHONY : nestml_amat_module_module
 
 # fast build rule for target.
-nestml_mat_module_module/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nestml_mat_module_module.dir/build.make CMakeFiles/nestml_mat_module_module.dir/build
-.PHONY : nestml_mat_module_module/fast
+nestml_amat_module_module/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nestml_amat_module_module.dir/build.make CMakeFiles/nestml_amat_module_module.dir/build
+.PHONY : nestml_amat_module_module/fast
 
-mat2_psc_exp_neuron_nestml.o: mat2_psc_exp_neuron_nestml.cpp.o
-.PHONY : mat2_psc_exp_neuron_nestml.o
-
-# target to build an object file
-mat2_psc_exp_neuron_nestml.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nestml_mat_module_module.dir/build.make CMakeFiles/nestml_mat_module_module.dir/mat2_psc_exp_neuron_nestml.cpp.o
-.PHONY : mat2_psc_exp_neuron_nestml.cpp.o
-
-mat2_psc_exp_neuron_nestml.i: mat2_psc_exp_neuron_nestml.cpp.i
-.PHONY : mat2_psc_exp_neuron_nestml.i
-
-# target to preprocess a source file
-mat2_psc_exp_neuron_nestml.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nestml_mat_module_module.dir/build.make CMakeFiles/nestml_mat_module_module.dir/mat2_psc_exp_neuron_nestml.cpp.i
-.PHONY : mat2_psc_exp_neuron_nestml.cpp.i
-
-mat2_psc_exp_neuron_nestml.s: mat2_psc_exp_neuron_nestml.cpp.s
-.PHONY : mat2_psc_exp_neuron_nestml.s
-
-# target to generate assembly for a file
-mat2_psc_exp_neuron_nestml.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nestml_mat_module_module.dir/build.make CMakeFiles/nestml_mat_module_module.dir/mat2_psc_exp_neuron_nestml.cpp.s
-.PHONY : mat2_psc_exp_neuron_nestml.cpp.s
-
-nestml_mat_module.o: nestml_mat_module.cpp.o
-.PHONY : nestml_mat_module.o
+amat_neuron_nestml.o: amat_neuron_nestml.cpp.o
+.PHONY : amat_neuron_nestml.o
 
 # target to build an object file
-nestml_mat_module.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nestml_mat_module_module.dir/build.make CMakeFiles/nestml_mat_module_module.dir/nestml_mat_module.cpp.o
-.PHONY : nestml_mat_module.cpp.o
+amat_neuron_nestml.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nestml_amat_module_module.dir/build.make CMakeFiles/nestml_amat_module_module.dir/amat_neuron_nestml.cpp.o
+.PHONY : amat_neuron_nestml.cpp.o
 
-nestml_mat_module.i: nestml_mat_module.cpp.i
-.PHONY : nestml_mat_module.i
+amat_neuron_nestml.i: amat_neuron_nestml.cpp.i
+.PHONY : amat_neuron_nestml.i
 
 # target to preprocess a source file
-nestml_mat_module.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nestml_mat_module_module.dir/build.make CMakeFiles/nestml_mat_module_module.dir/nestml_mat_module.cpp.i
-.PHONY : nestml_mat_module.cpp.i
+amat_neuron_nestml.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nestml_amat_module_module.dir/build.make CMakeFiles/nestml_amat_module_module.dir/amat_neuron_nestml.cpp.i
+.PHONY : amat_neuron_nestml.cpp.i
 
-nestml_mat_module.s: nestml_mat_module.cpp.s
-.PHONY : nestml_mat_module.s
+amat_neuron_nestml.s: amat_neuron_nestml.cpp.s
+.PHONY : amat_neuron_nestml.s
 
 # target to generate assembly for a file
-nestml_mat_module.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nestml_mat_module_module.dir/build.make CMakeFiles/nestml_mat_module_module.dir/nestml_mat_module.cpp.s
-.PHONY : nestml_mat_module.cpp.s
+amat_neuron_nestml.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nestml_amat_module_module.dir/build.make CMakeFiles/nestml_amat_module_module.dir/amat_neuron_nestml.cpp.s
+.PHONY : amat_neuron_nestml.cpp.s
+
+nestml_amat_module.o: nestml_amat_module.cpp.o
+.PHONY : nestml_amat_module.o
+
+# target to build an object file
+nestml_amat_module.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nestml_amat_module_module.dir/build.make CMakeFiles/nestml_amat_module_module.dir/nestml_amat_module.cpp.o
+.PHONY : nestml_amat_module.cpp.o
+
+nestml_amat_module.i: nestml_amat_module.cpp.i
+.PHONY : nestml_amat_module.i
+
+# target to preprocess a source file
+nestml_amat_module.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nestml_amat_module_module.dir/build.make CMakeFiles/nestml_amat_module_module.dir/nestml_amat_module.cpp.i
+.PHONY : nestml_amat_module.cpp.i
+
+nestml_amat_module.s: nestml_amat_module.cpp.s
+.PHONY : nestml_amat_module.s
+
+# target to generate assembly for a file
+nestml_amat_module.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nestml_amat_module_module.dir/build.make CMakeFiles/nestml_amat_module_module.dir/nestml_amat_module.cpp.s
+.PHONY : nestml_amat_module.cpp.s
 
 # Help Target
 help:
@@ -270,13 +270,13 @@ help:
 	@echo "... package_source"
 	@echo "... rebuild_cache"
 	@echo "... dist"
-	@echo "... nestml_mat_module_module"
-	@echo "... mat2_psc_exp_neuron_nestml.o"
-	@echo "... mat2_psc_exp_neuron_nestml.i"
-	@echo "... mat2_psc_exp_neuron_nestml.s"
-	@echo "... nestml_mat_module.o"
-	@echo "... nestml_mat_module.i"
-	@echo "... nestml_mat_module.s"
+	@echo "... nestml_amat_module_module"
+	@echo "... amat_neuron_nestml.o"
+	@echo "... amat_neuron_nestml.i"
+	@echo "... amat_neuron_nestml.s"
+	@echo "... nestml_amat_module.o"
+	@echo "... nestml_amat_module.i"
+	@echo "... nestml_amat_module.s"
 .PHONY : help
 
 

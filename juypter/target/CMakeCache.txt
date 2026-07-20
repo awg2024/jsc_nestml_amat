@@ -94,7 +94,7 @@ CMAKE_INSTALL_INFODIR:PATH=
 
 //object code libraries (lib/nest or lib64/nest or lib/<multiarch-tuple>/nest
 // on Debian)
-CMAKE_INSTALL_LIBDIR:STRING=/tmp/nestml_target_6tx7lq6s
+CMAKE_INSTALL_LIBDIR:STRING=/tmp/nestml_target_tcfjpqgk
 
 //Program executables (libexec)
 CMAKE_INSTALL_LIBEXECDIR:PATH=libexec
@@ -112,7 +112,7 @@ CMAKE_INSTALL_MANDIR:PATH=
 CMAKE_INSTALL_OLDINCLUDEDIR:PATH=/usr/include
 
 //Install path prefix, prepended onto install directories.
-CMAKE_INSTALL_PREFIX:PATH=/tmp/nestml_target_6tx7lq6s
+CMAKE_INSTALL_PREFIX:PATH=/tmp/nestml_target_tcfjpqgk
 
 //Run-time variable data (LOCALSTATEDIR/run)
 CMAKE_INSTALL_RUNSTATEDIR:PATH=
@@ -171,7 +171,7 @@ CMAKE_PROJECT_DESCRIPTION:STATIC=
 CMAKE_PROJECT_HOMEPAGE_URL:STATIC=
 
 //Value Computed by CMake
-CMAKE_PROJECT_NAME:STATIC=nestml_mat_module
+CMAKE_PROJECT_NAME:STATIC=nestml_amat_module
 
 //Value Computed by CMake
 CMAKE_PROJECT_SPDX_LICENSE:STATIC=
@@ -242,13 +242,13 @@ CMAKE_TAPI:FILEPATH=CMAKE_TAPI-NOTFOUND
 CMAKE_VERBOSE_MAKEFILE:BOOL=FALSE
 
 //Value Computed by CMake
-nestml_mat_module_BINARY_DIR:STATIC=/mnt/d/users/ag399/jsc/juypter/target
+nestml_amat_module_BINARY_DIR:STATIC=/mnt/d/users/ag399/jsc/juypter/target
 
 //Value Computed by CMake
-nestml_mat_module_IS_TOP_LEVEL:STATIC=ON
+nestml_amat_module_IS_TOP_LEVEL:STATIC=ON
 
 //Value Computed by CMake
-nestml_mat_module_SOURCE_DIR:STATIC=/mnt/d/users/ag399/jsc/juypter/target
+nestml_amat_module_SOURCE_DIR:STATIC=/mnt/d/users/ag399/jsc/juypter/target
 
 //Specify the `nest-config` executable.
 with-nest:STRING=/home/allodilab/miniconda3/envs/nest_x86_64_V7/bin/nest-config
@@ -422,5 +422,5 @@ CMAKE_UNAME:INTERNAL=/usr/bin/uname
 //ADVANCED property for variable: CMAKE_VERBOSE_MAKEFILE
 CMAKE_VERBOSE_MAKEFILE-ADVANCED:INTERNAL=1
 //CMAKE_INSTALL_PREFIX during last run
-_GNUInstallDirs_LAST_CMAKE_INSTALL_PREFIX:INTERNAL=/tmp/nestml_target_6tx7lq6s
+_GNUInstallDirs_LAST_CMAKE_INSTALL_PREFIX:INTERNAL=/tmp/nestml_target_tcfjpqgk
 

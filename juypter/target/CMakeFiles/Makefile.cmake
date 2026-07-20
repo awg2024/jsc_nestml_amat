@@ -121,5 +121,5 @@ set(CMAKE_MAKEFILE_PRODUCTS
 # Dependency information for all targets:
 set(CMAKE_DEPEND_INFO_FILES
   "CMakeFiles/dist.dir/DependInfo.cmake"
-  "CMakeFiles/nestml_mat_module_module.dir/DependInfo.cmake"
+  "CMakeFiles/nestml_amat_module_module.dir/DependInfo.cmake"
   )

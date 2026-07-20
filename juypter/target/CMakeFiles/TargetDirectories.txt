@@ -1,5 +1,5 @@
 /mnt/d/users/ag399/jsc/juypter/target/CMakeFiles/dist.dir
-/mnt/d/users/ag399/jsc/juypter/target/CMakeFiles/nestml_mat_module_module.dir
+/mnt/d/users/ag399/jsc/juypter/target/CMakeFiles/nestml_amat_module_module.dir
 /mnt/d/users/ag399/jsc/juypter/target/CMakeFiles/package.dir
 /mnt/d/users/ag399/jsc/juypter/target/CMakeFiles/package_source.dir
 /mnt/d/users/ag399/jsc/juypter/target/CMakeFiles/edit_cache.dir

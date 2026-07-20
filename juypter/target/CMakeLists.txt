@@ -1,5 +1,5 @@
 
-# nestml_mat_module/CMakeLists.txt
+# nestml_amat_module/CMakeLists.txt
 #
 # This file is part of NEST.
 #
@@ -33,16 +33,16 @@
 cmake_minimum_required( VERSION 3.19 )
 
 # 1) Name your module here, i.e. add later with -Dexternal-modules=${moduleName}:
-set( SHORT_NAME nestml_mat_module )
+set( SHORT_NAME nestml_amat_module )
 
 #    the complete module name is here:
 set( MODULE_NAME ${SHORT_NAME} )
 
 # 2) Add all your sources here
 set( MODULE_SOURCES
-    nestml_mat_module.h nestml_mat_module.cpp
+    nestml_amat_module.h nestml_amat_module.cpp
     
-      mat2_psc_exp_neuron_nestml.cpp mat2_psc_exp_neuron_nestml.h
+      amat_neuron_nestml.cpp amat_neuron_nestml.h
     
     )
 
