@@ -22,7 +22,7 @@ set(CPACK_DEFAULT_PACKAGE_DESCRIPTION_SUMMARY "nestml_amat_module built using CM
 set(CPACK_GENERATOR "TGZ")
 set(CPACK_INNOSETUP_ARCHITECTURE "x64")
 set(CPACK_INSTALL_CMAKE_PROJECTS "/Users/angusgray/Desktop/JSC/github/jsc_nestml_amat/juypter/target;nestml_amat_module;ALL;/")
-set(CPACK_INSTALL_PREFIX "/var/folders/jk/36jftn6s3yz6ks1zj2zdlry40000gn/T/nestml_target_m39oqn7v")
+set(CPACK_INSTALL_PREFIX "/var/folders/jk/36jftn6s3yz6ks1zj2zdlry40000gn/T/nestml_target_l4zx304r")
 set(CPACK_MODULE_PATH "")
 set(CPACK_NSIS_DISPLAY_NAME "nestml_amat_module 1.0")
 set(CPACK_NSIS_INSTALLER_ICON_CODE "")

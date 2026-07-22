@@ -24,7 +24,7 @@ set(CPACK_IGNORE_FILES "\\.gitignore;\\.git/;\\.travis\\.yml;/build/;/_CPack_Pac
 set(CPACK_INNOSETUP_ARCHITECTURE "x64")
 set(CPACK_INSTALLED_DIRECTORIES "/Users/angusgray/Desktop/JSC/github/jsc_nestml_amat/juypter/target;/")
 set(CPACK_INSTALL_CMAKE_PROJECTS "")
-set(CPACK_INSTALL_PREFIX "/var/folders/jk/36jftn6s3yz6ks1zj2zdlry40000gn/T/nestml_target_m39oqn7v")
+set(CPACK_INSTALL_PREFIX "/var/folders/jk/36jftn6s3yz6ks1zj2zdlry40000gn/T/nestml_target_l4zx304r")
 set(CPACK_MODULE_PATH "")
 set(CPACK_NSIS_DISPLAY_NAME "nestml_amat_module 1.0")
 set(CPACK_NSIS_INSTALLER_ICON_CODE "")

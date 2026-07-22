@@ -17,7 +17,7 @@
 [0m  make install[0m
 [0m[0m
 [0mThe library file libnestml_amat_module.so will be installed to[0m
-[0m  /var/folders/jk/36jftn6s3yz6ks1zj2zdlry40000gn/T/nestml_target_m39oqn7v[0m
+[0m  /var/folders/jk/36jftn6s3yz6ks1zj2zdlry40000gn/T/nestml_target_l4zx304r[0m
 [0mThe module can be loaded into NEST using[0m
 [0m  (nestml_amat_module) Install       (in SLI)[0m
 [0m  nest.Install(nestml_amat_module)   (in PyNEST)[0m
