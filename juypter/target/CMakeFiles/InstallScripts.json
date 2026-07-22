@@ -1,7 +1,7 @@
 {
 	"InstallScripts" : 
 	[
-		"/mnt/d/users/ag399/jsc/juypter/target/cmake_install.cmake"
+		"/Users/angusgray/Desktop/JSC/github/jsc_nestml_amat/juypter/target/cmake_install.cmake"
 	],
 	"Parallel" : false
 }

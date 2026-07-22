@@ -1,5 +1,4 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/nestml_amat_module_module.dir/link.d"
   "CMakeFiles/nestml_amat_module_module.dir/amat_neuron_nestml.cpp.o"
   "CMakeFiles/nestml_amat_module_module.dir/amat_neuron_nestml.cpp.o.d"
   "CMakeFiles/nestml_amat_module_module.dir/nestml_amat_module.cpp.o"

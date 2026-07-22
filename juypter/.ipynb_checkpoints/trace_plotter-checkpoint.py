@@ -1,32 +1,40 @@
+
+
+
 from __future__ import annotations
 from dataclasses import dataclass, field
 import numpy as np
 import matplotlib.pyplot as plt
 
-
 @dataclass
 class _Trace:
-    name: str
-    y: np.ndarray
-    color: str = "black"
-    label: str | None = None
-    label_color: str | None = None
-    lw: float = 1.4
-    fill: bool = False
-    height_ratio: float = 1.0
+    """ 
+    Container storing all information needed to draw one trace.
+    Each instance represents one row in the stacked figure, including 
+    the data values, appearance, and optional label. 
+    """
+    name: str # Internal identifier
+    y: np.ndarray # Signal values
+    color: str = "black" # Line colour
+    label: str | None = None # Displayed label
+    label_color: str | None = None 
+    lw: float = 1.4 # Line width
+    fill: bool = False # Whether to shade beneath the trace
+    height_ratio: float = 1.0 # Relative subplot height
 
 
 class TracePlotter:
-   
-   # Stack an arbitrary number of time-aligned traces on shared time axis,
-   # in the minimal-axis "textbook figure" style: no box, no ticks, just
-   # colored trace labels and an optional scale bar.
-    
+    """ 
+    Utility class for producing vertically stacked traces sharing 
+    a common time axis. 
+    """
 
+    # Store the common time vector used by every trace.
+    # All signals added to the plot must have this same length.
     def __init__(self, time: np.ndarray, time_unit: str = "ms"):
         self.time = np.asarray(time)
         self.time_unit = time_unit
-        self.traces: list[_Trace] = []
+        self.traces: list[_Trace] = [] # List storing every trace to be plotted.
         self.spike_times: list[float] = []
 
     # building the figure content
@@ -41,14 +49,17 @@ class TracePlotter:
         fill: bool = False,
         height_ratio: float = 1.0,
     ) -> "TracePlotter":
-        #Add one time series to be plotted as its own stacked row."""
+        # Register a new signal for plotting.
+        # Each added trace occupies one subplot in the final stacked figure.
         y = np.asarray(y)
         if y.shape != self.time.shape:
+            # Ensure every signal is sampled on the same time grid.
             raise ValueError(
                 f"Trace '{name}' has shape {y.shape}, expected {self.time.shape} "
                 f"to match the time array."
             )
         self.traces.append(
+            # Package all plotting options into a _Trace object so that rendering can done later
             _Trace(
                 name=name,
                 y=y,
@@ -60,15 +71,13 @@ class TracePlotter:
                 height_ratio=height_ratio,
             )
         )
-        return self
+        return self # Return the object itself to allow method chaining, easier when call
 
-    def add_spike(self, spike_time: float) -> "TracePlotter":
-        #Mark a vertical spike line spanning every row, at a given time."""
+    def add_spike(self, spike_time: float) -> "TracePlotter": #Mark a vertical spike line spanning every row
         self.spike_times.append(spike_time)
         return self
 
-    # ---- rendering --------------------------------------------------------
-
+    # render plot 
     def plot(
         self,
         figsize: tuple[float, float] | None = None,
@@ -77,40 +86,43 @@ class TracePlotter:
         row_gap: float = 0.0,
     ):
         """
-        Render the stacked figure.
+        Render all stored traces as vertically stacked subplots sharing
+        a common time axis.
 
-        Returns (fig, axes) so the caller can further customize or save it.
+        Returns (fig, axes) matplotlib figure and axes objects 
         """
-        n = len(self.traces)
+        n = len(self.traces) # Number of stacked rows required.
         if n == 0:
             raise ValueError("No traces added yet — call add_trace() first.")
 
-        heights = [t.height_ratio for t in self.traces]
+        heights = [t.height_ratio for t in self.traces] # Allow selected traces to occupy more space 
         figsize = figsize or (6, 1.1 * n)
 
-        fig, axes = plt.subplots(
+        fig, axes = plt.subplots( # Create one subplot per trace with a shared horizontal time axis.
             n,
             1,
             sharex=True,
             figsize=figsize,
             gridspec_kw={"height_ratios": heights, "hspace": row_gap},
         )
-        if n == 1:
+        if n == 1: # plt.subplots returns a single Axes rather than a list when n=1, wrap it in list so there's no mismatch 
             axes = [axes]
 
-        for ax, tr in zip(axes, self.traces):
+        for ax, tr in zip(axes, self.traces): # Draw each stored trace onto its corresponding subplot.
             ax.plot(self.time, tr.y, color=tr.color, lw=tr.lw)
-            if tr.fill:
+            if tr.fill: # Optional shaded region beneath the trace for emphasis.
                 ax.fill_between(self.time, tr.y, color=tr.color, alpha=0.15)
 
-            # minimal-axis "textbook" look: no box, no ticks
+            # Remove all axis decorations so that attention is focused on waveform itself. 
+            # Displayed in the Yamouchi et al., 2011 & Heiberg et al., 2018 papers. 
             for spine in ax.spines.values():
                 spine.set_visible(False)
             ax.set_xticks([])
             ax.set_yticks([])
             ax.set_facecolor("none")
 
-            # colored inline label instead of a legend
+            # Placing a coloured label directly inside the subplot.
+            # This avoids the need for a separate legend.
             if tr.label:
                 ax.text(
                     0.02,
@@ -123,9 +135,7 @@ class TracePlotter:
                     ha="left",
                 )
 
-            # spike marker(s) drawn on every row so, with hspace=0, they
-            # appear as one continuous vertical line through the stack
-            
+            # Draw spike markers above the uppermost trace.
             for st in self.spike_times:
                 axes[0].annotate(
                     "",
@@ -137,10 +147,11 @@ class TracePlotter:
                 )
 
         if title:
-            fig.suptitle(title, y=1.02)
+            fig.suptitle(title, y=1.02) # Optional figure title.
 
         if scalebar_ms is not None:
-            self._draw_scalebar(axes[-1], scalebar_ms)
+            self._draw_scalebar(axes[-1], scalebar_ms) # Replace conventional x-axis ticks with a simple horizontal
+                                                    # scale bar indicating elapsed simulation time.
 
         fig.tight_layout()
         return fig, axes

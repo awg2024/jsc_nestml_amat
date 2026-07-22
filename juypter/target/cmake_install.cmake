@@ -1,8 +1,8 @@
-# Install script for directory: /mnt/d/users/ag399/jsc/juypter/target
+# Install script for directory: /Users/angusgray/Desktop/JSC/github/jsc_nestml_amat/juypter/target
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "/tmp/nestml_target_tcfjpqgk")
+  set(CMAKE_INSTALL_PREFIX "/var/folders/jk/36jftn6s3yz6ks1zj2zdlry40000gn/T/nestml_target_m39oqn7v")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -27,11 +27,6 @@ if(NOT CMAKE_INSTALL_COMPONENT)
   endif()
 endif()
 
-# Install shared libraries without execute permission?
-if(NOT DEFINED CMAKE_INSTALL_SO_NO_EXE)
-  set(CMAKE_INSTALL_SO_NO_EXE "1")
-endif()
-
 # Is this installation the result of a crosscompile?
 if(NOT DEFINED CMAKE_CROSSCOMPILING)
   set(CMAKE_CROSSCOMPILING "FALSE")
@@ -39,41 +34,35 @@ endif()
 
 # Set path to fallback-tool for dependency-resolution.
 if(NOT DEFINED CMAKE_OBJDUMP)
-  set(CMAKE_OBJDUMP "/home/allodilab/miniconda3/envs/nest_x86_64_V7/bin/x86_64-conda-linux-gnu-objdump")
+  set(CMAKE_OBJDUMP "/usr/bin/objdump")
 endif()
 
 if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
-  if(EXISTS "$ENV{DESTDIR}/tmp/nestml_target_tcfjpqgk/nestml_amat_module.so" AND
-     NOT IS_SYMLINK "$ENV{DESTDIR}/tmp/nestml_target_tcfjpqgk/nestml_amat_module.so")
-    file(RPATH_CHECK
-         FILE "$ENV{DESTDIR}/tmp/nestml_target_tcfjpqgk/nestml_amat_module.so"
-         RPATH "")
-  endif()
   list(APPEND CMAKE_ABSOLUTE_DESTINATION_FILES
-   "/tmp/nestml_target_tcfjpqgk/nestml_amat_module.so")
+   "/var/folders/jk/36jftn6s3yz6ks1zj2zdlry40000gn/T/nestml_target_m39oqn7v/nestml_amat_module.so")
   if(CMAKE_WARN_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(WARNING "ABSOLUTE path INSTALL DESTINATION : ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
   if(CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
-  file(INSTALL DESTINATION "/tmp/nestml_target_tcfjpqgk" TYPE MODULE FILES "/mnt/d/users/ag399/jsc/juypter/target/nestml_amat_module.so")
-  if(EXISTS "$ENV{DESTDIR}/tmp/nestml_target_tcfjpqgk/nestml_amat_module.so" AND
-     NOT IS_SYMLINK "$ENV{DESTDIR}/tmp/nestml_target_tcfjpqgk/nestml_amat_module.so")
+  file(INSTALL DESTINATION "/var/folders/jk/36jftn6s3yz6ks1zj2zdlry40000gn/T/nestml_target_m39oqn7v" TYPE MODULE FILES "/Users/angusgray/Desktop/JSC/github/jsc_nestml_amat/juypter/target/nestml_amat_module.so")
+  if(EXISTS "$ENV{DESTDIR}/var/folders/jk/36jftn6s3yz6ks1zj2zdlry40000gn/T/nestml_target_m39oqn7v/nestml_amat_module.so" AND
+     NOT IS_SYMLINK "$ENV{DESTDIR}/var/folders/jk/36jftn6s3yz6ks1zj2zdlry40000gn/T/nestml_target_m39oqn7v/nestml_amat_module.so")
     if(CMAKE_INSTALL_DO_STRIP)
-      execute_process(COMMAND "/home/allodilab/miniconda3/envs/nest_x86_64_V7/bin/x86_64-conda-linux-gnu-strip" "$ENV{DESTDIR}/tmp/nestml_target_tcfjpqgk/nestml_amat_module.so")
+      execute_process(COMMAND "/usr/bin/strip" -x "$ENV{DESTDIR}/var/folders/jk/36jftn6s3yz6ks1zj2zdlry40000gn/T/nestml_target_m39oqn7v/nestml_amat_module.so")
     endif()
   endif()
 endif()
 
 if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
-  include("/mnt/d/users/ag399/jsc/juypter/target/CMakeFiles/nestml_amat_module_module.dir/install-cxx-module-bmi-noconfig.cmake" OPTIONAL)
+  include("/Users/angusgray/Desktop/JSC/github/jsc_nestml_amat/juypter/target/CMakeFiles/nestml_amat_module_module.dir/install-cxx-module-bmi-noconfig.cmake" OPTIONAL)
 endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
 if(CMAKE_INSTALL_LOCAL_ONLY)
-  file(WRITE "/mnt/d/users/ag399/jsc/juypter/target/install_local_manifest.txt"
+  file(WRITE "/Users/angusgray/Desktop/JSC/github/jsc_nestml_amat/juypter/target/install_local_manifest.txt"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")
 endif()
 if(CMAKE_INSTALL_COMPONENT)
@@ -89,6 +78,6 @@ else()
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
-  file(WRITE "/mnt/d/users/ag399/jsc/juypter/target/${CMAKE_INSTALL_MANIFEST}"
+  file(WRITE "/Users/angusgray/Desktop/JSC/github/jsc_nestml_amat/juypter/target/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")
 endif()

@@ -19,7 +19,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with NEST.  If not, see <http://www.gnu.org/licenses/>.
  *
- *  Generated from NESTML 8.2.0 at time: 2026-07-20 15:21:28.996153
+ *  Generated from NESTML 8.3.0 at time: 2026-07-21 16:30:21.145759
 **/
 
 // C++ includes:
@@ -34,17 +34,7 @@
 #include "nest_impl.h"
 #include "universal_data_logger_impl.h"
 
-// Includes from sli:
-#include "dict.h"
-#include "dictutils.h"
-#include "doubledatum.h"
-#include "integerdatum.h"
-#include "lockptrdatum.h"
-
 #include "amat_neuron_nestml.h"
-
-// uncomment the next line to enable printing of detailed debug information
-// #define DEBUG
 void
 register_amat_neuron_nestml( const std::string& name )
 {
@@ -57,22 +47,19 @@ register_amat_neuron_nestml( const std::string& name )
 nest::RecordablesMap<amat_neuron_nestml> amat_neuron_nestml::recordablesMap_;
 namespace nest
 {
-
-  // Override the create() method with one call to RecordablesMap::insert_()
-  // for each quantity to be recorded.
+  // Override the create() method with one call to RecordablesMap::insert_() for each quantity to be recorded.
 template <> void RecordablesMap<amat_neuron_nestml>::create()
   {
     // add state variables to recordables map
-   insert_(amat_neuron_nestml_names::_V_th_alpha_1, &amat_neuron_nestml::get_V_th_alpha_1);
-   insert_(amat_neuron_nestml_names::_V_th_alpha_2, &amat_neuron_nestml::get_V_th_alpha_2);
-   insert_(amat_neuron_nestml_names::_V_th_v, &amat_neuron_nestml::get_V_th_v);
-   insert_(amat_neuron_nestml_names::_V_th_v_aux, &amat_neuron_nestml::get_V_th_v_aux);
-   insert_(amat_neuron_nestml_names::_V_m, &amat_neuron_nestml::get_V_m);
-   insert_(amat_neuron_nestml_names::_refr_t, &amat_neuron_nestml::get_refr_t);
-   insert_(amat_neuron_nestml_names::_I_kernel_exc__X__exc_spikes, &amat_neuron_nestml::get_I_kernel_exc__X__exc_spikes);
-   insert_(amat_neuron_nestml_names::_I_kernel_inh__X__inh_spikes, &amat_neuron_nestml::get_I_kernel_inh__X__inh_spikes);
-
-    // Add vector variables  
+    // add state variables to recordables map
+    insert_(amat_neuron_nestml_names::_V_th_alpha_1, &amat_neuron_nestml::get_V_th_alpha_1);
+    insert_(amat_neuron_nestml_names::_V_th_alpha_2, &amat_neuron_nestml::get_V_th_alpha_2);
+    insert_(amat_neuron_nestml_names::_V_th_v, &amat_neuron_nestml::get_V_th_v);
+    insert_(amat_neuron_nestml_names::_V_th_v_aux, &amat_neuron_nestml::get_V_th_v_aux);
+    insert_(amat_neuron_nestml_names::_V_m, &amat_neuron_nestml::get_V_m);
+    insert_(amat_neuron_nestml_names::_refr_t, &amat_neuron_nestml::get_refr_t);
+    insert_(amat_neuron_nestml_names::_I_kernel_exc__X__exc_spikes, &amat_neuron_nestml::get_I_kernel_exc__X__exc_spikes);
+    insert_(amat_neuron_nestml_names::_I_kernel_inh__X__inh_spikes, &amat_neuron_nestml::get_I_kernel_inh__X__inh_spikes);
   }
 }
 std::vector< std::tuple< int, int > > amat_neuron_nestml::rport_to_nestml_buffer_idx =
@@ -160,8 +147,8 @@ amat_neuron_nestml::amat_neuron_nestml(const amat_neuron_nestml& __n):
   P_.I_e = __n.P_.I_e;
 
   // copy state struct S_
-  S_.V_th_alpha_1 = __n.S_.V_th_alpha_1;
-  S_.V_th_alpha_2 = __n.S_.V_th_alpha_2;
+  S_.ode_state[State_::V_th_alpha_1] = __n.S_.ode_state[State_::V_th_alpha_1];
+  S_.ode_state[State_::V_th_alpha_2] = __n.S_.ode_state[State_::V_th_alpha_2];
   S_.ode_state[State_::V_th_v] = __n.S_.ode_state[State_::V_th_v];
   S_.ode_state[State_::V_th_v_aux] = __n.S_.ode_state[State_::V_th_v_aux];
   S_.ode_state[State_::V_m] = __n.S_.ode_state[State_::V_m];
@@ -170,11 +157,10 @@ amat_neuron_nestml::amat_neuron_nestml(const amat_neuron_nestml& __n):
   S_.ode_state[State_::I_kernel_inh__X__inh_spikes] = __n.S_.ode_state[State_::I_kernel_inh__X__inh_spikes];
 
   // copy internals V_
-  V_.h = __n.V_.h;
-  V_.__h = __n.V_.__h;
-  V_.P11th = __n.V_.P11th;
-  V_.P22th = __n.V_.P22th;
   V_.unit_psc = __n.V_.unit_psc;
+  V_.__h = __n.V_.__h;
+  V_.__P__V_th_alpha_1__V_th_alpha_1 = __n.V_.__P__V_th_alpha_1__V_th_alpha_1;
+  V_.__P__V_th_alpha_2__V_th_alpha_2 = __n.V_.__P__V_th_alpha_2__V_th_alpha_2;
   V_.__P__V_m__V_m = __n.V_.__P__V_m__V_m;
   V_.__P__V_m__I_kernel_exc__X__exc_spikes = __n.V_.__P__V_m__I_kernel_exc__X__exc_spikes;
   V_.__P__V_m__I_kernel_inh__X__inh_spikes = __n.V_.__P__V_m__I_kernel_inh__X__inh_spikes;
@@ -212,7 +198,7 @@ amat_neuron_nestml::~amat_neuron_nestml()
 // ---------------------------------------------------------------------------
 void amat_neuron_nestml::calibrate_time( const nest::TimeConverter& tc )
 {
-  LOG( nest::M_WARNING,
+  LOG( nest::VerbosityLevel::WARNING,
     "amat_neuron_nestml",
     "Simulation resolution has changed. Internal state and parameters of the model have been reset!" );
 
@@ -247,8 +233,8 @@ void amat_neuron_nestml::init_state_internal_()
   V_.__h = nest::Time::get_resolution().get_ms();
   recompute_internal_variables();
   // initial values for state variables
-  S_.V_th_alpha_1 = 0; // as mV
-  S_.V_th_alpha_2 = 0; // as mV
+  S_.ode_state[State_::V_th_alpha_1] = 0; // as mV
+  S_.ode_state[State_::V_th_alpha_2] = 0; // as mV
   S_.ode_state[State_::V_th_v] = 0; // as mV
   S_.ode_state[State_::V_th_v_aux] = 0; // as mV / ms
   S_.ode_state[State_::V_m] = P_.E_L; // as mV
@@ -317,10 +303,9 @@ void amat_neuron_nestml::recompute_internal_variables(bool exclude_timestep)
 
   if (exclude_timestep)
   {    
-    V_.h = nest::Time::get_resolution().get_ms(); // as ms
-    V_.P11th = std::exp((-V_.h) / P_.tau_1); // as real
-    V_.P22th = std::exp((-V_.h) / P_.tau_2); // as real
     V_.unit_psc = 1; // as pA
+    V_.__P__V_th_alpha_1__V_th_alpha_1 = std::exp((-V_.__h) / P_.tau_1); // as real
+    V_.__P__V_th_alpha_2__V_th_alpha_2 = std::exp((-V_.__h) / P_.tau_2); // as real
     V_.__P__V_m__V_m = std::exp((-V_.__h) / P_.tau_m); // as real
     V_.__P__V_m__I_kernel_exc__X__exc_spikes = P_.tau_m * P_.tau_syn_exc * V_.unit_psc * ((-std::exp(V_.__h / P_.tau_m)) + std::exp(V_.__h / P_.tau_syn_exc)) * std::exp((-V_.__h) * (P_.tau_m + P_.tau_syn_exc) / (P_.tau_m * P_.tau_syn_exc)) / (P_.C_m * (P_.tau_m - P_.tau_syn_exc)); // as real
     V_.__P__V_m__I_kernel_inh__X__inh_spikes = P_.tau_m * P_.tau_syn_inh * V_.unit_psc * (std::exp(V_.__h / P_.tau_m) - std::exp(V_.__h / P_.tau_syn_inh)) * std::exp((-V_.__h) * (P_.tau_m + P_.tau_syn_inh) / (P_.tau_m * P_.tau_syn_inh)) / (P_.C_m * (P_.tau_m - P_.tau_syn_inh)); // as real
@@ -329,11 +314,10 @@ void amat_neuron_nestml::recompute_internal_variables(bool exclude_timestep)
     V_.__P__I_kernel_inh__X__inh_spikes__I_kernel_inh__X__inh_spikes = std::exp((-V_.__h) / P_.tau_syn_inh); // as real
   }
   else {    
-    V_.h = nest::Time::get_resolution().get_ms(); // as ms
-    V_.__h = nest::Time::get_resolution().get_ms(); // as ms
-    V_.P11th = std::exp((-V_.h) / P_.tau_1); // as real
-    V_.P22th = std::exp((-V_.h) / P_.tau_2); // as real
     V_.unit_psc = 1; // as pA
+    V_.__h = nest::Time::get_resolution().get_ms(); // as ms
+    V_.__P__V_th_alpha_1__V_th_alpha_1 = std::exp((-V_.__h) / P_.tau_1); // as real
+    V_.__P__V_th_alpha_2__V_th_alpha_2 = std::exp((-V_.__h) / P_.tau_2); // as real
     V_.__P__V_m__V_m = std::exp((-V_.__h) / P_.tau_m); // as real
     V_.__P__V_m__I_kernel_exc__X__exc_spikes = P_.tau_m * P_.tau_syn_exc * V_.unit_psc * ((-std::exp(V_.__h / P_.tau_m)) + std::exp(V_.__h / P_.tau_syn_exc)) * std::exp((-V_.__h) * (P_.tau_m + P_.tau_syn_exc) / (P_.tau_m * P_.tau_syn_exc)) / (P_.C_m * (P_.tau_m - P_.tau_syn_exc)); // as real
     V_.__P__V_m__I_kernel_inh__X__inh_spikes = P_.tau_m * P_.tau_syn_inh * V_.unit_psc * (std::exp(V_.__h / P_.tau_m) - std::exp(V_.__h / P_.tau_syn_inh)) * std::exp((-V_.__h) * (P_.tau_m + P_.tau_syn_inh) / (P_.tau_m * P_.tau_syn_inh)) / (P_.C_m * (P_.tau_m - P_.tau_syn_inh)); // as real
@@ -368,37 +352,40 @@ void amat_neuron_nestml::pre_run_hook()
 //   Update and spike handling functions
 // ---------------------------------------------------------------------------
 
+
 extern "C" inline int amat_neuron_nestml_dynamics_refr_t(double __time, const double ode_state[], double f[], void* pnode)
 {
   typedef amat_neuron_nestml::State_ State_;
-  // get access to node so we can almost work as in a member function
+   // get access to node so we can almost work as in a member function
   assert( pnode );
   const amat_neuron_nestml& node = *( reinterpret_cast< amat_neuron_nestml* >( pnode ) );
   constexpr int I_STIM = amat_neuron_nestml::I_STIM;
-
   // ode_state[] here is---and must be---the state vector supplied by the integrator,
   // not the state vector in the node, node.S_.ode_state[].
 
-
+  f[State_::V_th_alpha_1] = 0;
+  f[State_::V_th_alpha_2] = 0;
   f[State_::V_m] = 0;
   f[State_::V_th_v_aux] = 0;
   f[State_::V_th_v] = 0;
-  f[State_::refr_t] = (-1.0);
+  f[State_::refr_t] = (-1.);
   f[State_::I_kernel_exc__X__exc_spikes] = (-ode_state[State_::I_kernel_exc__X__exc_spikes]) / node.P_.tau_syn_exc;
   f[State_::I_kernel_inh__X__inh_spikes] = (-ode_state[State_::I_kernel_inh__X__inh_spikes]) / node.P_.tau_syn_inh;
   return GSL_SUCCESS;
-}extern "C" inline int amat_neuron_nestml_dynamics_V_m_V_th_v_V_th_v_aux(double __time, const double ode_state[], double f[], void* pnode)
+}
+
+extern "C" inline int amat_neuron_nestml_dynamics_V_m_V_th_alpha_1_V_th_alpha_2_V_th_v_V_th_v_aux(double __time, const double ode_state[], double f[], void* pnode)
 {
   typedef amat_neuron_nestml::State_ State_;
-  // get access to node so we can almost work as in a member function
+   // get access to node so we can almost work as in a member function
   assert( pnode );
   const amat_neuron_nestml& node = *( reinterpret_cast< amat_neuron_nestml* >( pnode ) );
   constexpr int I_STIM = amat_neuron_nestml::I_STIM;
-
   // ode_state[] here is---and must be---the state vector supplied by the integrator,
   // not the state vector in the node, node.S_.ode_state[].
 
-
+  f[State_::V_th_alpha_1] = (-ode_state[State_::V_th_alpha_1]) / node.P_.tau_1;
+  f[State_::V_th_alpha_2] = (-ode_state[State_::V_th_alpha_2]) / node.P_.tau_2;
   f[State_::V_m] = (node.P_.E_L - ode_state[State_::V_m]) / node.P_.tau_m + (node.P_.I_e + node.B_.continuous_inputs_grid_sum_[I_STIM] + node.V_.unit_psc * (ode_state[State_::I_kernel_exc__X__exc_spikes] - ode_state[State_::I_kernel_inh__X__inh_spikes])) / node.P_.C_m;
   f[State_::V_th_v_aux] = (-ode_state[State_::V_th_v_aux]) / node.P_.tau_V + node.P_.beta * ((node.P_.E_L - ode_state[State_::V_m]) / node.P_.tau_m + (node.P_.I_e + node.B_.continuous_inputs_grid_sum_[I_STIM] + node.V_.unit_psc * (ode_state[State_::I_kernel_exc__X__exc_spikes] - ode_state[State_::I_kernel_inh__X__inh_spikes])) / node.P_.C_m);
   f[State_::V_th_v] = (-ode_state[State_::V_th_v]) / node.P_.tau_V + ode_state[State_::V_th_v_aux];
@@ -407,6 +394,7 @@ extern "C" inline int amat_neuron_nestml_dynamics_refr_t(double __time, const do
   f[State_::I_kernel_inh__X__inh_spikes] = (-ode_state[State_::I_kernel_inh__X__inh_spikes]) / node.P_.tau_syn_inh;
   return GSL_SUCCESS;
 }
+
 void amat_neuron_nestml::update(nest::Time const & origin, const long from, const long to)
 {
   const double __timestep = nest::Time::get_resolution().get_ms();  // do not remove, this is necessary for the timestep() function
@@ -450,8 +438,7 @@ void amat_neuron_nestml::update(nest::Time const & origin, const long from, cons
     // start rendered code for integrate_odes(refr_t)
 
     // analytic solver: integrating state variables (first step): refr_t
-    const double refr_t__tmp = V_.__P__refr_t__refr_t * S_.ode_state[State_::refr_t] - 1.0 * V_.__h;
-
+    const double refr_t__tmp = V_.__P__refr_t__refr_t * S_.ode_state[State_::refr_t] - 1. * V_.__h;
 
     // numeric solver: integrating state variables: refr_t
     double __t = 0;
@@ -491,18 +478,17 @@ void amat_neuron_nestml::update(nest::Time const & origin, const long from, cons
   }
   else
   {  
-    S_.V_th_alpha_1 = S_.V_th_alpha_1 * V_.P11th;
-    S_.V_th_alpha_2 = S_.V_th_alpha_2 * V_.P22th;
 
-    // start rendered code for integrate_odes(V_m, V_th_v, V_th_v_aux)
+    // start rendered code for integrate_odes(V_m, V_th_alpha_1, V_th_alpha_2, V_th_v, V_th_v_aux)
 
-    // analytic solver: integrating state variables (first step): V_m
+    // analytic solver: integrating state variables (first step): V_th_alpha_1, V_th_alpha_2, V_m
+    const double V_th_alpha_1__tmp = S_.ode_state[State_::V_th_alpha_1] * V_.__P__V_th_alpha_1__V_th_alpha_1;
+    const double V_th_alpha_2__tmp = S_.ode_state[State_::V_th_alpha_2] * V_.__P__V_th_alpha_2__V_th_alpha_2;
     const double V_m__tmp = (-P_.E_L) * V_.__P__V_m__V_m + P_.E_L + S_.ode_state[State_::I_kernel_exc__X__exc_spikes] * V_.__P__V_m__I_kernel_exc__X__exc_spikes + S_.ode_state[State_::I_kernel_inh__X__inh_spikes] * V_.__P__V_m__I_kernel_inh__X__inh_spikes + S_.ode_state[State_::V_m] * V_.__P__V_m__V_m - P_.I_e * V_.__P__V_m__V_m * P_.tau_m / P_.C_m + P_.I_e * P_.tau_m / P_.C_m - B_.continuous_inputs_grid_sum_[I_STIM] * V_.__P__V_m__V_m * P_.tau_m / P_.C_m + B_.continuous_inputs_grid_sum_[I_STIM] * P_.tau_m / P_.C_m;
 
-
-    // numeric solver: integrating state variables: V_m, V_th_v_aux, V_th_v
+    // numeric solver: integrating state variables: V_th_alpha_1, V_th_alpha_2, V_m, V_th_v_aux, V_th_v
     double __t = 0;
-    B_.__sys.function = amat_neuron_nestml_dynamics_V_m_V_th_v_V_th_v_aux;
+    B_.__sys.function = amat_neuron_nestml_dynamics_V_m_V_th_alpha_1_V_th_alpha_2_V_th_v_V_th_v_aux;
     // numerical integration with adaptive step size control:
     // ------------------------------------------------------
     // gsl_odeiv_evolve_apply performs only a single numerical
@@ -532,8 +518,10 @@ void amat_neuron_nestml::update(nest::Time const & origin, const long from, cons
         throw nest::GSLSolverFailure( get_name(), status );
       }
     }
-    // analytic solver: integrating state variables (second step): V_m
+    // analytic solver: integrating state variables (second step): V_th_alpha_1, V_th_alpha_2, V_m
     /* replace analytically solvable variables with precisely integrated values  */
+    S_.ode_state[State_::V_th_alpha_1] = V_th_alpha_1__tmp;
+    S_.ode_state[State_::V_th_alpha_2] = V_th_alpha_2__tmp;
     S_.ode_state[State_::V_m] = V_m__tmp;
   }
 
@@ -562,16 +550,16 @@ void amat_neuron_nestml::update(nest::Time const & origin, const long from, cons
      * Begin NESTML generated code for the onCondition block(s)
     **/
 
-    if (S_.ode_state[State_::refr_t] <= 0 && S_.ode_state[State_::V_m] >= P_.E_L + P_.omega + S_.V_th_alpha_1 + S_.V_th_alpha_2)
+    if (S_.ode_state[State_::refr_t] <= 0 && S_.ode_state[State_::V_m] >= P_.E_L + P_.omega + S_.ode_state[State_::V_th_alpha_1] + S_.ode_state[State_::V_th_alpha_2])
     {
       S_.ode_state[State_::refr_t] = P_.refr_T;
-      S_.V_th_alpha_1 += P_.alpha_1;
-      S_.V_th_alpha_2 += P_.alpha_2;
+      S_.ode_state[State_::V_th_alpha_1] += P_.alpha_1;
+      S_.ode_state[State_::V_th_alpha_2] += P_.alpha_2;
 
       // begin generated code for emit_spike() function
 
       #ifdef DEBUG
-      std::cout << "Emitting a spike at t = " << nest::Time(nest::Time::step(origin.get_steps() + lag + 1)).get_ms() << "\n";
+      std::cout << "[neuron " << this << "] Emitting a spike at t = " << nest::Time(nest::Time::step(origin.get_steps() + lag + 1)).get_ms() << "\n";
       #endif
       set_spiketime(nest::Time::step(origin.get_steps() + lag + 1));
       nest::SpikeEvent se;

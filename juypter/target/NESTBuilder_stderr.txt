@@ -3,12 +3,12 @@
 [0mnestml_amat_module Configuration Summary[0m
 [0m-------------------------------------------------------[0m
 [0m[0m
-[0mC++ compiler         : /home/allodilab/miniconda3/envs/nest_x86_64_V7/bin/x86_64-conda-linux-gnu-c++[0m
+[0mC++ compiler         : /usr/bin/c++[0m
 [0mBuild static libs    : OFF[0m
-[0mC++ compiler flags   : -fvisibility-inlines-hidden -fmessage-length=0 -march=nocona -mtune=haswell -ftree-vectorize -fPIC -fstack-protector-strong -fno-plt -O2 -ffunction-sections -pipe -isystem /home/allodilab/miniconda3/envs/nest_x86_64_V7/include[0m
-[0mNEST compiler flags  : -fvisibility-inlines-hidden -fmessage-length=0 -march=nocona -mtune=haswell -ftree-vectorize -fPIC -fstack-protector-strong -fno-plt -O2 -ffunction-sections -pipe -isystem /home/allodilab/miniconda3/envs/nest_x86_64_V7/include -fdebug-prefix-map=/home/conda/feedstock_root/build_artifacts/nest-simulator_1753334347263/work=/usr/local/src/conda/nest-simulator-3.8 -fdebug-prefix-map=/home/allodilab/miniconda3/envs/nest_x86_64_V7=/usr/local/src/conda-prefix -lrt -std=c++17 -Wall -fopenmp -O2 -fdiagnostics-color=auto[0m
-[0mNEST include dirs    :  -I/home/allodilab/miniconda3/envs/nest_x86_64_V7/include/nest -I/home/allodilab/miniconda3/envs/nest_x86_64_V7/include -I/home/allodilab/miniconda3/envs/nest_x86_64_V7/include -I/home/allodilab/miniconda3/envs/nest_x86_64_V7/include -I/home/allodilab/miniconda3/envs/nest_x86_64_V7/include[0m
-[0mNEST libraries flags : -L/home/allodilab/miniconda3/envs/nest_x86_64_V7/lib/nest -lnest -lsli /home/allodilab/miniconda3/envs/nest_x86_64_V7/x86_64-conda-linux-gnu/sysroot/usr/lib/libpthread.so[0m
+[0mC++ compiler flags   : [0m
+[0mNEST compiler flags  :  -Wall -Xpreprocessor -fopenmp -O2  -std=c++20[0m
+[0mNEST include dirs    :  -I/Users/angusgray/Desktop/JSC/nest-simulator/mamba/include/nest -I/Users/angusgray/Desktop/JSC/nest-simulator/mamba/include -I/Users/angusgray/Desktop/JSC/nest-simulator/mamba/include -I/Users/angusgray/Desktop/JSC/nest-simulator/mamba/include[0m
+[0mNEST libraries flags : -L/Users/angusgray/Desktop/JSC/nest-simulator/mamba/lib/nest /Users/angusgray/Desktop/JSC/nest-simulator/mamba/lib/libltdl.dylib /Users/angusgray/Desktop/JSC/nest-simulator/mamba/lib/libgsl.dylib /Users/angusgray/Desktop/JSC/nest-simulator/mamba/lib/libgslcblas.dylib    /Users/angusgray/Desktop/JSC/nest-simulator/mamba/lib/libomp.dylib[0m
 [0m[0m
 [0m-------------------------------------------------------[0m
 [0m[0m
@@ -17,57 +17,40 @@
 [0m  make install[0m
 [0m[0m
 [0mThe library file libnestml_amat_module.so will be installed to[0m
-[0m  /tmp/nestml_target_tcfjpqgk[0m
+[0m  /var/folders/jk/36jftn6s3yz6ks1zj2zdlry40000gn/T/nestml_target_m39oqn7v[0m
 [0mThe module can be loaded into NEST using[0m
 [0m  (nestml_amat_module) Install       (in SLI)[0m
 [0m  nest.Install(nestml_amat_module)   (in PyNEST)[0m
 [0m[0m
-In file included from /home/allodilab/miniconda3/envs/nest_x86_64_V7/include/nest/common_synapse_properties.h:30,
-                 from /home/allodilab/miniconda3/envs/nest_x86_64_V7/include/nest/connector_base.h:39,
-                 from /home/allodilab/miniconda3/envs/nest_x86_64_V7/include/nest/connection_manager.h:36,
-                 from /home/allodilab/miniconda3/envs/nest_x86_64_V7/include/nest/connection_manager_impl.h:26,
-                 from /home/allodilab/miniconda3/envs/nest_x86_64_V7/include/nest/nest_extension_interface.h:29,
-                 from /mnt/d/users/ag399/jsc/juypter/target/nestml_amat_module.cpp:26:
-/home/allodilab/miniconda3/envs/nest_x86_64_V7/include/nest/node.h:797:18: warning: 'virtual double nest::Node::get_C_m(int)' was hidden [-Woverloaded-virtual=]
-  797 |   virtual double get_C_m( int comp );
-      |                  ^~~~~~~
-In file included from /mnt/d/users/ag399/jsc/juypter/target/nestml_amat_module.cpp:31:
-/mnt/d/users/ag399/jsc/juypter/target/amat_neuron_nestml.h:381:17: note:   by 'double amat_neuron_nestml::get_C_m() const'
-  381 |   inline double get_C_m() const
-      |                 ^~~~~~~
-In file included from /home/allodilab/miniconda3/envs/nest_x86_64_V7/include/nest/common_synapse_properties.h:30,
-                 from /home/allodilab/miniconda3/envs/nest_x86_64_V7/include/nest/connector_base.h:39,
-                 from /home/allodilab/miniconda3/envs/nest_x86_64_V7/include/nest/connection_manager.h:36,
-                 from /home/allodilab/miniconda3/envs/nest_x86_64_V7/include/nest/kernel_manager.h:30,
-                 from /mnt/d/users/ag399/jsc/juypter/target/amat_neuron_nestml.cpp:33:
-/home/allodilab/miniconda3/envs/nest_x86_64_V7/include/nest/node.h:797:18: warning: 'virtual double nest::Node::get_C_m(int)' was hidden [-Woverloaded-virtual=]
-  797 |   virtual double get_C_m( int comp );
-      |                  ^~~~~~~
-In file included from /mnt/d/users/ag399/jsc/juypter/target/amat_neuron_nestml.cpp:44:
-/mnt/d/users/ag399/jsc/juypter/target/amat_neuron_nestml.h:381:17: note:   by 'double amat_neuron_nestml::get_C_m() const'
-  381 |   inline double get_C_m() const
-      |                 ^~~~~~~
-/mnt/d/users/ag399/jsc/juypter/target/amat_neuron_nestml.cpp: In member function 'void amat_neuron_nestml::init_state_internal_()':
-/mnt/d/users/ag399/jsc/juypter/target/amat_neuron_nestml.cpp:227:16: warning: unused variable '__timestep' [-Wunused-variable]
-  227 |   const double __timestep = nest::Time::get_resolution().get_ms();  // do not remove, this is necessary for the timestep() function
-      |                ^~~~~~~~~~
-/mnt/d/users/ag399/jsc/juypter/target/amat_neuron_nestml.cpp: In member function 'void amat_neuron_nestml::recompute_internal_variables(bool)':
-/mnt/d/users/ag399/jsc/juypter/target/amat_neuron_nestml.cpp:316:16: warning: unused variable '__timestep' [-Wunused-variable]
-  316 |   const double __timestep = nest::Time::get_resolution().get_ms();  // do not remove, this is necessary for the timestep() function
-      |                ^~~~~~~~~~
-/mnt/d/users/ag399/jsc/juypter/target/amat_neuron_nestml.cpp: In function 'int amat_neuron_nestml_dynamics_refr_t(double, const double*, double*, void*)':
-/mnt/d/users/ag399/jsc/juypter/target/amat_neuron_nestml.cpp:377:17: warning: unused variable 'I_STIM' [-Wunused-variable]
-  377 |   constexpr int I_STIM = amat_neuron_nestml::I_STIM;
-      |                 ^~~~~~
-/mnt/d/users/ag399/jsc/juypter/target/amat_neuron_nestml.cpp: In member function 'virtual void amat_neuron_nestml::update(const nest::Time&, long int, long int)':
-/mnt/d/users/ag399/jsc/juypter/target/amat_neuron_nestml.cpp:427:24: warning: comparison of integer expressions of different signedness: 'long int' and 'const size_t' {aka 'const long unsigned int'} [-Wsign-compare]
-  427 |     for (long i = 0; i < NUM_SPIKE_RECEPTORS; ++i)
-      |                      ~~^~~~~~~~~~~~~~~~~~~~~
-/mnt/d/users/ag399/jsc/juypter/target/amat_neuron_nestml.cpp:418:10: warning: variable 'get_t' set but not used [-Wunused-but-set-variable]
-  418 |     auto get_t = [origin, lag](){ return nest::Time( nest::Time::step( origin.get_steps() + lag + 1) ).get_ms(); };
-      |          ^~~~~
-/mnt/d/users/ag399/jsc/juypter/target/amat_neuron_nestml.cpp:412:16: warning: unused variable '__timestep' [-Wunused-variable]
-  412 |   const double __timestep = nest::Time::get_resolution().get_ms();  // do not remove, this is necessary for the timestep() function
-      |                ^~~~~~~~~~
-make[2]: Warning: File 'CMakeFiles/nestml_amat_module_module.dir/compiler_depend.make' has modification time 1.2 s in the future
-make[2]: warning:  Clock skew detected.  Your build may be incomplete.
+In file included from /Users/angusgray/Desktop/JSC/github/jsc_nestml_amat/juypter/target/nestml_amat_module.cpp:31:
+/Users/angusgray/Desktop/JSC/github/jsc_nestml_amat/juypter/target/amat_neuron_nestml.h:338:17: warning: 'amat_neuron_nestml::get_C_m' hides overloaded virtual function [-Woverloaded-virtual]
+  inline double get_C_m() const
+                ^
+/Users/angusgray/Desktop/JSC/nest-simulator/mamba/include/nest/node.h:834:18: note: hidden overloaded virtual function 'nest::Node::get_C_m' declared here: different number of parameters (1 vs 0)
+  virtual double get_C_m( int comp );
+                 ^
+In file included from /Users/angusgray/Desktop/JSC/github/jsc_nestml_amat/juypter/target/amat_neuron_nestml.cpp:37:
+/Users/angusgray/Desktop/JSC/github/jsc_nestml_amat/juypter/target/amat_neuron_nestml.h:338:17: warning: 'amat_neuron_nestml::get_C_m' hides overloaded virtual function [-Woverloaded-virtual]
+  inline double get_C_m() const
+                ^
+/Users/angusgray/Desktop/JSC/nest-simulator/mamba/include/nest/node.h:834:18: note: hidden overloaded virtual function 'nest::Node::get_C_m' declared here: different number of parameters (1 vs 0)
+  virtual double get_C_m( int comp );
+                 ^
+/Users/angusgray/Desktop/JSC/github/jsc_nestml_amat/juypter/target/amat_neuron_nestml.cpp:213:16: warning: unused variable '__timestep' [-Wunused-variable]
+  const double __timestep = nest::Time::get_resolution().get_ms();  // do not remove, this is necessary for the timestep() function
+               ^
+/Users/angusgray/Desktop/JSC/github/jsc_nestml_amat/juypter/target/amat_neuron_nestml.cpp:302:16: warning: unused variable '__timestep' [-Wunused-variable]
+  const double __timestep = nest::Time::get_resolution().get_ms();  // do not remove, this is necessary for the timestep() function
+               ^
+/Users/angusgray/Desktop/JSC/github/jsc_nestml_amat/juypter/target/amat_neuron_nestml.cpp:362:17: warning: unused variable 'I_STIM' [-Wunused-variable]
+  constexpr int I_STIM = amat_neuron_nestml::I_STIM;
+                ^
+/Users/angusgray/Desktop/JSC/github/jsc_nestml_amat/juypter/target/amat_neuron_nestml.cpp:406:10: warning: unused variable 'get_t' [-Wunused-variable]
+    auto get_t = [origin, lag](){ return nest::Time( nest::Time::step( origin.get_steps() + lag + 1) ).get_ms(); };
+         ^
+/Users/angusgray/Desktop/JSC/github/jsc_nestml_amat/juypter/target/amat_neuron_nestml.cpp:400:16: warning: unused variable '__timestep' [-Wunused-variable]
+  const double __timestep = nest::Time::get_resolution().get_ms();  // do not remove, this is necessary for the timestep() function
+               ^
+1 warning generated.
+6 warnings generated.
+ld: warning: search path '/Users/angusgray/Desktop/JSC/nest-simulator/mamba/lib/nest' not found
