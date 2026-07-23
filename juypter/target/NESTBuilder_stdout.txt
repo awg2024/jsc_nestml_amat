@@ -4,7 +4,7 @@
 -- Check for working CXX compiler: /usr/bin/c++ - skipped
 -- Detecting CXX compile features
 -- Detecting CXX compile features - done
--- Configuring done (0.9s)
+-- Configuring done (0.8s)
 -- Generating done (0.0s)
 -- Build files have been written to: /Users/angusgray/Desktop/JSC/github/jsc_nestml_amat/juypter/target
 [ 66%] [32mBuilding CXX object CMakeFiles/nestml_amat_module_module.dir/amat_neuron_nestml.cpp.o[0m
@@ -14,4 +14,4 @@
 [100%] Built target nestml_amat_module_module
 [36mInstall the project...[0m
 -- Install configuration: ""
--- Installing: /var/folders/jk/36jftn6s3yz6ks1zj2zdlry40000gn/T/nestml_target_l4zx304r/nestml_amat_module.so
+-- Installing: /var/folders/jk/36jftn6s3yz6ks1zj2zdlry40000gn/T/nestml_target_24mtpv7x/nestml_amat_module.so
