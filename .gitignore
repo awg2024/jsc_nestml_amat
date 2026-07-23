@@ -1,0 +1,12 @@
+# Ignore all data files
+/juypter/2009_competition/data/
+
+# Ignore Jupyter checkpoints
+.ipynb_checkpoints/
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# macOS
+.DS_Store
