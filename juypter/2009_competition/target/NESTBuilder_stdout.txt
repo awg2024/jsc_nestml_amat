@@ -1,0 +1,17 @@
+-- The CXX compiler identification is AppleClang 15.0.0.15000309
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/c++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Configuring done (0.8s)
+-- Generating done (0.0s)
+-- Build files have been written to: /Users/angusgray/Desktop/JSC/github/jsc_nestml_amat/juypter/2009_competition/target
+[ 66%] [32mBuilding CXX object CMakeFiles/nestml_amat_module_module.dir/amat_neuron_nestml.cpp.o[0m
+[ 66%] [32mBuilding CXX object CMakeFiles/nestml_amat_module_module.dir/nestml_amat_module.cpp.o[0m
+[100%] [1m[32mLinking CXX shared module nestml_amat_module.so[0m
+[100%] Built target nestml_amat_module_module
+[100%] Built target nestml_amat_module_module
+[36mInstall the project...[0m
+-- Install configuration: ""
+-- Installing: /var/folders/jk/36jftn6s3yz6ks1zj2zdlry40000gn/T/nestml_target_xaky2hud/nestml_amat_module.so

@@ -1,0 +1,56 @@
+[0m[0m
+[0m-------------------------------------------------------[0m
+[0mnestml_amat_module Configuration Summary[0m
+[0m-------------------------------------------------------[0m
+[0m[0m
+[0mC++ compiler         : /usr/bin/c++[0m
+[0mBuild static libs    : OFF[0m
+[0mC++ compiler flags   : [0m
+[0mNEST compiler flags  :  -Wall -Xpreprocessor -fopenmp -O2  -std=c++20[0m
+[0mNEST include dirs    :  -I/Users/angusgray/Desktop/JSC/nest-simulator/mamba/include/nest -I/Users/angusgray/Desktop/JSC/nest-simulator/mamba/include -I/Users/angusgray/Desktop/JSC/nest-simulator/mamba/include -I/Users/angusgray/Desktop/JSC/nest-simulator/mamba/include[0m
+[0mNEST libraries flags : -L/Users/angusgray/Desktop/JSC/nest-simulator/mamba/lib/nest /Users/angusgray/Desktop/JSC/nest-simulator/mamba/lib/libltdl.dylib /Users/angusgray/Desktop/JSC/nest-simulator/mamba/lib/libgsl.dylib /Users/angusgray/Desktop/JSC/nest-simulator/mamba/lib/libgslcblas.dylib    /Users/angusgray/Desktop/JSC/nest-simulator/mamba/lib/libomp.dylib[0m
+[0m[0m
+[0m-------------------------------------------------------[0m
+[0m[0m
+[0mYou can now build and install 'nestml_amat_module' using[0m
+[0m  make[0m
+[0m  make install[0m
+[0m[0m
+[0mThe library file libnestml_amat_module.so will be installed to[0m
+[0m  /var/folders/jk/36jftn6s3yz6ks1zj2zdlry40000gn/T/nestml_target_xaky2hud[0m
+[0mThe module can be loaded into NEST using[0m
+[0m  (nestml_amat_module) Install       (in SLI)[0m
+[0m  nest.Install(nestml_amat_module)   (in PyNEST)[0m
+[0m[0m
+In file included from /Users/angusgray/Desktop/JSC/github/jsc_nestml_amat/juypter/2009_competition/target/nestml_amat_module.cpp:31:
+/Users/angusgray/Desktop/JSC/github/jsc_nestml_amat/juypter/2009_competition/target/amat_neuron_nestml.h:338:17: warning: 'amat_neuron_nestml::get_C_m' hides overloaded virtual function [-Woverloaded-virtual]
+  inline double get_C_m() const
+                ^
+/Users/angusgray/Desktop/JSC/nest-simulator/mamba/include/nest/node.h:834:18: note: hidden overloaded virtual function 'nest::Node::get_C_m' declared here: different number of parameters (1 vs 0)
+  virtual double get_C_m( int comp );
+                 ^
+In file included from /Users/angusgray/Desktop/JSC/github/jsc_nestml_amat/juypter/2009_competition/target/amat_neuron_nestml.cpp:37:
+/Users/angusgray/Desktop/JSC/github/jsc_nestml_amat/juypter/2009_competition/target/amat_neuron_nestml.h:338:17: warning: 'amat_neuron_nestml::get_C_m' hides overloaded virtual function [-Woverloaded-virtual]
+  inline double get_C_m() const
+                ^
+/Users/angusgray/Desktop/JSC/nest-simulator/mamba/include/nest/node.h:834:18: note: hidden overloaded virtual function 'nest::Node::get_C_m' declared here: different number of parameters (1 vs 0)
+  virtual double get_C_m( int comp );
+                 ^
+/Users/angusgray/Desktop/JSC/github/jsc_nestml_amat/juypter/2009_competition/target/amat_neuron_nestml.cpp:213:16: warning: unused variable '__timestep' [-Wunused-variable]
+  const double __timestep = nest::Time::get_resolution().get_ms();  // do not remove, this is necessary for the timestep() function
+               ^
+/Users/angusgray/Desktop/JSC/github/jsc_nestml_amat/juypter/2009_competition/target/amat_neuron_nestml.cpp:302:16: warning: unused variable '__timestep' [-Wunused-variable]
+  const double __timestep = nest::Time::get_resolution().get_ms();  // do not remove, this is necessary for the timestep() function
+               ^
+/Users/angusgray/Desktop/JSC/github/jsc_nestml_amat/juypter/2009_competition/target/amat_neuron_nestml.cpp:362:17: warning: unused variable 'I_STIM' [-Wunused-variable]
+  constexpr int I_STIM = amat_neuron_nestml::I_STIM;
+                ^
+/Users/angusgray/Desktop/JSC/github/jsc_nestml_amat/juypter/2009_competition/target/amat_neuron_nestml.cpp:406:10: warning: unused variable 'get_t' [-Wunused-variable]
+    auto get_t = [origin, lag](){ return nest::Time( nest::Time::step( origin.get_steps() + lag + 1) ).get_ms(); };
+         ^
+/Users/angusgray/Desktop/JSC/github/jsc_nestml_amat/juypter/2009_competition/target/amat_neuron_nestml.cpp:400:16: warning: unused variable '__timestep' [-Wunused-variable]
+  const double __timestep = nest::Time::get_resolution().get_ms();  // do not remove, this is necessary for the timestep() function
+               ^
+1 warning generated.
+6 warnings generated.
+ld: warning: search path '/Users/angusgray/Desktop/JSC/nest-simulator/mamba/lib/nest' not found

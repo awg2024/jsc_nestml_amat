@@ -2,7 +2,7 @@
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "/var/folders/jk/36jftn6s3yz6ks1zj2zdlry40000gn/T/nestml_target_24mtpv7x")
+  set(CMAKE_INSTALL_PREFIX "/var/folders/jk/36jftn6s3yz6ks1zj2zdlry40000gn/T/nestml_target_kwbcrkmh")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -39,18 +39,18 @@ endif()
 
 if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
   list(APPEND CMAKE_ABSOLUTE_DESTINATION_FILES
-   "/var/folders/jk/36jftn6s3yz6ks1zj2zdlry40000gn/T/nestml_target_24mtpv7x/nestml_amat_module.so")
+   "/var/folders/jk/36jftn6s3yz6ks1zj2zdlry40000gn/T/nestml_target_kwbcrkmh/nestml_amat_module.so")
   if(CMAKE_WARN_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(WARNING "ABSOLUTE path INSTALL DESTINATION : ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
   if(CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
-  file(INSTALL DESTINATION "/var/folders/jk/36jftn6s3yz6ks1zj2zdlry40000gn/T/nestml_target_24mtpv7x" TYPE MODULE FILES "/Users/angusgray/Desktop/JSC/github/jsc_nestml_amat/juypter/target/nestml_amat_module.so")
-  if(EXISTS "$ENV{DESTDIR}/var/folders/jk/36jftn6s3yz6ks1zj2zdlry40000gn/T/nestml_target_24mtpv7x/nestml_amat_module.so" AND
-     NOT IS_SYMLINK "$ENV{DESTDIR}/var/folders/jk/36jftn6s3yz6ks1zj2zdlry40000gn/T/nestml_target_24mtpv7x/nestml_amat_module.so")
+  file(INSTALL DESTINATION "/var/folders/jk/36jftn6s3yz6ks1zj2zdlry40000gn/T/nestml_target_kwbcrkmh" TYPE MODULE FILES "/Users/angusgray/Desktop/JSC/github/jsc_nestml_amat/juypter/target/nestml_amat_module.so")
+  if(EXISTS "$ENV{DESTDIR}/var/folders/jk/36jftn6s3yz6ks1zj2zdlry40000gn/T/nestml_target_kwbcrkmh/nestml_amat_module.so" AND
+     NOT IS_SYMLINK "$ENV{DESTDIR}/var/folders/jk/36jftn6s3yz6ks1zj2zdlry40000gn/T/nestml_target_kwbcrkmh/nestml_amat_module.so")
     if(CMAKE_INSTALL_DO_STRIP)
-      execute_process(COMMAND "/usr/bin/strip" -x "$ENV{DESTDIR}/var/folders/jk/36jftn6s3yz6ks1zj2zdlry40000gn/T/nestml_target_24mtpv7x/nestml_amat_module.so")
+      execute_process(COMMAND "/usr/bin/strip" -x "$ENV{DESTDIR}/var/folders/jk/36jftn6s3yz6ks1zj2zdlry40000gn/T/nestml_target_kwbcrkmh/nestml_amat_module.so")
     endif()
   endif()
 endif()
