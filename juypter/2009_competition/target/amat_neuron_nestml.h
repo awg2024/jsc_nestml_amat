@@ -19,7 +19,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with NEST.  If not, see <http://www.gnu.org/licenses/>.
  *
- *  Generated from NESTML 8.3.0 at time: 2026-07-24 10:48:00.145196
+ *  Generated from NESTML 8.3.0 at time: 2026-07-24 11:16:04.732708
 **/
 #ifndef AMAT_NEURON_NESTML
 #define AMAT_NEURON_NESTML

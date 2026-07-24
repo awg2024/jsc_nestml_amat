@@ -14,4 +14,4 @@
 [100%] Built target nestml_amat_module_module
 [36mInstall the project...[0m
 -- Install configuration: ""
--- Installing: /var/folders/jk/36jftn6s3yz6ks1zj2zdlry40000gn/T/nestml_target_xaky2hud/nestml_amat_module.so
+-- Installing: /var/folders/jk/36jftn6s3yz6ks1zj2zdlry40000gn/T/nestml_target_wyj550v5/nestml_amat_module.so
