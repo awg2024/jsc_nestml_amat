@@ -62,8 +62,14 @@ def standardise_amat_events(
     zeros = np.zeros_like(V_m)
 
     if model_kind == "nest":
-        theta = _get_array(events, "V_th")
+        raw_V_th = _get_array(events, "V_th")
         V_th_v = _get_array(events, "V_th_v", zeros)
+    
+        # Native NEST AMAT records V_th as a relative threshold offset
+        # around omega, e.g. ~5 mV, not as an absolute threshold around -65 mV.
+        # Therefore convert it to the same absolute convention as NESTML.
+        theta = E_L + raw_V_th
+    
         V_th_v_aux = zeros
         V_th_alpha_1 = zeros
         V_th_alpha_2 = zeros
