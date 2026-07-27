@@ -132,7 +132,6 @@ model amat_neuron:
         V_th_v_aux mV/ms = 0 mV/ms # Auxiliary variable w = dtheta_V/dt + theta_V/tau_V,
                                    # needed to express the alpha-kernel convolution as two
                                    # coupled first-order ODEs instead of one 2nd-order ODE. 
-
         # membrane potential and refractory timer 
         V_m mV = E_L        # Absolute membrane potential; never reset on spike
         refr_t ms = 0 ms    # Refractory period timer; counts down to 0 after a spike
@@ -159,8 +158,8 @@ model amat_neuron:
 
         # The AMAT voltage-dependent threshold pair
         # Single second-order ODE into the two coupled first-order ODEs below: 
-        V_th_v_aux' = -V_th_v_aux / tau_V + beta * dV_dt
-        V_th_v' = -V_th_v / tau_V + V_th_v_aux
+        V_th_v_aux' = -V_th_v_aux / tau_v + beta * dV_dt
+        V_th_v' = -V_th_v / tau_v + V_th_v_aux
 
         refr_t' = -1e3 * ms/s    # refractoriness is implemented as an ODE, representing a timer counting back down to zero. 
 
@@ -182,7 +181,7 @@ model amat_neuron:
         omega mV = 19 mV         # Resting spike threshold (absolute value, not relative to E_L)
 
         # voltage-dependent threshold parameters (new, AMAT extension) 
-        tau_V ms = 5 ms          # Timescale of the voltage-dependency kernel K(s)=s*exp(-s/tau_V) [4]
+        tau_v ms = 5 ms          # Timescale of the voltage-dependency kernel K(s)=s*exp(-s/tau_v) [4]
         beta 1/ms = 0 / ms       # Strength/sign of voltage dependency. beta=0 recovers mat2_psc_exp
                                  # exactly. Negative beta -> phasic/rebound-type behaviour;
                                  # positive beta -> resonator/subthreshold-oscillation-type behaviour [4]
@@ -216,7 +215,7 @@ model amat_neuron:
             # re-do commentry here, we took out the intenral exponentials? 
             integrate_odes(V_m, V_th_v_aux, V_th_v, V_th_alpha_1, V_th_alpha_2)
     
-    onCondition(refr_t <= 0 ms and V_m >= E_L + omega + V_th_alpha_1 + V_th_alpha_2):
+    onCondition(refr_t <= 0 ms and V_m >= E_L + omega + V_th_alpha_1 + V_th_alpha_2 + V_th_v):
         # Spike condition: V_m has crossed theta(t) = E_L + omega + theta_1 + theta_2 + theta_V
         # (all three threshold components, summed, per Eq. 16 of Yamauchi et al. 2011)
 
