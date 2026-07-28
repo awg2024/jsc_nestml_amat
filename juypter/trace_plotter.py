@@ -58,7 +58,6 @@ def _reconstruct_spike_kernel(time, spike_times, amplitude, tau):
 
     return kernel
 
-
 def standardise_amat_events(
     events: Mapping,
     *,
@@ -69,36 +68,28 @@ def standardise_amat_events(
     input_times: Sequence[float] = (),
     spike_events: Mapping | None = None,
     params: Mapping | None = None,
+    pulse_width: float | None = None,
+    pulse_amplitude: float | None = None,
 ) -> PlotBundle:
     """
     Convert native NEST or NESTML AMAT events into common plotting variables.
 
-    Returned traces:
-        V_m
-        theta
-        theta_relative
-        distance
-        V_th_alpha_1
-        V_th_alpha_2
-        V_th_v
-        V_th_v_aux
-        input_proxy
+    Important distinction
+    ---------------------
+    I_syn:
+        True postsynaptic current produced by incoming spike events.
 
-    Native NEST:
-        Uses recorded V_th as the relative total threshold.
-        Absolute threshold is E_L + V_th.
+    input_current:
+        Injected continuous current from a current generator.
 
-    NESTML:
-        Reconstructs relative threshold as:
-        omega + V_th_alpha_1 + V_th_alpha_2 + V_th_v
-
-        Absolute threshold is:
-        E_L + omega + V_th_alpha_1 + V_th_alpha_2 + V_th_v
+    Native NEST does not expose its injected-current buffer as a recordable,
+    so input_current is reconstructed from the known pulse specification.
+    It is therefore a plotting proxy, not a recorded state variable.
     """
 
     time = _get_array(events, "times")
     V_m = _get_array(events, "V_m")
-    zeros = np.zeros_like(V_m)
+    zeros = np.zeros_like(V_m, dtype=float)
 
     if spike_events is not None and "times" in spike_events:
         spike_times = np.asarray(spike_events["times"])
@@ -109,19 +100,42 @@ def standardise_amat_events(
 
     alpha_1 = params.get("alpha_1", 0.0)
     alpha_2 = params.get("alpha_2", 0.0)
-    tau_1 = params.get("tau_1", params.get("tau_1", 10.0))
-    tau_2 = params.get("tau_2", params.get("tau_2", 200.0))
+    tau_1 = params.get("tau_1", 10.0)
+    tau_2 = params.get("tau_2", 200.0)
 
+    # ---------------------------------------------------------
+    # Reconstruct the known injected-current waveform.
+    # This is not I_syn.
+    # ---------------------------------------------------------
+    input_current = np.zeros_like(time, dtype=float)
+
+    if pulse_width is not None and pulse_amplitude is not None:
+        for pulse_time in input_times:
+            mask = (
+                (time >= pulse_time)
+                & (time < pulse_time + pulse_width)
+            )
+            input_current[mask] = pulse_amplitude
+
+    # ---------------------------------------------------------
+    # Native NEST
+    # ---------------------------------------------------------
     if model_kind == "nest":
-        raw_V_th = _get_array(events, "V_th")
+        # Native model records the two PSC components separately.
+        I_syn_ex = _get_array(events, "I_syn_ex", zeros)
+        I_syn_in = _get_array(events, "I_syn_in", zeros)
+
+        # Inhibitory current is already negative in native NEST.
+        I_syn = I_syn_ex + I_syn_in
+
+        # Native NEST V_th is already an absolute voltage.
+        theta = _get_array(events, "V_th")
+        theta_relative = theta - E_L
+
         V_th_v = _get_array(events, "V_th_v", zeros)
 
-        # Native NEST records V_th as a relative threshold, usually around omega.
-        theta_relative = raw_V_th
-        theta = E_L + theta_relative
-
-        # Native NEST does not expose alpha components separately.
-        # Reconstruct them from output spikes and known parameters.
+        # The native multimeter does not expose these components.
+        # Reconstruct them from emitted spike times.
         V_th_alpha_1 = _reconstruct_spike_kernel(
             time=time,
             spike_times=spike_times,
@@ -136,22 +150,31 @@ def standardise_amat_events(
             tau=tau_2,
         )
 
+        # Not exposed by the native model.
         V_th_v_aux = zeros
-        input_proxy = _get_array(events, "I_syn_ex", zeros)
 
+    # NESTML
     elif model_kind == "nestml":
-        V_th_alpha_1 = _get_array(events, "V_th_alpha_1", zeros)
-        V_th_alpha_2 = _get_array(events, "V_th_alpha_2", zeros)
-        V_th_v = _get_array(events, "V_th_v", zeros)
-        V_th_v_aux = _get_array(events, "V_th_v_aux", zeros)
+        I_syn_ex = _get_array(events, "I_syn_ex", zeros)
+        I_syn_in = _get_array(events, "I_syn_in", zeros)
 
-        theta_relative = omega + V_th_alpha_1 + V_th_alpha_2 + V_th_v
+        # Prefer the directly recorded total if available.
+        # Otherwise reconstruct it from the two components.
+        I_syn = _get_array(events,"I_syn",fallback=I_syn_ex + I_syn_in)
+
+        V_th_alpha_1 = _get_array(events,"V_th_alpha_1",zeros)
+        V_th_alpha_2 = _get_array(events,"V_th_alpha_2",zeros)
+        V_th_v = _get_array(events, "V_th_v", zeros)
+        
+        V_th_v_aux = _get_array(events,"V_th_v_aux",zeros)
+
+        theta_relative = (omega + V_th_alpha_1 + V_th_alpha_2 + V_th_v)
         theta = E_L + theta_relative
 
-        input_proxy = zeros
-
     else:
-        raise ValueError("model_kind must be 'nest' or 'nestml'.")
+        raise ValueError(
+            "model_kind must be 'nest' or 'nestml'."
+        )
 
     distance = V_m - theta
 
@@ -159,6 +182,10 @@ def standardise_amat_events(
         name=name,
         time=time,
         traces={
+            "input_current": input_current,
+            "I_syn": I_syn,
+            "I_syn_ex": I_syn_ex,
+            "I_syn_in": I_syn_in,
             "V_m": V_m,
             "theta": theta,
             "theta_relative": theta_relative,
@@ -167,12 +194,11 @@ def standardise_amat_events(
             "V_th_alpha_2": V_th_alpha_2,
             "V_th_v": V_th_v,
             "V_th_v_aux": V_th_v_aux,
-            "input_proxy": input_proxy,
         },
         input_times=input_times,
         spike_times=spike_times,
     )
-
+    
 
 
 class TracePlotter:
