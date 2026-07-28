@@ -36,6 +36,29 @@ def _get_array(events: Mapping, key: str, fallback: np.ndarray | None = None) ->
         return np.asarray(fallback)
     raise KeyError(f"Missing key '{key}' in events dictionary.")
 
+
+def _reconstruct_spike_kernel(time, spike_times, amplitude, tau):
+    """
+    Reconstruct spike-history threshold component:
+
+        sum_k amplitude * exp(-(t - t_k) / tau), for t >= t_k
+
+    This is useful for native NEST AMAT, which records total V_th but
+    may not expose V_th_alpha_1 and V_th_alpha_2 separately.
+    """
+    time = np.asarray(time)
+    kernel = np.zeros_like(time, dtype=float)
+
+    if spike_times is None:
+        return kernel
+
+    for tk in spike_times:
+        mask = time >= tk
+        kernel[mask] += amplitude * np.exp(-(time[mask] - tk) / tau)
+
+    return kernel
+
+
 def standardise_amat_events(
     events: Mapping,
     *,
@@ -45,34 +68,75 @@ def standardise_amat_events(
     name: str,
     input_times: Sequence[float] = (),
     spike_events: Mapping | None = None,
+    params: Mapping | None = None,
 ) -> PlotBundle:
     """
     Convert native NEST or NESTML AMAT events into common plotting variables.
 
+    Returned traces:
+        V_m
+        theta
+        theta_relative
+        distance
+        V_th_alpha_1
+        V_th_alpha_2
+        V_th_v
+        V_th_v_aux
+        input_proxy
+
     Native NEST:
-        Uses recorded V_th directly as total threshold.
+        Uses recorded V_th as the relative total threshold.
+        Absolute threshold is E_L + V_th.
 
     NESTML:
-        Reconstructs total threshold as:
-        theta = E_L + omega + V_th_alpha_1 + V_th_alpha_2 + V_th_v
+        Reconstructs relative threshold as:
+        omega + V_th_alpha_1 + V_th_alpha_2 + V_th_v
+
+        Absolute threshold is:
+        E_L + omega + V_th_alpha_1 + V_th_alpha_2 + V_th_v
     """
 
     time = _get_array(events, "times")
     V_m = _get_array(events, "V_m")
     zeros = np.zeros_like(V_m)
 
+    if spike_events is not None and "times" in spike_events:
+        spike_times = np.asarray(spike_events["times"])
+    else:
+        spike_times = np.array([])
+
+    params = params or {}
+
+    alpha_1 = params.get("alpha_1", 0.0)
+    alpha_2 = params.get("alpha_2", 0.0)
+    tau_1 = params.get("tau_1", params.get("tau_1", 10.0))
+    tau_2 = params.get("tau_2", params.get("tau_2", 200.0))
+
     if model_kind == "nest":
         raw_V_th = _get_array(events, "V_th")
         V_th_v = _get_array(events, "V_th_v", zeros)
-    
-        # Native NEST AMAT records V_th as a relative threshold offset
-        # around omega, e.g. ~5 mV, not as an absolute threshold around -65 mV.
-        # Therefore convert it to the same absolute convention as NESTML.
-        theta = E_L + raw_V_th
-    
+
+        # Native NEST records V_th as a relative threshold, usually around omega.
+        theta_relative = raw_V_th
+        theta = E_L + theta_relative
+
+        # Native NEST does not expose alpha components separately.
+        # Reconstruct them from output spikes and known parameters.
+        V_th_alpha_1 = _reconstruct_spike_kernel(
+            time=time,
+            spike_times=spike_times,
+            amplitude=alpha_1,
+            tau=tau_1,
+        )
+
+        V_th_alpha_2 = _reconstruct_spike_kernel(
+            time=time,
+            spike_times=spike_times,
+            amplitude=alpha_2,
+            tau=tau_2,
+        )
+
         V_th_v_aux = zeros
-        V_th_alpha_1 = zeros
-        V_th_alpha_2 = zeros
         input_proxy = _get_array(events, "I_syn_ex", zeros)
 
     elif model_kind == "nestml":
@@ -81,7 +145,9 @@ def standardise_amat_events(
         V_th_v = _get_array(events, "V_th_v", zeros)
         V_th_v_aux = _get_array(events, "V_th_v_aux", zeros)
 
-        theta = E_L + omega + V_th_alpha_1 + V_th_alpha_2 + V_th_v
+        theta_relative = omega + V_th_alpha_1 + V_th_alpha_2 + V_th_v
+        theta = E_L + theta_relative
+
         input_proxy = zeros
 
     else:
@@ -89,27 +155,24 @@ def standardise_amat_events(
 
     distance = V_m - theta
 
-    if spike_events is not None and "times" in spike_events:
-        spike_times = np.asarray(spike_events["times"])
-    else:
-        spike_times = np.array([])
-
     return PlotBundle(
         name=name,
         time=time,
         traces={
             "V_m": V_m,
             "theta": theta,
+            "theta_relative": theta_relative,
             "distance": distance,
-            "V_th_v": V_th_v,
-            "V_th_v_aux": V_th_v_aux,
             "V_th_alpha_1": V_th_alpha_1,
             "V_th_alpha_2": V_th_alpha_2,
+            "V_th_v": V_th_v,
+            "V_th_v_aux": V_th_v_aux,
             "input_proxy": input_proxy,
         },
         input_times=input_times,
         spike_times=spike_times,
     )
+
 
 
 class TracePlotter:
