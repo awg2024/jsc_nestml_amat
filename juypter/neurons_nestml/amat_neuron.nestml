@@ -146,7 +146,7 @@ model amat_neuron:
         # decay ODEs for slow and fast adaptation (from mat2_psc_exp)
         V_th_alpha_1' = -V_th_alpha_1 / tau_1
         V_th_alpha_2' = -V_th_alpha_2 / tau_2
-        
+
 
         recordable inline I_syn_ex pA = (unit_psc * convolve(I_kernel_exc, exc_spikes))  # convolving the I_e exp exc kernel and convolved 
     
@@ -168,6 +168,8 @@ model amat_neuron:
 
         refr_t' = -1e3 * ms/s    # refractoriness is implemented as an ODE, representing a timer counting back down to zero. 
 
+        recordable inline V_th mV = (omega + V_th_alpha_1 + V_th_alpha_2 + V_th_v)  #  recordable summed threshold 
+
     parameters:
         
         # membrane parameters (unchanged from mat2_psc_exp) 
@@ -183,7 +185,9 @@ model amat_neuron:
         tau_2 ms = 200 ms        # Long time constant of adaptive threshold
         alpha_1 mV = 10 mV       # Amplitude of short time threshold adaptation [3]
         alpha_2 mV = 0 mV        # Amplitude of long time threshold adaptation [3]
-        omega mV = 5 mV         # Resting spike threshold (absolute value, not relative to E_L)
+        
+        omega mV = -65 mV         # Resting spike threshold (relative to E_L)
+                                  # E_L resting is -70mV and then with omega it sits 5mV higher than resting. 
 
         # voltage-dependent threshold parameters (new, AMAT extension) 
         tau_v ms = 5 ms          # Timescale of the voltage-dependency kernel K(s)=s*exp(-s/tau_v) [4]
@@ -220,7 +224,7 @@ model amat_neuron:
             
             integrate_odes(V_m, V_th_v_aux, V_th_v, V_th_alpha_1, V_th_alpha_2)   #  implemented refr_t in integrate_ode 
     
-    onCondition(refr_t <= 0 ms and V_m >= E_L + omega + V_th_alpha_1 + V_th_alpha_2 + V_th_v):
+    onCondition(refr_t <= 0 ms and V_m >= V_th):
         
         # Spike condition: V_m has crossed theta(t) = E_L + omega + theta_1 + theta_2 + theta_V
         # (all three threshold components, summed, per Eq. 16 of Yamauchi et al. 2011)

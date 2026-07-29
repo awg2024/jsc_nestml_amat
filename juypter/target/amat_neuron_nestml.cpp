@@ -19,7 +19,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with NEST.  If not, see <http://www.gnu.org/licenses/>.
  *
- *  Generated from NESTML 8.3.0 at time: 2026-07-28 17:20:05.056159
+ *  Generated from NESTML 8.3.0 at time: 2026-07-29 11:52:17.511105
 **/
 
 // C++ includes:
@@ -64,6 +64,7 @@ template <> void RecordablesMap<amat_neuron_nestml>::create()
     insert_(amat_neuron_nestml_names::_I_syn_ex, &amat_neuron_nestml::get_I_syn_ex);
     insert_(amat_neuron_nestml_names::_I_syn_in, &amat_neuron_nestml::get_I_syn_in);
     insert_(amat_neuron_nestml_names::_I_syn, &amat_neuron_nestml::get_I_syn);
+    insert_(amat_neuron_nestml_names::_V_th, &amat_neuron_nestml::get_V_th);
   }
 }
 std::vector< std::tuple< int, int > > amat_neuron_nestml::rport_to_nestml_buffer_idx =
@@ -229,7 +230,7 @@ void amat_neuron_nestml::init_state_internal_()
   P_.tau_2 = 200; // as ms
   P_.alpha_1 = 10; // as mV
   P_.alpha_2 = 0; // as mV
-  P_.omega = 5; // as mV
+  P_.omega = (-65); // as mV
   P_.tau_v = 5; // as ms
   P_.beta = 0 / 1.0; // as 1 / ms
   P_.I_e = 0; // as pA
@@ -554,7 +555,7 @@ void amat_neuron_nestml::update(nest::Time const & origin, const long from, cons
      * Begin NESTML generated code for the onCondition block(s)
     **/
 
-    if (S_.ode_state[State_::refr_t] <= 0 && S_.ode_state[State_::V_m] >= P_.E_L + P_.omega + S_.ode_state[State_::V_th_alpha_1] + S_.ode_state[State_::V_th_alpha_2] + S_.ode_state[State_::V_th_v])
+    if (S_.ode_state[State_::refr_t] <= 0 && S_.ode_state[State_::V_m] >= get_V_th())
     {
       S_.ode_state[State_::refr_t] = P_.refr_T;
       S_.ode_state[State_::V_th_alpha_1] += P_.alpha_1;

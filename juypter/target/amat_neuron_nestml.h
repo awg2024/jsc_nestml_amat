@@ -19,7 +19,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with NEST.  If not, see <http://www.gnu.org/licenses/>.
  *
- *  Generated from NESTML 8.3.0 at time: 2026-07-28 17:20:05.056159
+ *  Generated from NESTML 8.3.0 at time: 2026-07-29 11:52:17.511105
 **/
 #ifndef AMAT_NEURON_NESTML
 #define AMAT_NEURON_NESTML
@@ -73,6 +73,7 @@ namespace amat_neuron_nestml_names
     const Name _I_syn_ex( "I_syn_ex" );
     const Name _I_syn_in( "I_syn_in" );
     const Name _I_syn( "I_syn" );
+    const Name _V_th( "V_th" );
     // parameters
     const Name _tau_m( "tau_m" );
     const Name _C_m( "C_m" );
@@ -172,7 +173,7 @@ tau_1 [ms] spike-history threshold parameters (unchanged from mat2_psc_exp)
 tau_2 [ms]  Long time constant of adaptive threshold
 alpha_1 [mV]  Amplitude of short time threshold adaptation [3]
 alpha_2 [mV]  Amplitude of long time threshold adaptation [3]
-omega [mV]  Resting spike threshold (absolute value, not relative to E_L)
+omega [mV]  Resting spike threshold (relative to E_L)
 tau_v [ms] voltage-dependent threshold parameters (new, AMAT extension) 
  Timescale of the voltage-dependency kernel K(s)=s*exp(-s/tau_v) [4]
 beta [1 / ms]  Strength/sign of voltage dependency. beta=0 recovers mat2_psc_exp
@@ -630,7 +631,7 @@ static std::vector< std::tuple< int, int > > rport_to_nestml_buffer_idx;
     double alpha_1;
     //!  Amplitude of long time threshold adaptation [3]
     double alpha_2;
-    //!  Resting spike threshold (absolute value, not relative to E_L)
+    //!  Resting spike threshold (relative to E_L)
     double omega;
     //! voltage-dependent threshold parameters (new, AMAT extension) 
     //!  Timescale of the voltage-dependency kernel K(s)=s*exp(-s/tau_v) [4]
@@ -856,6 +857,11 @@ public:
     return (-(S_.ode_state[State_::V_m] - P_.E_L)) / P_.tau_m + ((((V_.unit_psc * S_.ode_state[State_::I_kernel_exc__X__exc_spikes])) + (((-V_.unit_psc) * S_.ode_state[State_::I_kernel_inh__X__inh_spikes]))) + P_.I_e + B_.continuous_inputs_grid_sum_[I_STIM]) / P_.C_m;
   }
 
+  inline double get_V_th() const
+  {
+    return (P_.omega + S_.ode_state[State_::V_th_alpha_1] + S_.ode_state[State_::V_th_alpha_2] + S_.ode_state[State_::V_th_v]);
+  }
+
 
 
   // -------------------------------------------------------------------------
@@ -863,6 +869,8 @@ public:
   // -------------------------------------------------------------------------
 private:
   
+
+
 
 
 
