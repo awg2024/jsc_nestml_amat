@@ -19,7 +19,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with NEST.  If not, see <http://www.gnu.org/licenses/>.
  *
- *  Generated from NESTML 8.3.0 at time: 2026-07-29 15:43:19.699487
+ *  Generated from NESTML 8.3.0 at time: 2026-07-30 08:58:42.246446
 **/
 
 // C++ includes:
@@ -58,8 +58,8 @@ template <> void RecordablesMap<amat_neuron_nestml>::create()
     insert_(amat_neuron_nestml_names::_V_th_v_aux, &amat_neuron_nestml::get_V_th_v_aux);
     insert_(amat_neuron_nestml_names::_V_m, &amat_neuron_nestml::get_V_m);
     insert_(amat_neuron_nestml_names::_refr_t, &amat_neuron_nestml::get_refr_t);
-    insert_(amat_neuron_nestml_names::_I_kernel_inh__X__inh_spikes, &amat_neuron_nestml::get_I_kernel_inh__X__inh_spikes);
     insert_(amat_neuron_nestml_names::_I_kernel_exc__X__exc_spikes, &amat_neuron_nestml::get_I_kernel_exc__X__exc_spikes);
+    insert_(amat_neuron_nestml_names::_I_kernel_inh__X__inh_spikes, &amat_neuron_nestml::get_I_kernel_inh__X__inh_spikes);
     // add recordable inline expressions to recordables map
     insert_(amat_neuron_nestml_names::_I_syn_ex, &amat_neuron_nestml::get_I_syn_ex);
     insert_(amat_neuron_nestml_names::_I_syn_in, &amat_neuron_nestml::get_I_syn_in);
@@ -158,8 +158,8 @@ amat_neuron_nestml::amat_neuron_nestml(const amat_neuron_nestml& __n):
   S_.ode_state[State_::V_th_v_aux] = __n.S_.ode_state[State_::V_th_v_aux];
   S_.ode_state[State_::V_m] = __n.S_.ode_state[State_::V_m];
   S_.ode_state[State_::refr_t] = __n.S_.ode_state[State_::refr_t];
-  S_.ode_state[State_::I_kernel_inh__X__inh_spikes] = __n.S_.ode_state[State_::I_kernel_inh__X__inh_spikes];
   S_.ode_state[State_::I_kernel_exc__X__exc_spikes] = __n.S_.ode_state[State_::I_kernel_exc__X__exc_spikes];
+  S_.ode_state[State_::I_kernel_inh__X__inh_spikes] = __n.S_.ode_state[State_::I_kernel_inh__X__inh_spikes];
 
   // copy internals V_
   V_.unit_psc = __n.V_.unit_psc;
@@ -167,11 +167,11 @@ amat_neuron_nestml::amat_neuron_nestml(const amat_neuron_nestml& __n):
   V_.__P__V_th_alpha_1__V_th_alpha_1 = __n.V_.__P__V_th_alpha_1__V_th_alpha_1;
   V_.__P__V_th_alpha_2__V_th_alpha_2 = __n.V_.__P__V_th_alpha_2__V_th_alpha_2;
   V_.__P__V_m__V_m = __n.V_.__P__V_m__V_m;
-  V_.__P__V_m__I_kernel_inh__X__inh_spikes = __n.V_.__P__V_m__I_kernel_inh__X__inh_spikes;
   V_.__P__V_m__I_kernel_exc__X__exc_spikes = __n.V_.__P__V_m__I_kernel_exc__X__exc_spikes;
+  V_.__P__V_m__I_kernel_inh__X__inh_spikes = __n.V_.__P__V_m__I_kernel_inh__X__inh_spikes;
   V_.__P__refr_t__refr_t = __n.V_.__P__refr_t__refr_t;
-  V_.__P__I_kernel_inh__X__inh_spikes__I_kernel_inh__X__inh_spikes = __n.V_.__P__I_kernel_inh__X__inh_spikes__I_kernel_inh__X__inh_spikes;
   V_.__P__I_kernel_exc__X__exc_spikes__I_kernel_exc__X__exc_spikes = __n.V_.__P__I_kernel_exc__X__exc_spikes__I_kernel_exc__X__exc_spikes;
+  V_.__P__I_kernel_inh__X__inh_spikes__I_kernel_inh__X__inh_spikes = __n.V_.__P__I_kernel_inh__X__inh_spikes__I_kernel_inh__X__inh_spikes;
 }
 
 // ---------------------------------------------------------------------------
@@ -244,8 +244,8 @@ void amat_neuron_nestml::init_state_internal_()
   S_.ode_state[State_::V_th_v_aux] = 0; // as mV / ms
   S_.ode_state[State_::V_m] = P_.E_L; // as mV
   S_.ode_state[State_::refr_t] = 0; // as ms
-  S_.ode_state[State_::I_kernel_inh__X__inh_spikes] = 0; // as real
   S_.ode_state[State_::I_kernel_exc__X__exc_spikes] = 0; // as real
+  S_.ode_state[State_::I_kernel_inh__X__inh_spikes] = 0; // as real
 }
 
 void amat_neuron_nestml::init_buffers_()
@@ -312,11 +312,11 @@ void amat_neuron_nestml::recompute_internal_variables(bool exclude_timestep)
     V_.__P__V_th_alpha_1__V_th_alpha_1 = std::exp((-V_.__h) / P_.tau_1); // as real
     V_.__P__V_th_alpha_2__V_th_alpha_2 = std::exp((-V_.__h) / P_.tau_2); // as real
     V_.__P__V_m__V_m = std::exp((-V_.__h) / P_.tau_m); // as real
-    V_.__P__V_m__I_kernel_inh__X__inh_spikes = P_.tau_m * P_.tau_syn_inh * V_.unit_psc * (std::exp(V_.__h / P_.tau_m) - std::exp(V_.__h / P_.tau_syn_inh)) * std::exp((-V_.__h) * (P_.tau_m + P_.tau_syn_inh) / (P_.tau_m * P_.tau_syn_inh)) / (P_.C_m * (P_.tau_m - P_.tau_syn_inh)); // as real
     V_.__P__V_m__I_kernel_exc__X__exc_spikes = P_.tau_m * P_.tau_syn_exc * V_.unit_psc * ((-std::exp(V_.__h / P_.tau_m)) + std::exp(V_.__h / P_.tau_syn_exc)) * std::exp((-V_.__h) * (P_.tau_m + P_.tau_syn_exc) / (P_.tau_m * P_.tau_syn_exc)) / (P_.C_m * (P_.tau_m - P_.tau_syn_exc)); // as real
+    V_.__P__V_m__I_kernel_inh__X__inh_spikes = P_.tau_m * P_.tau_syn_inh * V_.unit_psc * (std::exp(V_.__h / P_.tau_m) - std::exp(V_.__h / P_.tau_syn_inh)) * std::exp((-V_.__h) * (P_.tau_m + P_.tau_syn_inh) / (P_.tau_m * P_.tau_syn_inh)) / (P_.C_m * (P_.tau_m - P_.tau_syn_inh)); // as real
     V_.__P__refr_t__refr_t = 1; // as real
-    V_.__P__I_kernel_inh__X__inh_spikes__I_kernel_inh__X__inh_spikes = std::exp((-V_.__h) / P_.tau_syn_inh); // as real
     V_.__P__I_kernel_exc__X__exc_spikes__I_kernel_exc__X__exc_spikes = std::exp((-V_.__h) / P_.tau_syn_exc); // as real
+    V_.__P__I_kernel_inh__X__inh_spikes__I_kernel_inh__X__inh_spikes = std::exp((-V_.__h) / P_.tau_syn_inh); // as real
   }
   else {    
     V_.unit_psc = 1; // as pA
@@ -324,11 +324,11 @@ void amat_neuron_nestml::recompute_internal_variables(bool exclude_timestep)
     V_.__P__V_th_alpha_1__V_th_alpha_1 = std::exp((-V_.__h) / P_.tau_1); // as real
     V_.__P__V_th_alpha_2__V_th_alpha_2 = std::exp((-V_.__h) / P_.tau_2); // as real
     V_.__P__V_m__V_m = std::exp((-V_.__h) / P_.tau_m); // as real
-    V_.__P__V_m__I_kernel_inh__X__inh_spikes = P_.tau_m * P_.tau_syn_inh * V_.unit_psc * (std::exp(V_.__h / P_.tau_m) - std::exp(V_.__h / P_.tau_syn_inh)) * std::exp((-V_.__h) * (P_.tau_m + P_.tau_syn_inh) / (P_.tau_m * P_.tau_syn_inh)) / (P_.C_m * (P_.tau_m - P_.tau_syn_inh)); // as real
     V_.__P__V_m__I_kernel_exc__X__exc_spikes = P_.tau_m * P_.tau_syn_exc * V_.unit_psc * ((-std::exp(V_.__h / P_.tau_m)) + std::exp(V_.__h / P_.tau_syn_exc)) * std::exp((-V_.__h) * (P_.tau_m + P_.tau_syn_exc) / (P_.tau_m * P_.tau_syn_exc)) / (P_.C_m * (P_.tau_m - P_.tau_syn_exc)); // as real
+    V_.__P__V_m__I_kernel_inh__X__inh_spikes = P_.tau_m * P_.tau_syn_inh * V_.unit_psc * (std::exp(V_.__h / P_.tau_m) - std::exp(V_.__h / P_.tau_syn_inh)) * std::exp((-V_.__h) * (P_.tau_m + P_.tau_syn_inh) / (P_.tau_m * P_.tau_syn_inh)) / (P_.C_m * (P_.tau_m - P_.tau_syn_inh)); // as real
     V_.__P__refr_t__refr_t = 1; // as real
-    V_.__P__I_kernel_inh__X__inh_spikes__I_kernel_inh__X__inh_spikes = std::exp((-V_.__h) / P_.tau_syn_inh); // as real
     V_.__P__I_kernel_exc__X__exc_spikes__I_kernel_exc__X__exc_spikes = std::exp((-V_.__h) / P_.tau_syn_exc); // as real
+    V_.__P__I_kernel_inh__X__inh_spikes__I_kernel_inh__X__inh_spikes = std::exp((-V_.__h) / P_.tau_syn_inh); // as real
   }
 }
 void amat_neuron_nestml::pre_run_hook()
@@ -374,8 +374,8 @@ extern "C" inline int amat_neuron_nestml_dynamics_refr_t(double __time, const do
   f[State_::V_th_v_aux] = 0;
   f[State_::V_th_v] = 0;
   f[State_::refr_t] = (-1.);
-  f[State_::I_kernel_inh__X__inh_spikes] = (-ode_state[State_::I_kernel_inh__X__inh_spikes]) / node.P_.tau_syn_inh;
   f[State_::I_kernel_exc__X__exc_spikes] = (-ode_state[State_::I_kernel_exc__X__exc_spikes]) / node.P_.tau_syn_exc;
+  f[State_::I_kernel_inh__X__inh_spikes] = (-ode_state[State_::I_kernel_inh__X__inh_spikes]) / node.P_.tau_syn_inh;
   return GSL_SUCCESS;
 }
 
@@ -395,8 +395,8 @@ extern "C" inline int amat_neuron_nestml_dynamics_V_m_V_th_alpha_1_V_th_alpha_2_
   f[State_::V_th_v_aux] = (-ode_state[State_::V_th_v_aux]) / node.P_.tau_v + node.P_.beta * ((node.P_.E_L - ode_state[State_::V_m]) / node.P_.tau_m + (node.P_.I_e + ode_state[State_::I_kernel_exc__X__exc_spikes] * node.V_.unit_psc - ode_state[State_::I_kernel_inh__X__inh_spikes] * node.V_.unit_psc + node.B_.continuous_inputs_grid_sum_[I_STIM]) / node.P_.C_m);
   f[State_::V_th_v] = (-ode_state[State_::V_th_v]) / node.P_.tau_v + ode_state[State_::V_th_v_aux];
   f[State_::refr_t] = 0;
-  f[State_::I_kernel_inh__X__inh_spikes] = (-ode_state[State_::I_kernel_inh__X__inh_spikes]) / node.P_.tau_syn_inh;
   f[State_::I_kernel_exc__X__exc_spikes] = (-ode_state[State_::I_kernel_exc__X__exc_spikes]) / node.P_.tau_syn_exc;
+  f[State_::I_kernel_inh__X__inh_spikes] = (-ode_state[State_::I_kernel_inh__X__inh_spikes]) / node.P_.tau_syn_inh;
   return GSL_SUCCESS;
 }
 
@@ -429,8 +429,8 @@ void amat_neuron_nestml::update(nest::Time const & origin, const long from, cons
      * step 1: regardless of whether and how integrate_odes() will be called, update variables due to convolutions
     **/
 
-    const double I_kernel_inh__X__inh_spikes__tmp_ = S_.ode_state[State_::I_kernel_inh__X__inh_spikes] * V_.__P__I_kernel_inh__X__inh_spikes__I_kernel_inh__X__inh_spikes;
     const double I_kernel_exc__X__exc_spikes__tmp_ = S_.ode_state[State_::I_kernel_exc__X__exc_spikes] * V_.__P__I_kernel_exc__X__exc_spikes__I_kernel_exc__X__exc_spikes;
+    const double I_kernel_inh__X__inh_spikes__tmp_ = S_.ode_state[State_::I_kernel_inh__X__inh_spikes] * V_.__P__I_kernel_inh__X__inh_spikes__I_kernel_inh__X__inh_spikes;
 
 
     /**
@@ -541,15 +541,15 @@ void amat_neuron_nestml::update(nest::Time const & origin, const long from, cons
      * step 2: regardless of whether and how integrate_odes() was called, update variables due to convolutions. Set to the updated values at the end of the timestep.
     **/
 
-    S_.ode_state[State_::I_kernel_inh__X__inh_spikes] = I_kernel_inh__X__inh_spikes__tmp_;
     S_.ode_state[State_::I_kernel_exc__X__exc_spikes] = I_kernel_exc__X__exc_spikes__tmp_;
+    S_.ode_state[State_::I_kernel_inh__X__inh_spikes] = I_kernel_inh__X__inh_spikes__tmp_;
 
     /**
      * spike updates due to convolutions
     **/
 
-    S_.ode_state[State_::I_kernel_inh__X__inh_spikes] += ((0.001 * B_.spike_inputs_grid_sum_[INH_SPIKES - MIN_SPIKE_RECEPTOR])) / (1 / 1000.0);
     S_.ode_state[State_::I_kernel_exc__X__exc_spikes] += ((0.001 * B_.spike_inputs_grid_sum_[EXC_SPIKES - MIN_SPIKE_RECEPTOR])) / (1 / 1000.0);
+    S_.ode_state[State_::I_kernel_inh__X__inh_spikes] += ((0.001 * B_.spike_inputs_grid_sum_[INH_SPIKES - MIN_SPIKE_RECEPTOR])) / (1 / 1000.0);
 
     /**
      * Begin NESTML generated code for the onCondition block(s)
