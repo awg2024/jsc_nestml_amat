@@ -186,8 +186,8 @@ model amat_neuron:
         alpha_1 mV = 10 mV       # Amplitude of short time threshold adaptation [3]
         alpha_2 mV = 0 mV        # Amplitude of long time threshold adaptation [4]
         
-        omega mV = -65 mV         # Resting spike threshold (relative to E_L)
-                                  # E_L resting is -70mV and then with omega it sits 5mV higher than resting. 
+        omega mV = -65 mV         # This value is relative to E_L (resting spike offset) 
+                                  # E_L is resting ate -70mV and then with omega_offset is 5mV, sitting 5mV higher than resting. 
 
         # voltage-dependent threshold parameters (new, AMAT extension) 
         tau_v ms = 5 ms          # Timescale of the voltage-dependency kernel K(s)=s*exp(-s/tau_v) [4]
@@ -195,9 +195,8 @@ model amat_neuron:
         beta 1/ms = 0 / ms       # Strength/sign of voltage dependency. beta=0 recovers mat2_psc_exp
                                  # exactly. Negative beta -> phasic/rebound-type behaviour;
                                  # positive beta -> resonator/subthreshold-oscillation-type behaviour [4]
-
-        # constant external input current
-        I_e pA = 0 pA
+        
+        I_e pA = 0 pA            # constant external input current
 
     internals:
         unit_psc pA = 1 pA        # Unitary postsynaptic current amplitude
@@ -225,8 +224,7 @@ model amat_neuron:
             integrate_odes(V_m, V_th_v_aux, V_th_v, V_th_alpha_1, V_th_alpha_2)   #  implemented refr_t in integrate_ode 
     
     onCondition(refr_t <= 0 ms and V_m >= V_th):
-        
-        # Spike condition: V_m has crossed theta(t) = E_L + omega + theta_1 + theta_2 + theta_V
+        # Spike condition if V_m has crossed V_theta
         # (all three threshold components, summed, per Eq. 16 of Yamauchi et al. 2011)
         
         refr_t = refr_T    # start of the refractory period
