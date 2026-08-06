@@ -1,5 +1,7 @@
 # Ignore all data files
 /juypter/2009_competition/data_challengeA/
+/juypter/test/
+
 
 # Ignore Jupyter checkpoints
 .ipynb_checkpoints/

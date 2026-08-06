@@ -175,7 +175,10 @@ model amat_neuron:
         # membrane parameters (unchanged from mat2_psc_exp) 
         tau_m ms = 10 ms          # Membrane time constant (Yamauchi et al. explicitly states to use 10 ms)
         C_m pF = 200 pF          # Capacitance of the membrane
-        refr_T ms = 2 ms         # Duration of refractory period
+        
+        refr_T ms = 2.0 ms       # Note: NEST counts this down via discrete time-steps (rounding to zero), while NESTML uses a continuous ODE process, 
+                                 # which can cause NEST, NESTML discrepencies? although... 1.8,1.9,2.1 - no diff? 
+
         E_L mV = -70 mV          # Resting potential
         tau_syn_exc ms = 1 ms    # Time constant of postsynaptic excitatory currents
         tau_syn_inh ms = 3 ms    # Time constant of postsynaptic inhibitory currents

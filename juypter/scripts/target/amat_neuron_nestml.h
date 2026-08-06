@@ -19,7 +19,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with NEST.  If not, see <http://www.gnu.org/licenses/>.
  *
- *  Generated from NESTML 8.3.0 at time: 2026-07-31 08:21:46.858687
+ *  Generated from NESTML 8.3.0 at time: 2026-08-01 13:53:46.816641
 **/
 #ifndef AMAT_NEURON_NESTML
 #define AMAT_NEURON_NESTML
@@ -67,8 +67,8 @@ namespace amat_neuron_nestml_names
     const Name _V_th_v_aux( "V_th_v_aux" );
     const Name _V_m( "V_m" );
     const Name _refr_t( "refr_t" );
-    const Name _I_kernel_exc__X__exc_spikes( "I_kernel_exc__X__exc_spikes" );
     const Name _I_kernel_inh__X__inh_spikes( "I_kernel_inh__X__inh_spikes" );
+    const Name _I_kernel_exc__X__exc_spikes( "I_kernel_exc__X__exc_spikes" );
     // inline expressions
     const Name _I_syn_ex( "I_syn_ex" );
     const Name _I_syn_in( "I_syn_in" );
@@ -95,11 +95,11 @@ namespace amat_neuron_nestml_names
     const Name ___P__V_th_alpha_1__V_th_alpha_1( "__P__V_th_alpha_1__V_th_alpha_1" );
     const Name ___P__V_th_alpha_2__V_th_alpha_2( "__P__V_th_alpha_2__V_th_alpha_2" );
     const Name ___P__V_m__V_m( "__P__V_m__V_m" );
-    const Name ___P__V_m__I_kernel_exc__X__exc_spikes( "__P__V_m__I_kernel_exc__X__exc_spikes" );
     const Name ___P__V_m__I_kernel_inh__X__inh_spikes( "__P__V_m__I_kernel_inh__X__inh_spikes" );
+    const Name ___P__V_m__I_kernel_exc__X__exc_spikes( "__P__V_m__I_kernel_exc__X__exc_spikes" );
     const Name ___P__refr_t__refr_t( "__P__refr_t__refr_t" );
-    const Name ___P__I_kernel_exc__X__exc_spikes__I_kernel_exc__X__exc_spikes( "__P__I_kernel_exc__X__exc_spikes__I_kernel_exc__X__exc_spikes" );
     const Name ___P__I_kernel_inh__X__inh_spikes__I_kernel_inh__X__inh_spikes( "__P__I_kernel_inh__X__inh_spikes__I_kernel_inh__X__inh_spikes" );
+    const Name ___P__I_kernel_exc__X__exc_spikes__I_kernel_exc__X__exc_spikes( "__P__I_kernel_exc__X__exc_spikes__I_kernel_exc__X__exc_spikes" );
 
     const Name gsl_abs_error_tol("gsl_abs_error_tol");
     const Name gsl_rel_error_tol("gsl_rel_error_tol");
@@ -164,7 +164,7 @@ extern "C" inline int amat_neuron_nestml_dynamics( double, const double ode_stat
 tau_m [ms] membrane parameters (unchanged from mat2_psc_exp) 
  Membrane time constant (Yamauchi et al. explicitly states to use 10 ms)
 C_m [pF]  Capacitance of the membrane
-refr_T [ms]  Duration of refractory period
+refr_T [ms]  Note: NEST counts this down via discrete time-steps (rounding to zero), while NESTML uses a continuous ODE process, 
 E_L [mV]  Resting potential
 tau_syn_exc [ms]  Time constant of postsynaptic excitatory currents
 tau_syn_inh [ms]  Time constant of postsynaptic inhibitory currents
@@ -313,20 +313,20 @@ public:
     S_.ode_state[State_::refr_t] = __v;
   }
 
-  inline double get_I_kernel_exc__X__exc_spikes() const
-  {
-    return S_.ode_state[State_::I_kernel_exc__X__exc_spikes];
-  }inline void set_I_kernel_exc__X__exc_spikes(const double __v)
-  {
-    S_.ode_state[State_::I_kernel_exc__X__exc_spikes] = __v;
-  }
-
   inline double get_I_kernel_inh__X__inh_spikes() const
   {
     return S_.ode_state[State_::I_kernel_inh__X__inh_spikes];
   }inline void set_I_kernel_inh__X__inh_spikes(const double __v)
   {
     S_.ode_state[State_::I_kernel_inh__X__inh_spikes] = __v;
+  }
+
+  inline double get_I_kernel_exc__X__exc_spikes() const
+  {
+    return S_.ode_state[State_::I_kernel_exc__X__exc_spikes];
+  }inline void set_I_kernel_exc__X__exc_spikes(const double __v)
+  {
+    S_.ode_state[State_::I_kernel_exc__X__exc_spikes] = __v;
   }
 
 
@@ -486,19 +486,19 @@ public:
   {
     V_.__P__V_m__V_m = __v;
   }
-  inline double get___P__V_m__I_kernel_exc__X__exc_spikes() const
-  {
-    return V_.__P__V_m__I_kernel_exc__X__exc_spikes;
-  }inline void set___P__V_m__I_kernel_exc__X__exc_spikes(const double __v)
-  {
-    V_.__P__V_m__I_kernel_exc__X__exc_spikes = __v;
-  }
   inline double get___P__V_m__I_kernel_inh__X__inh_spikes() const
   {
     return V_.__P__V_m__I_kernel_inh__X__inh_spikes;
   }inline void set___P__V_m__I_kernel_inh__X__inh_spikes(const double __v)
   {
     V_.__P__V_m__I_kernel_inh__X__inh_spikes = __v;
+  }
+  inline double get___P__V_m__I_kernel_exc__X__exc_spikes() const
+  {
+    return V_.__P__V_m__I_kernel_exc__X__exc_spikes;
+  }inline void set___P__V_m__I_kernel_exc__X__exc_spikes(const double __v)
+  {
+    V_.__P__V_m__I_kernel_exc__X__exc_spikes = __v;
   }
   inline double get___P__refr_t__refr_t() const
   {
@@ -507,19 +507,19 @@ public:
   {
     V_.__P__refr_t__refr_t = __v;
   }
-  inline double get___P__I_kernel_exc__X__exc_spikes__I_kernel_exc__X__exc_spikes() const
-  {
-    return V_.__P__I_kernel_exc__X__exc_spikes__I_kernel_exc__X__exc_spikes;
-  }inline void set___P__I_kernel_exc__X__exc_spikes__I_kernel_exc__X__exc_spikes(const double __v)
-  {
-    V_.__P__I_kernel_exc__X__exc_spikes__I_kernel_exc__X__exc_spikes = __v;
-  }
   inline double get___P__I_kernel_inh__X__inh_spikes__I_kernel_inh__X__inh_spikes() const
   {
     return V_.__P__I_kernel_inh__X__inh_spikes__I_kernel_inh__X__inh_spikes;
   }inline void set___P__I_kernel_inh__X__inh_spikes__I_kernel_inh__X__inh_spikes(const double __v)
   {
     V_.__P__I_kernel_inh__X__inh_spikes__I_kernel_inh__X__inh_spikes = __v;
+  }
+  inline double get___P__I_kernel_exc__X__exc_spikes__I_kernel_exc__X__exc_spikes() const
+  {
+    return V_.__P__I_kernel_exc__X__exc_spikes__I_kernel_exc__X__exc_spikes;
+  }inline void set___P__I_kernel_exc__X__exc_spikes__I_kernel_exc__X__exc_spikes(const double __v)
+  {
+    V_.__P__I_kernel_exc__X__exc_spikes__I_kernel_exc__X__exc_spikes = __v;
   }
 
 
@@ -614,7 +614,7 @@ static std::vector< std::tuple< int, int > > rport_to_nestml_buffer_idx;
     double tau_m;
     //!  Capacitance of the membrane
     double C_m;
-    //!  Duration of refractory period
+    //!  Note: NEST counts this down via discrete time-steps (rounding to zero), while NESTML uses a continuous ODE process, 
     double refr_T;
     //!  Resting potential
     double E_L;
@@ -683,8 +683,8 @@ static std::vector< std::tuple< int, int > > rport_to_nestml_buffer_idx;
       V_th_v_aux,
       V_th_v,
       refr_t,
-      I_kernel_exc__X__exc_spikes,
       I_kernel_inh__X__inh_spikes,
+      I_kernel_exc__X__exc_spikes,
       // moved state variables from synapse (numeric)
       // moved state variables from synapse (analytic)
       // final entry to easily get the vector size
@@ -720,11 +720,11 @@ static std::vector< std::tuple< int, int > > rport_to_nestml_buffer_idx;
     double __P__V_th_alpha_1__V_th_alpha_1;
     double __P__V_th_alpha_2__V_th_alpha_2;
     double __P__V_m__V_m;
-    double __P__V_m__I_kernel_exc__X__exc_spikes;
     double __P__V_m__I_kernel_inh__X__inh_spikes;
+    double __P__V_m__I_kernel_exc__X__exc_spikes;
     double __P__refr_t__refr_t;
-    double __P__I_kernel_exc__X__exc_spikes__I_kernel_exc__X__exc_spikes;
     double __P__I_kernel_inh__X__inh_spikes__I_kernel_inh__X__inh_spikes;
+    double __P__I_kernel_exc__X__exc_spikes__I_kernel_exc__X__exc_spikes;
   };
 
   /**
@@ -1058,15 +1058,15 @@ inline void amat_neuron_nestml::get_status(DictionaryDatum&__d) const
 
   __d[ nest::amat_neuron_nestml_names::___P__V_m__V_m ] = get___P__V_m__V_m();
 
-  __d[ nest::amat_neuron_nestml_names::___P__V_m__I_kernel_exc__X__exc_spikes ] = get___P__V_m__I_kernel_exc__X__exc_spikes();
-
   __d[ nest::amat_neuron_nestml_names::___P__V_m__I_kernel_inh__X__inh_spikes ] = get___P__V_m__I_kernel_inh__X__inh_spikes();
+
+  __d[ nest::amat_neuron_nestml_names::___P__V_m__I_kernel_exc__X__exc_spikes ] = get___P__V_m__I_kernel_exc__X__exc_spikes();
 
   __d[ nest::amat_neuron_nestml_names::___P__refr_t__refr_t ] = get___P__refr_t__refr_t();
 
-  __d[ nest::amat_neuron_nestml_names::___P__I_kernel_exc__X__exc_spikes__I_kernel_exc__X__exc_spikes ] = get___P__I_kernel_exc__X__exc_spikes__I_kernel_exc__X__exc_spikes();
-
   __d[ nest::amat_neuron_nestml_names::___P__I_kernel_inh__X__inh_spikes__I_kernel_inh__X__inh_spikes ] = get___P__I_kernel_inh__X__inh_spikes__I_kernel_inh__X__inh_spikes();
+
+  __d[ nest::amat_neuron_nestml_names::___P__I_kernel_exc__X__exc_spikes__I_kernel_exc__X__exc_spikes ] = get___P__I_kernel_exc__X__exc_spikes__I_kernel_exc__X__exc_spikes();
 
   // initial values for state variables in ODE or kernel
 
@@ -1082,9 +1082,9 @@ inline void amat_neuron_nestml::get_status(DictionaryDatum&__d) const
 
   __d[ nest::amat_neuron_nestml_names::_refr_t ] = get_refr_t();
 
-  __d[ nest::amat_neuron_nestml_names::_I_kernel_exc__X__exc_spikes ] = get_I_kernel_exc__X__exc_spikes();
-
   __d[ nest::amat_neuron_nestml_names::_I_kernel_inh__X__inh_spikes ] = get_I_kernel_inh__X__inh_spikes();
+
+  __d[ nest::amat_neuron_nestml_names::_I_kernel_exc__X__exc_spikes ] = get_I_kernel_exc__X__exc_spikes();
 
   StructuralPlasticityNode::get_status( __d );
 
@@ -1147,10 +1147,10 @@ inline void amat_neuron_nestml::set_status(const DictionaryDatum&__d)
   update_value_param(__d, nest::amat_neuron_nestml_names::_V_m, tmp_V_m, this);
   double tmp_refr_t = get_refr_t();
   update_value_param(__d, nest::amat_neuron_nestml_names::_refr_t, tmp_refr_t, this);
-  double tmp_I_kernel_exc__X__exc_spikes = get_I_kernel_exc__X__exc_spikes();
-  update_value_param(__d, nest::amat_neuron_nestml_names::_I_kernel_exc__X__exc_spikes, tmp_I_kernel_exc__X__exc_spikes, this);
   double tmp_I_kernel_inh__X__inh_spikes = get_I_kernel_inh__X__inh_spikes();
   update_value_param(__d, nest::amat_neuron_nestml_names::_I_kernel_inh__X__inh_spikes, tmp_I_kernel_inh__X__inh_spikes, this);
+  double tmp_I_kernel_exc__X__exc_spikes = get_I_kernel_exc__X__exc_spikes();
+  update_value_param(__d, nest::amat_neuron_nestml_names::_I_kernel_exc__X__exc_spikes, tmp_I_kernel_exc__X__exc_spikes, this);
 
   // We now know that (ptmp, stmp) are consistent. We do not
   // write them back to (P_, S_) before we are also sure that
@@ -1179,8 +1179,8 @@ inline void amat_neuron_nestml::set_status(const DictionaryDatum&__d)
   set_V_th_v_aux(tmp_V_th_v_aux);
   set_V_m(tmp_V_m);
   set_refr_t(tmp_refr_t);
-  set_I_kernel_exc__X__exc_spikes(tmp_I_kernel_exc__X__exc_spikes);
   set_I_kernel_inh__X__inh_spikes(tmp_I_kernel_inh__X__inh_spikes);
+  set_I_kernel_exc__X__exc_spikes(tmp_I_kernel_exc__X__exc_spikes);
 
 
 
