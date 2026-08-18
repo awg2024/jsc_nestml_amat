@@ -1,0 +1,7 @@
+{
+	"InstallScripts" : 
+	[
+		"/p/project1/paj2623/gray2/target/cmake_install.cmake"
+	],
+	"Parallel" : false
+}
