@@ -1,0 +1,26 @@
+usage: brunel_alpha_nest.py [-h] [--benchmarkPath BENCHMARKPATH]
+                            [--simulated_neuron SIMULATED_NEURON]
+                            [--network_scale NETWORK_SCALE] [--nodes NODES]
+                            [--threads THREADS] [--iteration ITERATION]
+                            [--rng_seed RNG_SEED]
+usage: brunel_alpha_nest.py [-h] [--benchmarkPath BENCHMARKPATH]
+                            [--simulated_neuron SIMULATED_NEURON]
+                            [--network_scale NETWORK_SCALE] [--nodes NODES]
+                            [--threads THREADS] [--iteration ITERATION]
+                            [--rng_seed RNG_SEED]
+brunel_alpha_nest.py: error: argument --network_scale: invalid int value: '20000.0'
+brunel_alpha_nest.py: error: argument --network_scale: invalid int value: '20000.0'
+usage: brunel_alpha_nest.py [-h] [--benchmarkPath BENCHMARKPATH]
+                            [--simulated_neuron SIMULATED_NEURON]
+                            [--network_scale NETWORK_SCALE] [--nodes NODES]
+                            [--threads THREADS] [--iteration ITERATION]
+                            [--rng_seed RNG_SEED]
+usage: brunel_alpha_nest.py [-h] [--benchmarkPath BENCHMARKPATH]
+                            [--simulated_neuron SIMULATED_NEURON]
+                            [--network_scale NETWORK_SCALE] [--nodes NODES]
+                            [--threads THREADS] [--iteration ITERATION]
+                            [--rng_seed RNG_SEED]
+brunel_alpha_nest.py: error: argument --network_scale: invalid int value: '20000.0'
+brunel_alpha_nest.py: error: argument --network_scale: invalid int value: '20000.0'
+srun: error: jrc0588: tasks 2-3: Exited with exit code 2
+srun: error: jrc0555: tasks 0-1: Exited with exit code 2

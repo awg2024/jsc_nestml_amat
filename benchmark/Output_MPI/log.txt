@@ -1,0 +1,3 @@
+[93mamat_neuron_nestml,2[0m
+Rendering template: /p/project1/cslns/linssen1/jsc_nestml_amat/benchmark/Running/sbatch_run.sh.jinja2
+Rendered template file name: /p/project1/cslns/linssen1/jsc_nestml_amat/benchmark/Running/../Output_MPI/timings_strong_scaling_mpi/sbatch/sbatch_run_amat_neuron_nestml_2_[iter=0].sh
