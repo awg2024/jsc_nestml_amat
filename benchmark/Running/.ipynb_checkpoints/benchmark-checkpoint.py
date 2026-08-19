@@ -75,7 +75,7 @@ BASELINENEURON = "amat2_psc_exp"
 
 NEURONMODELS = [
     "amat_neuron_nestml",
-    "amat_cse_neuron_nestml",
+    "amat_neuron_cse_nestml",
     BASELINENEURON
 ]
 

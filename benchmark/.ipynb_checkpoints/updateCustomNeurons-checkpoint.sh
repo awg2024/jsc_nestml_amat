@@ -21,19 +21,7 @@ cmake .
 make -j24 install
 cd ../../..
 
-cd Running/target_amat_coeff/target # PATCH 1 
-rm -rf CMakeCache.txt CMakeFiles
-cmake .
-make -j24 install
-cd ../../..
-
-cd Running/targets_vm_tmp/target # PATCH 2 
-rm -rf CMakeCache.txt CMakeFiles
-cmake .
-make -j24 install
-cd ../../..
-
-cd Running/target_amat_all_tmp/target # PATCH 3 
+cd Running/target_amat_optimised_cse/target # Optimised CSE 
 rm -rf CMakeCache.txt CMakeFiles
 cmake .
 make -j24 install
