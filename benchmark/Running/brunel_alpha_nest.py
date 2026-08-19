@@ -287,16 +287,57 @@ def plot_interspike_intervals(spike_times_list, path, fname_snip=""):
 # (1 pA) using the `Lambert W` function. Thus function will later be used to
 # calibrate the synaptic weights.
 
+# defining the exact flags this script will accept. read help="" for info on the flag. 
 parser = argparse.ArgumentParser(description="Run a simulation with NEST")
+
 parser.add_argument("--benchmarkPath", type=str, default="", help="Path to the nest installation")
+
 parser.add_argument("--simulated_neuron", type=str, default="iaf_psc_alpha_neuron_Nestml", help="Name of the model to use")
+
 parser.add_argument("--network_scale", type=int, default=2500, help="Number of neurons to use")
+
 parser.add_argument("--nodes", type=int, default=1, required=False, help="Number of compute nodes to use")
+
 parser.add_argument("--threads", type=int, default=1, help="Number of threads to use")
+
 parser.add_argument("--iteration", type=int, help="iteration number used for the benchmark")
+    
 parser.add_argument("--rng_seed", type=int, help="random seed", default=123)
+
+parser.add_argument("--smoke_test",action="store_true",help="Use small-network connectivity for low-cost functional testing",)
+
+parser.add_argument("--simtime",type=float,default=1000.0,help="Biological simulation time in ms",)
+
+
+
 args = parser.parse_args()
 
+MODEL_VARIANTS = {
+    "amat_nestml": {
+        "module": "nestml_amat_module", # naming conventions for nestml model 
+        "model": "amat_neuron_nestml",
+    },
+
+    "amat_nestml_cse": {
+        "module": "nestml_amat_cse_module", # naming conventions for cse 
+        "model": "amat_neuron_nestml",
+    },
+ 
+    "amat2_psc_exp": { # naming conventions for original NEST 
+        "module": None,
+        "model": "amat2_psc_exp",
+    },
+}
+
+if args.simulated_neuron not in MODEL_VARIANTS:
+    raise ValueError(
+        f"Unknown benchmark variant: {args.simulated_neuron}. "
+        f"Expected one of {list(MODEL_VARIANTS)}"
+    )
+
+variant = MODEL_VARIANTS[args.simulated_neuron]
+module_name = variant["module"]
+modelName = variant["model"]
 
 def LambertWm1(x):
     # Using scipy to mimic the gsl_sf_lambert_Wm1 function.
@@ -353,14 +394,23 @@ NE = 4 * order  # number of excitatory neurons
 NI = 1 * order  # number of inhibitory neurons
 N_neurons = NE + NI  # number of neurons in total
 print(f"Number of neurons : {N_neurons}")
-N_rec_exc = 500  # record from this many neurons
-N_rec_inh = 100
+
+N_rec_exc = min(500, NE) # record from this many neurons
+N_rec_inh = min(100, NI) 
 
 ###############################################################################
 # Definition of connectivity parameters
 
-CE = int(epsilon * NE / (order / 2500))  # number of excitatory synapses per neuron
-CI = int(epsilon * NI / (order / 2500))  # number of inhibitory synapses per neuron
+if args.smoke_test: 
+
+    # normal 10% connectivity enables small networks
+    CE = max(1, int(epsilon * NE))
+    CI = max(1, int(epsilon * NI))
+
+else:
+    
+    CE = int(epsilon * NE / (order / 2500))  # number of excitatory synapses per neuron
+    CI = int(epsilon * NI / (order / 2500))  # number of inhibitory synapses per neuron
 
 # CE = int(epsilon * NE)  # number of excitatory synapses per neuron
 # CI = int(epsilon * NI)  # number of inhibitory synapses per neuron
@@ -442,18 +492,14 @@ else:
 
 
 
-if args.simulated_neuron == "amat2_psc_exp": 
-    neuron_params = {
-    } 
+#if args.simulated_neuron == "amat2_psc_exp": 
+#elif args.simulated_neuron == "amat_neuron_nestml": 
+#elif args.simulated_neuron == "amat_cse_neuron_nestml": 
+neuron_params = {}
 
-elif args.simulated_neuron == "amat_neuron_nestml":
-    neuron_params = {
-    }
-    
-elif args.simulated_neuron == "amat_cse_neuron_nestml": 
-    neuron_params = {
-    } 
-    
+
+
+
 
 J = 0.1  # postsynaptic amplitude in mV
 J_unit = ComputePSPnorm(tauMem, CMem, tauSyn)
@@ -487,12 +533,12 @@ nest.rng_seed = args.rng_seed
 print("The RNG seed is: " + str(nest.rng_seed))
 
 
+if module_name is not None:  # we defined the NEST model as None 
+    print(f"installing nestml module: {module_name}")
+    nest.Install(module_name)
 
-try:
-    nest.Install("nestmlmodule")
-except:
-    pass
-
+print(f"Benchmarking variant: {args.simulated_neuron}")
+print(f"Actual NEST model: {modelName}")
 print("Building network")
 
 ###############################################################################

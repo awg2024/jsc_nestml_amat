@@ -73,29 +73,30 @@ enable_mpi = args.enable_mpi
 
 BASELINENEURON = "amat2_psc_exp"
 
+# amat nestml benchmark variant identifiers 
 NEURONMODELS = [
-    "amat_neuron_nestml",
-    "amat_neuron_cse_nestml",
+    "amat_nestml",
+    "amat_nestml_cse",
     BASELINENEURON
 ]
 
 legend = {
-    "amat_neuron_nestml": "NESTML",
-    "amat_cse_neuron_nestml": "NESTML_CSE",
+    "amat_nestml": "NESTML",
+    "amat_nestml_cse": "NESTML_CSE",
     BASELINENEURON: "NEST"
 }
 
 colors = {
     BASELINENEURON: 0,
-    "amat_neuron_nestml": 1,
-    "amat_cse_neuron_nestml": 2
+    "amat_nestml": 1,
+    "amat_nestml_cse": 2
 }
 
 # MPI scaling
 DEBUG = True
 NUMTHREADS = 128  # Total number of threads per node
 
-MPI_STRONG_SCALE_NEURONS = 10000.  # the order of neurons in the Brunel network 
+MPI_STRONG_SCALE_NEURONS = 10000  # the order of neurons in the Brunel network 
 STRONGSCALINGFOLDERNAME = "timings_strong_scaling_mpi" # output dir 
 
 # MPI Weak scaling
@@ -750,6 +751,7 @@ def plot_isi_distributions(neuron_models, data):
 
 
 if __name__ == "__main__":
+    
     os.makedirs(output_folder, exist_ok=True)
     os.makedirs(os.path.join(output_folder, STRONGSCALINGFOLDERNAME), exist_ok=True)
     os.makedirs(os.path.join(output_folder, WEAKSCALINGFOLDERNAME), exist_ok=True)
