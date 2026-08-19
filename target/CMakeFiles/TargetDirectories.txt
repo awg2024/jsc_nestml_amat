@@ -1,5 +1,5 @@
 /p/project1/paj2623/gray2/target/CMakeFiles/dist.dir
-/p/project1/paj2623/gray2/target/CMakeFiles/nestml_amat_module_module.dir
+/p/project1/paj2623/gray2/target/CMakeFiles/nestml_cse_amat_module_module.dir
 /p/project1/paj2623/gray2/target/CMakeFiles/package.dir
 /p/project1/paj2623/gray2/target/CMakeFiles/package_source.dir
 /p/project1/paj2623/gray2/target/CMakeFiles/edit_cache.dir

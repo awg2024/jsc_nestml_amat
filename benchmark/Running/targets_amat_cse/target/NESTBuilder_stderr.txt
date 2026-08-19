@@ -1,0 +1,74 @@
+
+-------------------------------------------------------
+nestml_cse_amat_module Configuration Summary
+-------------------------------------------------------
+
+C++ compiler         : /p/software/default/stages/2026/software/psmpi/5.13.0-1-GCC-14.3.0/bin/mpicxx
+Build static libs    : OFF
+C++ compiler flags   : 
+NEST compiler flags  : -O2 -ftree-vectorize -march=native -fno-math-errno -fPIC -std=c++17 -Wall -fopenmp  -O2 -fdiagnostics-color=auto -O3 -DNDEBUG -D_SION_IME_NATIVE -D_SION_LINUX -DSION_OMPI
+NEST include dirs    :  -I/p/software/default/stages/2026/software/nest-simulator/3.9-gpsmpi-2025b/include/nest -I/p/software/default/stages/2026/software/libtool/2.5.4-GCCcore-14.3.0/include -I/p/software/default/stages/2026/software/libreadline/8.2-GCCcore-14.3.0/include -I/p/software/default/stages/2026/software/GSL/2.8-GCC-14.3.0/include -I/p/software/default/stages/2026/software/libneurosim/1.2.0-GCCcore-14.3.0/include -I/p/software/default/stages/2026/software/Boost/1.88.0-GCCcore-14.3.0/include /p/software/default/stages/2026/software/SIONlib/1.7.7-GCCcore-14.3.0-tools/include
+NEST libraries flags : -L/p/software/default/stages/2026/software/nest-simulator/3.9-gpsmpi-2025b/lib/nest -lnest -lsli /p/software/default/stages/2026/software/libtool/2.5.4-GCCcore-14.3.0/lib/libltdl.so /p/software/default/stages/2026/software/libreadline/8.2-GCCcore-14.3.0/lib/libreadline.so /p/software/default/stages/2026/software/ncurses/6.5-GCCcore-14.3.0/lib/libncurses.so /p/software/default/stages/2026/software/GSL/2.8-GCC-14.3.0/lib/libgsl.so /p/software/default/stages/2026/software/GSL/2.8-GCC-14.3.0/lib/libgslcblas.so /p/software/default/stages/2026/software/libneurosim/1.2.0-GCCcore-14.3.0/lib/libneurosim.so /p/software/default/stages/2026/software/libneurosim/1.2.0-GCCcore-14.3.0/lib/libpy3neurosim.so   /p/software/default/stages/2026/software/GCCcore/14.3.0/lib64/libgomp.so /lib64/libpthread.a
+
+-------------------------------------------------------
+
+You can now build and install 'nestml_cse_amat_module' using
+  make
+  make install
+
+The library file libnestml_cse_amat_module.so will be installed to
+  /tmp/nestml_target_d1g7n6ly
+The module can be loaded into NEST using
+  (nestml_cse_amat_module) Install       (in SLI)
+  nest.Install(nestml_cse_amat_module)   (in PyNEST)
+
+In file included from /p/software/default/stages/2026/software/libneurosim/1.2.0-GCCcore-14.3.0/include/neurosim/connection_generator_V2_0.h:30,
+                 from /p/software/default/stages/2026/software/libneurosim/1.2.0-GCCcore-14.3.0/include/neurosim/connection_generator.h:26,
+                 from /p/software/default/stages/2026/software/nest-simulator/3.9-gpsmpi-2025b/include/nest/nest_datums.h:41,
+                 from /p/software/default/stages/2026/software/nest-simulator/3.9-gpsmpi-2025b/include/nest/conn_parameter.h:32,
+                 from /p/software/default/stages/2026/software/nest-simulator/3.9-gpsmpi-2025b/include/nest/conn_builder.h:42,
+                 from /p/software/default/stages/2026/software/nest-simulator/3.9-gpsmpi-2025b/include/nest/connection_manager.h:34,
+                 from /p/software/default/stages/2026/software/nest-simulator/3.9-gpsmpi-2025b/include/nest/connection_manager_impl.h:26,
+                 from /p/software/default/stages/2026/software/nest-simulator/3.9-gpsmpi-2025b/include/nest/nest_extension_interface.h:29,
+                 from /p/project1/paj2623/gray2/benchmark/Running/targets_amat_cse/target/nestml_cse_amat_module.cpp:26:
+/p/software/default/stages/2026/software/libneurosim/1.2.0-GCCcore-14.3.0/include/neurosim/config.h:59:9: warning: "PACKAGE" redefined
+   59 | #define PACKAGE "libneurosim"
+      |         ^~~~~~~
+In file included from /p/software/default/stages/2026/software/nest-simulator/3.9-gpsmpi-2025b/include/nest/nest_extension_interface.h:28:
+/p/software/default/stages/2026/software/nest-simulator/3.9-gpsmpi-2025b/include/nest/config.h:58:9: note: this is the location of the previous definition
+   58 | #define PACKAGE nest
+      |         ^~~~~~~
+In file included from /p/software/default/stages/2026/software/libneurosim/1.2.0-GCCcore-14.3.0/include/neurosim/connection_generator_V2_0.h:30,
+                 from /p/software/default/stages/2026/software/libneurosim/1.2.0-GCCcore-14.3.0/include/neurosim/connection_generator.h:26,
+                 from /p/software/default/stages/2026/software/nest-simulator/3.9-gpsmpi-2025b/include/nest/nest_datums.h:41,
+                 from /p/software/default/stages/2026/software/nest-simulator/3.9-gpsmpi-2025b/include/nest/conn_parameter.h:32,
+                 from /p/software/default/stages/2026/software/nest-simulator/3.9-gpsmpi-2025b/include/nest/conn_builder.h:42,
+                 from /p/software/default/stages/2026/software/nest-simulator/3.9-gpsmpi-2025b/include/nest/connection_manager.h:34,
+                 from /p/software/default/stages/2026/software/nest-simulator/3.9-gpsmpi-2025b/include/nest/kernel_manager.h:30,
+                 from /p/project1/paj2623/gray2/benchmark/Running/targets_amat_cse/target/amat_neuron_nestml.cpp:33:
+/p/software/default/stages/2026/software/libneurosim/1.2.0-GCCcore-14.3.0/include/neurosim/config.h:59:9: warning: "PACKAGE" redefined
+   59 | #define PACKAGE "libneurosim"
+      |         ^~~~~~~
+In file included from /p/software/default/stages/2026/software/nest-simulator/3.9-gpsmpi-2025b/include/nest/numerics.h:27,
+                 from /p/project1/paj2623/gray2/benchmark/Running/targets_amat_cse/target/amat_neuron_nestml.cpp:29:
+/p/software/default/stages/2026/software/nest-simulator/3.9-gpsmpi-2025b/include/nest/config.h:58:9: note: this is the location of the previous definition
+   58 | #define PACKAGE nest
+      |         ^~~~~~~
+/p/project1/paj2623/gray2/benchmark/Running/targets_amat_cse/target/amat_neuron_nestml.cpp: In member function ‘void amat_neuron_nestml::init_state_internal_()’:
+/p/project1/paj2623/gray2/benchmark/Running/targets_amat_cse/target/amat_neuron_nestml.cpp:223:16: warning: unused variable ‘__timestep’ [-Wunused-variable]
+  223 |   const double __timestep = nest::Time::get_resolution().get_ms();  // do not remove, this is necessary for the timestep() function
+      |                ^~~~~~~~~~
+/p/project1/paj2623/gray2/benchmark/Running/targets_amat_cse/target/amat_neuron_nestml.cpp: In member function ‘void amat_neuron_nestml::recompute_internal_variables(bool)’:
+/p/project1/paj2623/gray2/benchmark/Running/targets_amat_cse/target/amat_neuron_nestml.cpp:312:16: warning: unused variable ‘__timestep’ [-Wunused-variable]
+  312 |   const double __timestep = nest::Time::get_resolution().get_ms();  // do not remove, this is necessary for the timestep() function
+      |                ^~~~~~~~~~
+/p/project1/paj2623/gray2/benchmark/Running/targets_amat_cse/target/amat_neuron_nestml.cpp: In member function ‘virtual void amat_neuron_nestml::update(const nest::Time&, long int, long int)’:
+/p/project1/paj2623/gray2/benchmark/Running/targets_amat_cse/target/amat_neuron_nestml.cpp:428:24: warning: comparison of integer expressions of different signedness: ‘long int’ and ‘const size_t’ {aka ‘const long unsigned int’} [-Wsign-compare]
+  428 |     for (long i = 0; i < NUM_SPIKE_RECEPTORS; ++i)
+      |                      ~~^~~~~~~~~~~~~~~~~~~~~
+/p/project1/paj2623/gray2/benchmark/Running/targets_amat_cse/target/amat_neuron_nestml.cpp:419:10: warning: variable ‘get_t’ set but not used [-Wunused-but-set-variable]
+  419 |     auto get_t = [origin, lag](){ return nest::Time( nest::Time::step( origin.get_steps() + lag + 1) ).get_ms(); };
+      |          ^~~~~
+/p/project1/paj2623/gray2/benchmark/Running/targets_amat_cse/target/amat_neuron_nestml.cpp:413:16: warning: unused variable ‘__timestep’ [-Wunused-variable]
+  413 |   const double __timestep = nest::Time::get_resolution().get_ms();  // do not remove, this is necessary for the timestep() function
+      |                ^~~~~~~~~~

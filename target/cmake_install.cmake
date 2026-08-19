@@ -2,7 +2,7 @@
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "/tmp/nestml_target_yv3p_at1")
+  set(CMAKE_INSTALL_PREFIX "/tmp/nestml_target_3dmhk6uh")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -43,31 +43,31 @@ if(NOT DEFINED CMAKE_OBJDUMP)
 endif()
 
 if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
-  if(EXISTS "$ENV{DESTDIR}/tmp/nestml_target_yv3p_at1/nestml_amat_module.so" AND
-     NOT IS_SYMLINK "$ENV{DESTDIR}/tmp/nestml_target_yv3p_at1/nestml_amat_module.so")
+  if(EXISTS "$ENV{DESTDIR}/tmp/nestml_target_3dmhk6uh/nestml_cse_amat_module.so" AND
+     NOT IS_SYMLINK "$ENV{DESTDIR}/tmp/nestml_target_3dmhk6uh/nestml_cse_amat_module.so")
     file(RPATH_CHECK
-         FILE "$ENV{DESTDIR}/tmp/nestml_target_yv3p_at1/nestml_amat_module.so"
+         FILE "$ENV{DESTDIR}/tmp/nestml_target_3dmhk6uh/nestml_cse_amat_module.so"
          RPATH "")
   endif()
   list(APPEND CMAKE_ABSOLUTE_DESTINATION_FILES
-   "/tmp/nestml_target_yv3p_at1/nestml_amat_module.so")
+   "/tmp/nestml_target_3dmhk6uh/nestml_cse_amat_module.so")
   if(CMAKE_WARN_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(WARNING "ABSOLUTE path INSTALL DESTINATION : ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
   if(CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
-  file(INSTALL DESTINATION "/tmp/nestml_target_yv3p_at1" TYPE MODULE FILES "/p/project1/paj2623/gray2/target/nestml_amat_module.so")
-  if(EXISTS "$ENV{DESTDIR}/tmp/nestml_target_yv3p_at1/nestml_amat_module.so" AND
-     NOT IS_SYMLINK "$ENV{DESTDIR}/tmp/nestml_target_yv3p_at1/nestml_amat_module.so")
+  file(INSTALL DESTINATION "/tmp/nestml_target_3dmhk6uh" TYPE MODULE FILES "/p/project1/paj2623/gray2/target/nestml_cse_amat_module.so")
+  if(EXISTS "$ENV{DESTDIR}/tmp/nestml_target_3dmhk6uh/nestml_cse_amat_module.so" AND
+     NOT IS_SYMLINK "$ENV{DESTDIR}/tmp/nestml_target_3dmhk6uh/nestml_cse_amat_module.so")
     if(CMAKE_INSTALL_DO_STRIP)
-      execute_process(COMMAND "/p/software/default/stages/2026/software/binutils/2.44-GCCcore-14.3.0/bin/strip" "$ENV{DESTDIR}/tmp/nestml_target_yv3p_at1/nestml_amat_module.so")
+      execute_process(COMMAND "/p/software/default/stages/2026/software/binutils/2.44-GCCcore-14.3.0/bin/strip" "$ENV{DESTDIR}/tmp/nestml_target_3dmhk6uh/nestml_cse_amat_module.so")
     endif()
   endif()
 endif()
 
 if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
-  include("/p/project1/paj2623/gray2/target/CMakeFiles/nestml_amat_module_module.dir/install-cxx-module-bmi-noconfig.cmake" OPTIONAL)
+  include("/p/project1/paj2623/gray2/target/CMakeFiles/nestml_cse_amat_module_module.dir/install-cxx-module-bmi-noconfig.cmake" OPTIONAL)
 endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT

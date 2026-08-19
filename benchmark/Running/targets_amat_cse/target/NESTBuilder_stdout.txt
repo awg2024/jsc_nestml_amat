@@ -1,0 +1,17 @@
+-- The CXX compiler identification is GNU 14.3.0
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /p/software/default/stages/2026/software/psmpi/5.13.0-1-GCC-14.3.0/bin/mpicxx - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Configuring done (1.6s)
+-- Generating done (0.0s)
+-- Build files have been written to: /p/project1/paj2623/gray2/benchmark/Running/targets_amat_cse/target
+[ 66%] Building CXX object CMakeFiles/nestml_cse_amat_module_module.dir/amat_neuron_nestml.cpp.o
+[ 66%] Building CXX object CMakeFiles/nestml_cse_amat_module_module.dir/nestml_cse_amat_module.cpp.o
+[100%] Linking CXX shared module nestml_cse_amat_module.so
+[100%] Built target nestml_cse_amat_module_module
+[100%] Built target nestml_cse_amat_module_module
+Install the project...
+-- Install configuration: ""
+-- Installing: /tmp/nestml_target_d1g7n6ly/nestml_cse_amat_module.so

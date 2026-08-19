@@ -1,0 +1,10 @@
+/p/project1/paj2623/gray2/benchmark/Running/targets_amat/target/CMakeFiles/dist.dir
+/p/project1/paj2623/gray2/benchmark/Running/targets_amat/target/CMakeFiles/nestml_amat_module_module.dir
+/p/project1/paj2623/gray2/benchmark/Running/targets_amat/target/CMakeFiles/package.dir
+/p/project1/paj2623/gray2/benchmark/Running/targets_amat/target/CMakeFiles/package_source.dir
+/p/project1/paj2623/gray2/benchmark/Running/targets_amat/target/CMakeFiles/edit_cache.dir
+/p/project1/paj2623/gray2/benchmark/Running/targets_amat/target/CMakeFiles/rebuild_cache.dir
+/p/project1/paj2623/gray2/benchmark/Running/targets_amat/target/CMakeFiles/list_install_components.dir
+/p/project1/paj2623/gray2/benchmark/Running/targets_amat/target/CMakeFiles/install.dir
+/p/project1/paj2623/gray2/benchmark/Running/targets_amat/target/CMakeFiles/install/local.dir
+/p/project1/paj2623/gray2/benchmark/Running/targets_amat/target/CMakeFiles/install/strip.dir

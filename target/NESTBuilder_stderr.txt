@@ -1,6 +1,6 @@
 
 -------------------------------------------------------
-nestml_amat_module Configuration Summary
+nestml_cse_amat_module Configuration Summary
 -------------------------------------------------------
 
 C++ compiler         : /p/software/default/stages/2026/software/psmpi/5.13.0-1-GCC-14.3.0/bin/mpicxx
@@ -12,32 +12,16 @@ NEST libraries flags : -L/p/software/default/stages/2026/software/nest-simulator
 
 -------------------------------------------------------
 
-You can now build and install 'nestml_amat_module' using
+You can now build and install 'nestml_cse_amat_module' using
   make
   make install
 
-The library file libnestml_amat_module.so will be installed to
-  /tmp/nestml_target_yv3p_at1
+The library file libnestml_cse_amat_module.so will be installed to
+  /tmp/nestml_target_3dmhk6uh
 The module can be loaded into NEST using
-  (nestml_amat_module) Install       (in SLI)
-  nest.Install(nestml_amat_module)   (in PyNEST)
+  (nestml_cse_amat_module) Install       (in SLI)
+  nest.Install(nestml_cse_amat_module)   (in PyNEST)
 
-In file included from /p/software/default/stages/2026/software/libneurosim/1.2.0-GCCcore-14.3.0/include/neurosim/connection_generator_V2_0.h:30,
-                 from /p/software/default/stages/2026/software/libneurosim/1.2.0-GCCcore-14.3.0/include/neurosim/connection_generator.h:26,
-                 from /p/software/default/stages/2026/software/nest-simulator/3.9-gpsmpi-2025b/include/nest/nest_datums.h:41,
-                 from /p/software/default/stages/2026/software/nest-simulator/3.9-gpsmpi-2025b/include/nest/conn_parameter.h:32,
-                 from /p/software/default/stages/2026/software/nest-simulator/3.9-gpsmpi-2025b/include/nest/conn_builder.h:42,
-                 from /p/software/default/stages/2026/software/nest-simulator/3.9-gpsmpi-2025b/include/nest/connection_manager.h:34,
-                 from /p/software/default/stages/2026/software/nest-simulator/3.9-gpsmpi-2025b/include/nest/connection_manager_impl.h:26,
-                 from /p/software/default/stages/2026/software/nest-simulator/3.9-gpsmpi-2025b/include/nest/nest_extension_interface.h:29,
-                 from /p/project1/paj2623/gray2/target/nestml_amat_module.cpp:26:
-/p/software/default/stages/2026/software/libneurosim/1.2.0-GCCcore-14.3.0/include/neurosim/config.h:59:9: warning: "PACKAGE" redefined
-   59 | #define PACKAGE "libneurosim"
-      |         ^~~~~~~
-In file included from /p/software/default/stages/2026/software/nest-simulator/3.9-gpsmpi-2025b/include/nest/nest_extension_interface.h:28:
-/p/software/default/stages/2026/software/nest-simulator/3.9-gpsmpi-2025b/include/nest/config.h:58:9: note: this is the location of the previous definition
-   58 | #define PACKAGE nest
-      |         ^~~~~~~
 In file included from /p/software/default/stages/2026/software/libneurosim/1.2.0-GCCcore-14.3.0/include/neurosim/connection_generator_V2_0.h:30,
                  from /p/software/default/stages/2026/software/libneurosim/1.2.0-GCCcore-14.3.0/include/neurosim/connection_generator.h:26,
                  from /p/software/default/stages/2026/software/nest-simulator/3.9-gpsmpi-2025b/include/nest/nest_datums.h:41,
@@ -51,6 +35,22 @@ In file included from /p/software/default/stages/2026/software/libneurosim/1.2.0
       |         ^~~~~~~
 In file included from /p/software/default/stages/2026/software/nest-simulator/3.9-gpsmpi-2025b/include/nest/numerics.h:27,
                  from /p/project1/paj2623/gray2/target/amat_neuron_nestml.cpp:29:
+/p/software/default/stages/2026/software/nest-simulator/3.9-gpsmpi-2025b/include/nest/config.h:58:9: note: this is the location of the previous definition
+   58 | #define PACKAGE nest
+      |         ^~~~~~~
+In file included from /p/software/default/stages/2026/software/libneurosim/1.2.0-GCCcore-14.3.0/include/neurosim/connection_generator_V2_0.h:30,
+                 from /p/software/default/stages/2026/software/libneurosim/1.2.0-GCCcore-14.3.0/include/neurosim/connection_generator.h:26,
+                 from /p/software/default/stages/2026/software/nest-simulator/3.9-gpsmpi-2025b/include/nest/nest_datums.h:41,
+                 from /p/software/default/stages/2026/software/nest-simulator/3.9-gpsmpi-2025b/include/nest/conn_parameter.h:32,
+                 from /p/software/default/stages/2026/software/nest-simulator/3.9-gpsmpi-2025b/include/nest/conn_builder.h:42,
+                 from /p/software/default/stages/2026/software/nest-simulator/3.9-gpsmpi-2025b/include/nest/connection_manager.h:34,
+                 from /p/software/default/stages/2026/software/nest-simulator/3.9-gpsmpi-2025b/include/nest/connection_manager_impl.h:26,
+                 from /p/software/default/stages/2026/software/nest-simulator/3.9-gpsmpi-2025b/include/nest/nest_extension_interface.h:29,
+                 from /p/project1/paj2623/gray2/target/nestml_cse_amat_module.cpp:26:
+/p/software/default/stages/2026/software/libneurosim/1.2.0-GCCcore-14.3.0/include/neurosim/config.h:59:9: warning: "PACKAGE" redefined
+   59 | #define PACKAGE "libneurosim"
+      |         ^~~~~~~
+In file included from /p/software/default/stages/2026/software/nest-simulator/3.9-gpsmpi-2025b/include/nest/nest_extension_interface.h:28:
 /p/software/default/stages/2026/software/nest-simulator/3.9-gpsmpi-2025b/include/nest/config.h:58:9: note: this is the location of the previous definition
    58 | #define PACKAGE nest
       |         ^~~~~~~
