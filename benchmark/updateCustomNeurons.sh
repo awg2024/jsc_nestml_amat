@@ -5,16 +5,35 @@
 
 source ../nest-simulator-install/bin/nest_vars.sh # load nest variables 
 
-# this script repeats the exact 5 step loop for four differentiations of the MODEL 
-# variations on what's being built. target_optimised, target std, target_plastic, target_plastic_noco variant (OLD VERSION). 
+# this script repeats the exact step loop for four differentiations of the MODEL 
 
-cd Running/targets_amat/target # DEFAULT NESTML AMAT loaded (might need to change) 
+# DEFINITION ON THE FOLLOW NEURONAL MODELS 
+# targets_amat = baseline testing (BASELINE)
+# targets_amat_coeff = precompute coeffients (PATCH 1) 
+# targets_amat_vm_tmp = replace only v_m_tmp (PATCH 2)
+# target_amat_tmp = replace common coefficient alpha1, alpha2, v_m_tmp (PATCH 3) 
+
+
+
+cd Running/targets_amat/target # DEFAULT NESTML AMAT compiled dir. Baseline 
 rm -rf CMakeCache.txt CMakeFiles
 cmake .
 make -j24 install
 cd ../../..
 
-cd Running/target_amat/target_cse
+cd Running/target_amat_coeff/target # PATCH 1 
+rm -rf CMakeCache.txt CMakeFiles
+cmake .
+make -j24 install
+cd ../../..
+
+cd Running/targets_vm_tmp/target # PATCH 2 
+rm -rf CMakeCache.txt CMakeFiles
+cmake .
+make -j24 install
+cd ../../..
+
+cd Running/target_amat_all_tmp/target # PATCH 3 
 rm -rf CMakeCache.txt CMakeFiles
 cmake .
 make -j24 install

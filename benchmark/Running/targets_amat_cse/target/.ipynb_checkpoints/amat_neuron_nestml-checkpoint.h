@@ -846,8 +846,8 @@ static std::vector< std::tuple< int, int > > rport_to_nestml_buffer_idx;
     double __P__I_kernel_exc__X__exc_spikes__I_kernel_exc__X__exc_spikes;
 
 
-    // ==== CSE Optimisation 
-    // Add two new precomputed coefficients next ot the existing propagator V_m members (internal cached coeffients) 
+    // CSE Optimisation 
+    // Add two new precomputed coefficients next ot the existing propagator V_m members 
 
     // coefficient multiplying (I_e + I_stim) in the closed-form V_m propagator
     double __P__V_m__I_input;
