@@ -94,35 +94,44 @@ colors = {
 
 # MPI scaling
 DEBUG = True
-NUMTHREADS = 128  # Total number of threads per node
 
-MPI_STRONG_SCALE_NEURONS = 10000  # the order of neurons in the Brunel network 
-STRONGSCALINGFOLDERNAME = "timings_strong_scaling_mpi" # output dir 
+# smoke test settings 
+NUMTHREADS = 1  # Total number of threads per node (128)
+
+# MPI Strong scaling  
+MPI_STRONG_SCALE_NEURONS = 10  # The order of neurons in the Brunel network  (10,000) 
 
 # MPI Weak scaling
-MPI_WEAK_SCALE_NEURONS = 10000 # the order of neurons in the Brunel network 
+MPI_WEAK_SCALE_NEURONS = 10 # The order of neurons in the Brunel network  (10,000) 
+
+
+STRONGSCALINGFOLDERNAME = "timings_strong_scaling_mpi" # output dir 
 WEAKSCALINGFOLDERNAME = "timings_weak_scaling_mpi" # output dir 
 
 # thread-based benchmarks
 NETWORK_BASE_SCALE = 100  # thread multiplier 
 N_THREADS = np.logspace(0, math.log2(16), num=4, base=2, dtype=int) # spreads 4 test points acorss log 2x ->> 1,2,4,16
 
+# if dont add short_sim to iteration clashes 
+ITERATIONS = 1 # init define 
+
 # MPI Strong scaling
 if enable_mpi:
     if enable_profile:
         MPI_SCALES = [2] 
-        ITERATIONS = 1
+        ITERATIONS = 1 # keeping iterations to 1 for smoke test. 
     else:
-        if short_sim:
-            MPI_SCALES = [2]
-            ITERATIONS = 1   # XXX: was originally 3!
+        if short_sim: 
+            MPI_SCALES = [1] # original (MPI_SCALES = [2])
+            ITERATIONS = 1 # keeping iterations to 1 for smoke test (original value 3) 
         else:
             MPI_SCALES = np.logspace(1, math.log2(16), num=4, base=2, dtype=int)
-            ITERATIONS = 1   # XXX: was originally 3!
+            ITERATIONS = 1 # keeping iterations to 1 for smoke test. 
 else:
     if short_sim:
         N_THREADS = np.logspace(math.log2(4), math.log2(32), num=2, base=2, dtype=int) # generates only 2 thread counts. [4, 32] 
-        ITERATIONS = 1
+        ITERATIONS = 1 # keeping iterations to 1 for smoke test. 
+
 
 PATHTOSTARTFILE = os.path.join(current_dir, "start.sh")
 
@@ -140,17 +149,49 @@ def log(message):
         f.close()
 
 
-def render_sbatch_template(combination, filename): # render sbatch template for benchmarking 
+
+def render_sbatch_template(combination, filename):
     template = setup_template_env()
+
     namespace = {}
-    namespace["nodes"] = combination["nodes"]  # number of nodes
-    namespace["ntasks_per_node"] = 2
-    namespace["cpus_per_task"] = int(combination["threads"] / 2)
+    namespace["nodes"] = combination["nodes"]
+    namespace["ntasks_per_node"] = 1     # Low-cost initial workflow (TEMPORARY) 
+    namespace["cpus_per_task"] = combination["threads"]
     namespace["combination"] = combination
     namespace["enable_profile"] = enable_profile
-    file = template.render(namespace)
-    log("Rendering template: " + template.filename)
 
+    file = template.render(namespace)
+
+    log("Rendering template: " + template.filename)
+    log("Rendered template file name: " + filename)
+
+    with open(filename, "w+") as f:
+        f.write(str(file))
+
+        
+
+
+
+def render_sbatch_template(combination, filename): # render sbatch template for benchmarking 
+    template = setup_template_env()
+    
+    #namespace = {}  #  usual workflow 
+    #namespace["nodes"] = combination["nodes"]  # number of nodes
+    #namespace["ntasks_per_node"] = 2
+    #namespace["cpus_per_task"] = int(combination["threads"] / 2)  # cpues per task 
+    #namespace["combination"] = combination
+    #namespace["enable_profile"] = enable_profile
+
+    namespace = {}
+    namespace["nodes"] = combination["nodes"]
+    namespace["ntasks_per_node"] = 1     # Low-cost initial workflow (TEMPORARY) 
+    namespace["cpus_per_task"] = combination["threads"]
+    namespace["combination"] = combination
+    namespace["enable_profile"] = enable_profile
+
+    file = template.render(namespace)
+    
+    log("Rendering template: " + template.filename)
     log("Rendered template file name: " + filename)
     with open(filename, "w+") as f:
         f.write(str(file))
@@ -175,17 +216,30 @@ def start_strong_scaling_benchmark_threads(iteration): # automates strong benchm
 
         result = subprocess.run(command, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
+	print("Slurm submission")
+	print("Model:", combination["simulated_neuron"])
+	print("Command:", " ".join(command))
+	print("Return code:", result.returncode) 
+
         if result.stdout:
+	    print("stdout:", result.stdout.strip())
+
             fname = "stdout_strong_run_" + combined + "_[iter=" + str(iteration) + "].txt"
             with open(fname, "w") as f:
                 f.write(result.stdout)
 
         if result.stderr:
+	    print("stderr:", result.stderr.strip())		
+
             fname = "stderr_strong_run_" + combined + "_[iter=" + str(iteration) + "].txt"
             with open(fname, "w") as f:
                 f.write(result.stderr)
 
         if result.returncode != 0:
+	    raise RuntimeError(
+	    	f"sbatch failed for {combination['simulated_neuron']}: " 
+		f"{result.stderr.strip()}"
+		)
             log("\033[91m" + combination["name"] + " failed\033[0m")
             log("\033[91m" + result.stderr + " failed\033[0m")
 
@@ -216,7 +270,7 @@ def start_strong_scaling_benchmark_mpi(iteration): # automates strong scaling us
         render_sbatch_template(combination, filename)
         command = ["sbatch", f"{filename}"]
         result = subprocess.run(command, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)# submit 
-        import pdb;pdb.set_trace() # injects python debugger 
+        #import pdb;pdb.set_trace() # injects python debugger after sbatch is submitted. 
 
 def start_weak_scaling_benchmark_threads(iteration):
     
@@ -237,18 +291,32 @@ def start_weak_scaling_benchmark_threads(iteration):
         log(f"\033[93m{combined}\033[0m" if DEBUG else combined)
         result = subprocess.run(command, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
+
+	print("Slurm submission")
+        print("Model:", combination["simulated_neuron"])
+        print("Command:", " ".join(command))
+        print("Return code:", result.returncode)
+
         if result.stdout:
-            fname = "stdout_weak_run_" + combined + "_[iter=" + str(iteration) + "].txt"
+            print("stdout:", result.stdout.strip())
+
+            fname = "stdout_strong_run_" + combined + "_[iter=" + str(iteration) + "].txt"
             with open(fname, "w") as f:
                 f.write(result.stdout)
 
         if result.stderr:
-            fname = "stderr_weak_run_" + combined + "_[iter=" + str(iteration) + "].txt"
+            print("stderr:", result.stderr.strip())
+
+            fname = "stderr_strong_run_" + combined + "_[iter=" + str(iteration) + "].txt"
             with open(fname, "w") as f:
                 f.write(result.stderr)
 
         if result.returncode != 0:
-            log("\033[91m" + combination["neuronmodel"] + " failed\033[0m")
+            raise RuntimeError(
+                f"sbatch failed for {combination['simulated_neuron']}: "
+                f"{result.stderr.strip()}"
+                )
+            log("\033[91m" + combination["name"] + " failed\033[0m")
             log("\033[91m" + result.stderr + " failed\033[0m")
 
 def start_weak_scaling_benchmark_mpi(iteration):
@@ -288,6 +356,9 @@ def extract_value_from_filename(filename, key):
 
 
 def post_process_data(sim_data: dict):
+
+    if not sim_data: 
+        raise("no benchmark json files were found for analysis") 
 
     # Compute max simulation time between MPI ranks and add it to the data
     for neuron in NEURONMODELS:
@@ -618,8 +689,8 @@ def read_isis_from_files(neuron_models):
         data[neuron_model] = {"isis": []}  # list of lists: one element for each iteration, containing the list of ISIs for that iteration (across all ranks)
 
         if args.enable_mpi:
-            threads = 128
-            nodes = 2
+            threads = NUMTHREADS # original value was hard coding 128
+            nodes = int(MPI_SCALES[0])  # original value was hard coding 2
         else:
             threads = N_THREADS[0]
             nodes = 1
@@ -631,7 +702,8 @@ def read_isis_from_files(neuron_models):
             # loop across ranks
             rank = 0
             while True:
-                filename = "timings_strong_scaling_mpi/isi_distribution_[simulated_neuron=" + neuron_model + "]_[network_scale=" + str(MPI_WEAK_SCALE_NEURONS) + "]_[iteration=" + str(iteration) + "]_[nodes=" + str(nodes) + "]_[threads=" + str(threads) + "]_[rank=" + str(rank) + "]_isi_list.txt" # XXX update MPI_WEAK_SCALE_NEURONS
+                filename = "timings_strong_scaling_mpi/isi_distribution_[simulated_neuron=" + neuron_model + "]_[network_scale=" +   str(MPI_STRONG_SCALE_NEURONS) + "]_[iteration=" + str(iteration) + "]_[nodes=" + str(nodes) + "]_[threads=" + str(threads) + "]_[rank=" + str(rank) + "]_isi_list.txt" 
+                
                 if not os.path.exists(os.path.join(output_folder, filename)):
                     break
 

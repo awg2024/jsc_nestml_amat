@@ -1,3 +1,20 @@
-[93mamat_neuron_nestml,2[0m
-Rendering template: /p/project1/cslns/linssen1/jsc_nestml_amat/benchmark/Running/sbatch_run.sh.jinja2
-Rendered template file name: /p/project1/cslns/linssen1/jsc_nestml_amat/benchmark/Running/../Output_MPI/timings_strong_scaling_mpi/sbatch/sbatch_run_amat_neuron_nestml_2_[iter=0].sh
+[93mamat_nestml,1[0m
+Rendering template: /p/project1/paj2623/gray2/benchmark/Running/sbatch_run.sh.jinja2
+Rendered template file name: /p/project1/paj2623/gray2/benchmark/Running/../Output_MPI/timings_strong_scaling_mpi/sbatch/sbatch_run_amat_nestml_1_[iter=0].sh
+[93mamat_nestml_cse,1[0m
+Rendering template: /p/project1/paj2623/gray2/benchmark/Running/sbatch_run.sh.jinja2
+Rendered template file name: /p/project1/paj2623/gray2/benchmark/Running/../Output_MPI/timings_strong_scaling_mpi/sbatch/sbatch_run_amat_nestml_cse_1_[iter=0].sh
+[93mamat2_psc_exp,1[0m
+Rendering template: /p/project1/paj2623/gray2/benchmark/Running/sbatch_run.sh.jinja2
+Rendered template file name: /p/project1/paj2623/gray2/benchmark/Running/../Output_MPI/timings_strong_scaling_mpi/sbatch/sbatch_run_amat2_psc_exp_1_[iter=0].sh
+[93mamat_nestml,1,10[0m
+Rendering template: /p/project1/paj2623/gray2/benchmark/Running/sbatch_run.sh.jinja2
+Rendered template file name: /p/project1/paj2623/gray2/benchmark/Running/../Output_MPI/timings_weak_scaling_mpi/sbatch/sbatch_run_amat_nestml_1_10_[iter=0].sh
+[93mamat_nestml_cse,1,10[0m
+Rendering template: /p/project1/paj2623/gray2/benchmark/Running/sbatch_run.sh.jinja2
+Rendered template file name: /p/project1/paj2623/gray2/benchmark/Running/../Output_MPI/timings_weak_scaling_mpi/sbatch/sbatch_run_amat_nestml_cse_1_10_[iter=0].sh
+[93mamat2_psc_exp,1,10[0m
+Rendering template: /p/project1/paj2623/gray2/benchmark/Running/sbatch_run.sh.jinja2
+Rendered template file name: /p/project1/paj2623/gray2/benchmark/Running/../Output_MPI/timings_weak_scaling_mpi/sbatch/sbatch_run_amat2_psc_exp_1_10_[iter=0].sh
+Checking for running jobs. Number of jobs running: 0
+Finished

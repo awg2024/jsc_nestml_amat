@@ -1,6 +1,7 @@
 #!/bin/bash
-#SBATCH --job-name=nestml_benchmark
-#SBATCH --account=paj2623
+
+#SBATCH --job-name=nestml_amat_benchmark
+#SBATCH --account=YOUR_BUDGET
 #SBATCH --partition=dc-cpu
 #SBATCH --time=00:10:00
 
@@ -12,15 +13,33 @@
 #SBATCH --output={{combination["output_file"]}}
 #SBATCH --error={{combination["error_file"]}}
 
-{%- if enable_profile %}
-ml AMD-uProf
-{%- endif %}
+module load Stages/2026
+module load GCC/14.3.0
+module load ParaStationMPI/5.13.0-1
+module load CMake/3.31.8
+module load nest-simulator/3.9
 
+source /p/project1/paj2623/gray2/venvs/amat_hpc/bin/activate
+
+export LD_LIBRARY_PATH="${PWD}/Running/targets_amat/target:${PWD}/Running/targets_amat_optimised_cse/target:${LD_LIBRARY_PATH:-}"
+
+export MPLBACKEND=Agg
+export PYTHONUNBUFFERED=1
 export OMP_PROC_BIND=TRUE
-export PROGRAM="python3 Running/brunel_alpha_nest.py --simulated_neuron {{combination["simulated_neuron"]}} --network_scale {{combination["network_scale"]}} --nodes {{ combination["nodes"] }} --threads {{combination["threads"]}}  --iteration {{combination["iteration"]}} --benchmarkPath {{combination["benchmarkPath"]}} --rng_seed {{combination["rng_seed"]}}"
 
-{%- if enable_profile %}
-srun AMDuProfCLI collect --config tbp --mpi -o cpuprof $PROGRAM
-{%- else %}
+export SRUN_CPUS_PER_TASK=${SLURM_CPUS_PER_TASK}
+
+export PROGRAM="python3 Running/brunel_alpha_nest.py \
+--simulated_neuron {{combination["simulated_neuron"]}} \
+--network_scale {{combination["network_scale"]}} \
+--nodes {{combination["nodes"]}} \
+--threads {{combination["threads"]}} \
+--iteration {{combination["iteration"]}} \
+--benchmarkPath {{combination["benchmarkPath"]}} \
+--rng_seed {{combination["rng_seed"]}}
+--smoke_test
+--simtime 100"
+
+
+
 srun $PROGRAM
-{%- endif %}

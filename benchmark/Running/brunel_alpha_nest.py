@@ -522,11 +522,9 @@ p_rate = 1000.0 * nu_ex * CE
 # already processed simulation time as well as its percentage of the total
 # simulation time.
 
-
 nest.resolution = dt
 nest.print_time = True
 nest.overwrite_files = True
-
 
 # current_time_ms = int(datetime.now().timestamp() * 1000) % 2**31           # Get the current time in milliseconds since the Unix epoch, modulo max nr of RNG seed bits in NEST (32)
 nest.rng_seed = args.rng_seed
@@ -548,12 +546,12 @@ print("Building network")
 # later be used to record excitatory and inhibitory spikes. Properties of the
 # nodes are specified via ``params``, which expects a dictionary.
 
-modelName = args.simulated_neuron
 print(f"Creating the neuron model: {modelName}")
 print(f"Random seed: {args.rng_seed}")
 
 nodes_ex = nest.Create(modelName, NE, params=neuron_params)
 nodes_in = nest.Create(modelName, NI, params=neuron_params)
+
 noise = nest.Create("poisson_generator", params={"rate": p_rate})
 espikes = nest.Create("spike_recorder")
 espikes_ascii = nest.Create("spike_recorder")
@@ -602,7 +600,7 @@ nest.Connect(noise, nodes_in, syn_spec="excitatory_static")
 # Here the same shortcut for the specification of the synapse as defined
 # above is used.
 
-if args.nodes > 1:
+if nest.GetKernelStatus("num_processes") > 1:
     local_neurons_ex = nest.GetLocalNodeCollection(nodes_ex)
     local_neurons_in = nest.GetLocalNodeCollection(nodes_in)
 

@@ -1,17 +1,17 @@
 #!/bin/bash
 
 #SBATCH --job-name=nestml_amat_benchmark
-#SBATCH --account=YOUR_BUDGET
+#SBATCH --account=paj2623
 #SBATCH --partition=dc-cpu
 #SBATCH --time=00:10:00
 
-#SBATCH --nodes={{nodes}}
-#SBATCH --ntasks-per-node={{ntasks_per_node}}
-#SBATCH --cpus-per-task={{cpus_per_task}}
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=1
+#SBATCH --cpus-per-task=1
 #SBATCH --hint=nomultithread
 
-#SBATCH --output={{combination["output_file"]}}
-#SBATCH --error={{combination["error_file"]}}
+#SBATCH --output=run_simulation_amat2_psc_exp_1_0_%j.out
+#SBATCH --error=run_simulation_amat2_psc_exp_1_0_%j.err
 
 module load Stages/2026
 module load GCC/14.3.0
@@ -30,13 +30,13 @@ export OMP_PROC_BIND=TRUE
 export SRUN_CPUS_PER_TASK=${SLURM_CPUS_PER_TASK}
 
 export PROGRAM="python3 Running/brunel_alpha_nest.py \
---simulated_neuron {{combination["simulated_neuron"]}} \
---network_scale {{combination["network_scale"]}} \
---nodes {{combination["nodes"]}} \
---threads {{combination["threads"]}} \
---iteration {{combination["iteration"]}} \
---benchmarkPath {{combination["benchmarkPath"]}} \
---rng_seed {{combination["rng_seed"]}}
+--simulated_neuron amat2_psc_exp \
+--network_scale 10 \
+--nodes 1 \
+--threads 1 \
+--iteration 0 \
+--benchmarkPath /p/project1/paj2623/gray2/benchmark/Running/../Output_MPI/timings_strong_scaling_mpi \
+--rng_seed 65384577
 --smoke_test
 --simtime 100"
 
