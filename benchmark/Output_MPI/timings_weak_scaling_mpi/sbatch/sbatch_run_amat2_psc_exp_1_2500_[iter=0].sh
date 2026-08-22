@@ -36,7 +36,7 @@ export PROGRAM="python3 Running/brunel_alpha_nest.py \
 --threads 1 \
 --iteration 0 \
 --benchmarkPath /p/project1/paj2623/gray2/benchmark/Running/../Output_MPI/timings_weak_scaling_mpi \
---rng_seed 484012945 \
+--rng_seed 1084839502 \
 --smoke_test \
 --simtime 100"
 
