@@ -241,13 +241,23 @@ def compute_cv(spike_train):
 
     return cv
 
+
 def compute_cv_for_neurons(spike_trains):
     cvs = []
     for spike_train in spike_trains:
-        if len(spike_train):
-            cvs.append(compute_cv(spike_train))
 
-    return np.mean(cvs)
+        # At least two ISIs
+        if len(spike_train) >= 3:
+            cv = compute_cv(spike_train)
+            if np.isfinite(cv):
+                cvs.append(cv)
+
+    if not cvs:
+        return np.nan
+
+    return float(np.mean(cvs))
+
+
 
 
 def plot_interspike_intervals(spike_times_list, path, fname_snip=""):
@@ -313,6 +323,8 @@ parser.add_argument("--eta", type=float, default=0.8, help="External drive relat
 parser.add_argument("--target_psp", type=float, default=0.15, help="Target excitatory PSP amplitude in mV")
 
 parser.add_argument("--g", type=float, default=5.0, help="Inhibitory/excitatory weight ratio")
+
+parser.add_argument("--beta", type=float, default=4.0, help="AMAT voltage-dependent threshold coefficient")
 
 args = parser.parse_args()
 
@@ -398,16 +410,32 @@ print(f"Number of neurons : {N_neurons}")
 N_rec_exc = min(500, NE) # record from this many neurons
 N_rec_inh = min(100, NI) 
 
-if args.smoke_test:  # if smoke_test is activated
-    
-    CE = max(1, int(epsilon * NE))    # normal 10% connectivity enables small networks
-    CI = max(1, int(epsilon * NI))
+SMOKE_CE = 20
+SMOKE_CI = 5
+PRODUCTION_CE = 1000
+PRODUCTION_CI = 250
 
-else:  
-    CE = int(epsilon * NE)  # number of excitatory synapses per neuron
-    CI = int(epsilon * NI)  # number of inhibitory synapses per neuron
+if args.smoke_test:
+    CE = min(SMOKE_CE, NE)
+    CI = min(SMOKE_CI, NI)
 
-C_tot = int(CI + CE)  # total number of synapses per neuron
+else:
+    if NE < PRODUCTION_CE:
+        raise ValueError(
+            f"Production CE={PRODUCTION_CE} requires at least "
+            f"{PRODUCTION_CE} excitatory neurons, but NE={NE}."
+        )
+
+    if NI < PRODUCTION_CI:
+        raise ValueError(
+            f"Production CI={PRODUCTION_CI} requires at least "
+            f"{PRODUCTION_CI} inhibitory neurons, but NI={NI}."
+        )
+
+    CE = PRODUCTION_CE
+    CI = PRODUCTION_CI
+
+C_tot = CE + CI
 
 ###############################################################################
 # Initialization of the parameters of the integrate and fire neuron and the
@@ -427,7 +455,7 @@ common_params = {
     "alpha_2": 0.0,
     "omega": -65.0,
     "tau_v": 5.0,
-    "beta": 4.0,
+    "beta": args.beta,
     "I_e": 0.0,
 }
 
@@ -521,6 +549,33 @@ print(f"Random seed: {args.rng_seed}")
 
 nodes_ex = nest.Create(modelName, NE, params=neuron_params)
 nodes_in = nest.Create(modelName, NI, params=neuron_params)
+
+
+mean_external_current = (
+    p_rate
+    * J_ex
+    * tauSynEx
+    / 1000.0
+)
+
+print("\n========== BENCHMARK CONFIG ==========")
+print(f"Model             : {args.simulated_neuron}")
+print(f"Network scale     : {order}")
+print(f"NE / NI           : {NE} / {NI}")
+print(f"CE / CI           : {CE} / {CI}")
+print(f"Smoke test        : {args.smoke_test}")
+print(f"eta               : {eta}")
+print(f"target PSP        : {target_psp_mv:.4f} mV")
+print(f"g                 : {g}")
+print(f"J_ex              : {J_ex:.6f} pA")
+print(f"J_in              : {J_in:.6f} pA")
+print(f"Poisson rate      : {p_rate:.2f} Hz")
+print(f"Mean ext current  : {mean_external_current:.2f} pA")
+print(f"beta              : {neuron_params['beta']}")
+print(f"simtime           : {simtime} ms")
+print("======================================\n")
+
+
 
 noise = nest.Create("poisson_generator", params={"rate": p_rate})
 espikes = nest.Create("spike_recorder")

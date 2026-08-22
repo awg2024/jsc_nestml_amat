@@ -65,6 +65,12 @@ parser.add_argument("--enable_profiling", action="store_true", help="Run the ben
 parser.add_argument("--short_sim", action="store_true", help="Run benchmark with profiling on 2 nodes with 2 iterations")
 parser.add_argument("--enable_mpi", action="store_true", default=False, help="Run benchmark with MPI (default: thread-based benchmarking)")
 
+parser.add_argument("--eta", type=float, default=0.8)
+parser.add_argument("--target_psp", type=float, default=0.15)
+parser.add_argument("--g", type=float, default=5.0)
+parser.add_argument("--simtime", type=float, default=999.0)
+
+
 args = parser.parse_args()
 runSim = args.noRunSim
 enable_profile = args.enable_profiling
@@ -99,10 +105,10 @@ DEBUG = True
 NUMTHREADS = 1  # Total number of threads per node (128)
 
 # MPI Strong scaling  
-MPI_STRONG_SCALE_NEURONS = 2500  # The order of neurons in the Brunel network  (10,000) 
+MPI_STRONG_SCALE_NEURONS = 50  # The order of neurons in the Brunel network  (10,000) 
 
 # MPI Weak scaling
-MPI_WEAK_SCALE_NEURONS = 2500 # The order of neurons in the Brunel network  (10,000) 
+MPI_WEAK_SCALE_NEURONS = 50 # The order of neurons in the Brunel network  (10,000) 
 
 STRONGSCALINGFOLDERNAME = "timings_strong_scaling_mpi" # output dir 
 WEAKSCALINGFOLDERNAME = "timings_weak_scaling_mpi" # output dir 
@@ -178,8 +184,18 @@ def render_sbatch_template(combination, filename): # render sbatch template for 
 def start_strong_scaling_benchmark_threads(iteration): # automates strong benchmark across neuronal models (amat, aeif_psc_alpha etc.)  
     log(f"Strong Scaling Benchmark {iteration}")  
     dirname = os.path.join(output_folder, STRONGSCALINGFOLDERNAME) 
-    combinations = [{"n_threads": n_threads, "neuronmodel": neuronmodel, "name": f"{neuronmodel},{n_threads}" } for neuronmodel in NEURONMODELS for n_threads in N_THREADS]  
+    combinations = [{"n_threads": n_threads,
+        "neuronmodel": neuronmodel, 
+        "name": f"{neuronmodel},{n_threads}" } for neuronmodel in NEURONMODELS for n_threads in N_THREADS,
+        "eta": args.eta,
+        "target_psp": args.target_psp,
+        "g": args.g,
+        "beta": args.beta,
+        "simtime": 99.0 if short_sim else args.simtime,
+        "smoke_test": short_sim,
+     ]  
     
+
     for combination in combinations: 
         rng_seed = rng.integers(0, max_int32)  
         command = ["bash", "-c", f'source {PATHTOSTARTFILE} && python3 {PATHTOFILE} --simulated_neuron {combination["neuronmodel"]} --network_scale {MPI_STRONG_SCALE_NEURONS} --threads {combination["n_threads"]} --iteration {iteration} --rng_seed {rng_seed} --benchmarkPath {dirname}']  
@@ -217,11 +233,14 @@ def start_strong_scaling_benchmark_mpi(iteration): # automates strong scaling us
             "network_scale": MPI_STRONG_SCALE_NEURONS,
             "threads": NUMTHREADS,
             "iteration": iteration,
-            
-            # avoid clutter in /running  
-            "output_file": os.path.join(dirname, f"run_simulation_{neuronmodel}_{compute_nodes}_{iteration}_%j.out"),
+            "eta": args.eta,
+            "target_psp": args.target_psp,
+            "g": args.g,
+            "beta": args.beta,
+            "simtime": 99.0 if short_sim else args.simtime,
+            "smoke_test": short_sim,
+            "output_file": os.path.join(dirname, f"run_simulation_{neuronmodel}_{compute_nodes}_{iteration}_%j.out"), 
             "error_file": os.path.join(dirname, f"run_simulation_{neuronmodel}_{compute_nodes}_{iteration}_%j.err"),
-            
             "benchmarkPath": dirname,
             "rng_seed": rng.integers(0, max_int32),
         } for neuronmodel in NEURONMODELS for compute_nodes in MPI_SCALES] # 
