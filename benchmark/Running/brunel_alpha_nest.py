@@ -376,7 +376,9 @@ startbuild = time.time()
 ###############################################################################
 # Assigning the simulation parameters to variables.
 
-dt = 0.01  # the resolution in ms  -- note that in NEST, aeif models internally use .01 ms timestep; use same value for consistency!
+
+# previously 0.1 ? 
+dt = 0.01  # the resolution in ms  
 delay = 1.5  # synaptic delay in ms
 
 ###############################################################################
@@ -399,6 +401,7 @@ print(f"Number of neurons : {N_neurons}")
 
 N_rec_exc = min(500, NE) # record from this many neurons
 N_rec_inh = min(100, NI) 
+
 
 ###############################################################################
 # Definition of connectivity parameters
@@ -423,34 +426,49 @@ C_tot = int(CI + CE)  # total number of synapses per neuron
 # synapses. The parameters of the neuron are stored in a dictionary. The
 # synaptic currents are normalized such that the amplitude of the PSP is J.
 
+theta = 20.0  # membrane threshold potential in mV
 neuron_params = {}
 
+
+common_params = {
+    "tau_m": 10.0,
+    "C_m": 200.0,
+    "E_L": -70.0,
+    "tau_1": 10.0,
+    "tau_2": 200.0,
+    "alpha_1": 10.0,
+    "alpha_2": 0.0,
+    "omega": -65.0,
+    "tau_v": 5.0,
+    "beta": 4.0,
+    "I_e": 0.0,
+}
+
+
 if args.simulated_neuron == "amat2_psc_exp":
-    neuron_params = {
-        "tau_m": 10.0,
-        "C_m": 200.0,
-        "E_L": -70.0,
-        "alpha_1": 10.0,
-        "alpha_2": 0.0}
-    
-elif args.simulated_neuron == "amat_neuron_nestml":
-    neuron_params = {
-        "tau_m": 10.0,
-        "C_m": 200.0,
-        "E_L": -70.0,
-        "alpha_1": 10.0,
-        "alpha_2": 0.0}
 
-elif args.simulated_neuron == "amat_cse_neuron_nestml":
     neuron_params = {
-        "tau_m": 10.0,
-        "C_m": 200.0,
-        "E_L": -70.0,
-        "alpha_1": 10.0,
-        "alpha_2": 0.0}
+        **common_params,
+
+        "tau_syn_ex": 1.0,
+        "tau_syn_in": 3.0,
+        "t_ref": 2.0,
+    }
+
+
+elif args.simulated_neuron in ("amat_nestml","amat_nestml_cse"):
+
+    neuron_params = {
+        **common_params,
+        "tau_syn_exc": 1.0,
+        "tau_syn_inh": 3.0,
+        "refr_T": 2.0}
+
 else:
-    assert False, "Unknown neuron model: " + str(args.simulated_neuron)
-
+    
+    raise ValueError(
+        f"Unknown neuron benchmark variant: "
+        f"{args.simulated_neuron}")
 
 # adjusted amat neuronal parameter 
 tauMem = 10.0
@@ -474,10 +492,7 @@ baseline_current = ((omega - E_L) * CMem / tauMem)
 
 p_rate = (eta * 1000.0 * baseline_current / (J_ex * tauSynEx))
 
-J = 0.1  # postsynaptic amplitude in mV
-J_unit = exp_psp_norm(tauMem, CMem, tauSyn) # calculating offset weights  
-J_ex = J / J_unit  # amplitude of excitatory postsynaptic current
-J_in = -g * J_ex  # amplitude of inhibitory postsynaptic current
+simtime = args.simtime
 
 ###############################################################################
 # Definition of threshold rate, which is the external rate needed to fix the
@@ -485,11 +500,6 @@ J_in = -g * J_ex  # amplitude of inhibitory postsynaptic current
 # rate of the poisson generator which is multiplied by the in-degree CE and
 # converted to Hz by multiplication by 1000.
 
-simtime = args.simtime
-
-nu_th = (theta * CMem) / (J_ex * CE * np.exp(1) * tauMem * tauSyn)
-nu_ex = eta * nu_th
-p_rate = 1000.0 * nu_ex * CE
 
 ################################################################################
 # Configuration of the simulation kernel by the previously defined time
@@ -577,29 +587,44 @@ nest.Connect(noise, nodes_in, syn_spec="excitatory_static")
 # Here the same shortcut for the specification of the synapse as defined
 # above is used.
 
-if nest.GetKernelStatus("num_processes") > 1:
-    local_neurons_ex = nest.GetLocalNodeCollection(nodes_ex)
-    local_neurons_in = nest.GetLocalNodeCollection(nodes_in)
+# Record from a fixed GLOBAL subset of neurons.
+# NEST distributes these connections correctly across MPI ranks.
+record_neurons_ex = nodes_ex[:N_rec_exc]
+record_neurons_in = nodes_in[:N_rec_inh]
 
-    # Convert to NodeCollection
-    local_neurons_ex = nest.NodeCollection(local_neurons_ex.tolist())
-    local_neurons_in = nest.NodeCollection(local_neurons_in.tolist())
-else:
-    local_neurons_ex = nodes_ex
-    local_neurons_in = nodes_in
+print(
+    "Recorded excitatory neurons:",
+    len(record_neurons_ex)
+)
+print(
+    "Recorded inhibitory neurons:",
+    len(record_neurons_in)
+)
 
-print("Local exc neurons: ", len(local_neurons_ex))
-print("Local inh neurons: ", len(local_neurons_in))
+nest.Connect(
+    record_neurons_ex,
+    espikes,
+    syn_spec="excitatory_static"
+)
 
-nest.Connect(local_neurons_ex[:N_rec_exc], espikes, syn_spec="excitatory_static")
-nest.Connect(local_neurons_ex[:N_rec_exc], espikes_ascii, syn_spec="excitatory_static")
-nest.Connect(local_neurons_in[:N_rec_inh], ispikes, syn_spec="excitatory_static")
+nest.Connect(
+    record_neurons_ex,
+    espikes_ascii,
+    syn_spec="excitatory_static"
+)
 
-nest.Connect(e_mm, local_neurons_ex[0], syn_spec="excitatory_static")
+nest.Connect(
+    record_neurons_in,
+    ispikes,
+    syn_spec="excitatory_static"
+)
 
-print("Connecting network")
-
-print("Excitatory connections")
+# Multimeter connects TO the neuron.
+nest.Connect(
+    e_mm,
+    nodes_ex[:1],
+    syn_spec="excitatory_static"
+)
 
 ###############################################################################
 # Connecting the excitatory population to all neurons using the pre-defined

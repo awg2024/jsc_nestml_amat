@@ -7,14 +7,26 @@ Rendered template file name: /p/project1/paj2623/gray2/benchmark/Running/../Outp
 [93mamat2_psc_exp,1[0m
 Rendering template: /p/project1/paj2623/gray2/benchmark/Running/sbatch_run.sh.jinja2
 Rendered template file name: /p/project1/paj2623/gray2/benchmark/Running/../Output_MPI/timings_strong_scaling_mpi/sbatch/sbatch_run_amat2_psc_exp_1_[iter=0].sh
-[93mamat_nestml,1,10[0m
+[93mamat_nestml,1,2500[0m
 Rendering template: /p/project1/paj2623/gray2/benchmark/Running/sbatch_run.sh.jinja2
-Rendered template file name: /p/project1/paj2623/gray2/benchmark/Running/../Output_MPI/timings_weak_scaling_mpi/sbatch/sbatch_run_amat_nestml_1_10_[iter=0].sh
-[93mamat_nestml_cse,1,10[0m
+Rendered template file name: /p/project1/paj2623/gray2/benchmark/Running/../Output_MPI/timings_weak_scaling_mpi/sbatch/sbatch_run_amat_nestml_1_2500_[iter=0].sh
+[93mamat_nestml_cse,1,2500[0m
 Rendering template: /p/project1/paj2623/gray2/benchmark/Running/sbatch_run.sh.jinja2
-Rendered template file name: /p/project1/paj2623/gray2/benchmark/Running/../Output_MPI/timings_weak_scaling_mpi/sbatch/sbatch_run_amat_nestml_cse_1_10_[iter=0].sh
-[93mamat2_psc_exp,1,10[0m
+Rendered template file name: /p/project1/paj2623/gray2/benchmark/Running/../Output_MPI/timings_weak_scaling_mpi/sbatch/sbatch_run_amat_nestml_cse_1_2500_[iter=0].sh
+[93mamat2_psc_exp,1,2500[0m
 Rendering template: /p/project1/paj2623/gray2/benchmark/Running/sbatch_run.sh.jinja2
-Rendered template file name: /p/project1/paj2623/gray2/benchmark/Running/../Output_MPI/timings_weak_scaling_mpi/sbatch/sbatch_run_amat2_psc_exp_1_10_[iter=0].sh
+Rendered template file name: /p/project1/paj2623/gray2/benchmark/Running/../Output_MPI/timings_weak_scaling_mpi/sbatch/sbatch_run_amat2_psc_exp_1_2500_[iter=0].sh
+Checking for running jobs. Number of jobs running: 10
+Checking for running jobs. Number of jobs running: 8
+Checking for running jobs. Number of jobs running: 8
+Checking for running jobs. Number of jobs running: 8
+Checking for running jobs. Number of jobs running: 8
+Checking for running jobs. Number of jobs running: 8
+Checking for running jobs. Number of jobs running: 8
+Checking for running jobs. Number of jobs running: 5
+Checking for running jobs. Number of jobs running: 5
+Checking for running jobs. Number of jobs running: 5
+Checking for running jobs. Number of jobs running: 5
+Checking for running jobs. Number of jobs running: 2
 Checking for running jobs. Number of jobs running: 0
 Finished

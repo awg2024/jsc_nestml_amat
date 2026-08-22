@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #SBATCH --job-name=nestml_amat_benchmark
-#SBATCH --account=paj2623
+#SBATCH --account=paj2623 
 #SBATCH --partition=dc-cpu
 #SBATCH --time=00:10:00
 
@@ -31,13 +31,13 @@ export SRUN_CPUS_PER_TASK=${SLURM_CPUS_PER_TASK}
 
 export PROGRAM="python3 Running/brunel_alpha_nest.py \
 --simulated_neuron amat_nestml \
---network_scale 10 \
+--network_scale 2500 \
 --nodes 1 \
 --threads 1 \
 --iteration 0 \
 --benchmarkPath /p/project1/paj2623/gray2/benchmark/Running/../Output_MPI/timings_strong_scaling_mpi \
---rng_seed 2057401553
---smoke_test
+--rng_seed 54994208 \
+--smoke_test \
 --simtime 100"
 
 

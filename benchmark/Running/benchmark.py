@@ -99,10 +99,10 @@ DEBUG = True
 NUMTHREADS = 1  # Total number of threads per node (128)
 
 # MPI Strong scaling  
-MPI_STRONG_SCALE_NEURONS = 10  # The order of neurons in the Brunel network  (10,000) 
+MPI_STRONG_SCALE_NEURONS = 2500  # The order of neurons in the Brunel network  (10,000) 
 
 # MPI Weak scaling
-MPI_WEAK_SCALE_NEURONS = 10 # The order of neurons in the Brunel network  (10,000) 
+MPI_WEAK_SCALE_NEURONS = 2500 # The order of neurons in the Brunel network  (10,000) 
 
 STRONGSCALINGFOLDERNAME = "timings_strong_scaling_mpi" # output dir 
 WEAKSCALINGFOLDERNAME = "timings_weak_scaling_mpi" # output dir 

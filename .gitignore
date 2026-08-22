@@ -1,1 +1,26 @@
-src/nestml
+# NESTML generated artifacts
+src/nestml/
+_neuron_nestml/
+*targets_amat*/
+
+# Slurm output logs
+*.out
+*.err
+slurm-*.out
+
+# Benchmark-specific runtime text outputs
+stdout_*_run_*.txt
+stderr_*_run_*.txt
+
+# Visualization and data artifacts
+# *.png for plots? 
+*.pdf
+*.json
+slurm_smoke_results/
+
+# Python caching environment
+__pycache__/
+*.pyc
+.venv/
+venvs/
+
