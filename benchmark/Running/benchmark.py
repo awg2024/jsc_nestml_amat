@@ -217,8 +217,11 @@ def start_strong_scaling_benchmark_mpi(iteration): # automates strong scaling us
             "network_scale": MPI_STRONG_SCALE_NEURONS,
             "threads": NUMTHREADS,
             "iteration": iteration,
-            "output_file": f"run_simulation_{neuronmodel}_{compute_nodes}_{iteration}_%j.out",
-            "error_file": f"run_simulation_{neuronmodel}_{compute_nodes}_{iteration}_%j.err",
+            
+            # avoid clutter in /running  
+            "output_file": os.path.join(dirname, f"run_simulation_{neuronmodel}_{compute_nodes}_{iteration}_%j.out"),
+            "error_file": os.path.join(dirname, f"run_simulation_{neuronmodel}_{compute_nodes}_{iteration}_%j.err"),
+            
             "benchmarkPath": dirname,
             "rng_seed": rng.integers(0, max_int32),
         } for neuronmodel in NEURONMODELS for compute_nodes in MPI_SCALES] # 
@@ -327,8 +330,11 @@ def start_weak_scaling_benchmark_mpi(iteration):
             "network_scale": MPI_WEAK_SCALE_NEURONS * compute_nodes,
             "threads": NUMTHREADS,
             "iteration": iteration,
-            "output_file": f"run_simulation_{neuronmodel}_{compute_nodes}_{MPI_WEAK_SCALE_NEURONS * compute_nodes}_{iteration}_%j.out",
-            "error_file": f"run_simulation_{neuronmodel}_{compute_nodes}_{MPI_WEAK_SCALE_NEURONS * compute_nodes}_{iteration}_%j.err",
+
+             # avoid clutter /running 
+            "output_file": os.path.join(dirname, f"run_simulation_{neuronmodel}_{compute_nodes}_{iteration}_%j.out"),
+            "error_file": os.path.join(dirname, f"run_simulation_{neuronmodel}_{compute_nodes}_{iteration}_%j.err"),
+
             "benchmarkPath": dirname,
             "rng_seed": rng.integers(0, max_int32),
         } for neuronmodel in NEURONMODELS for compute_nodes in MPI_SCALES]
@@ -826,8 +832,9 @@ def plot_isi_distributions(neuron_models, data):
     plt.subplots_adjust(left=0.2, right=.9, bottom=0.15, top=0.9)
     plt.legend()
 
-    plt.xlim(0, 160)  # XXX hard-coded...
-
+    #plt.xlim(0, 160)
+    plt.xlim(0, np.percentile(data["bin_edges"], 99))
+    
     plt.gca().spines["top"].set_visible(False)
     plt.gca().spines["right"].set_visible(False)
     plt.gca().spines["left"].set_visible(False)

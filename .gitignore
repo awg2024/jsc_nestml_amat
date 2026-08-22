@@ -12,8 +12,7 @@ slurm-*.out
 stdout_*_run_*.txt
 stderr_*_run_*.txt
 
-# Visualization and data artifacts
-# *.png for plots? 
+# Visualization and data artifacts 
 *.pdf
 *.json
 slurm_smoke_results/

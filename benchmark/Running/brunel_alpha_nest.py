@@ -308,7 +308,11 @@ parser.add_argument("--smoke_test",action="store_true",help="Use small-network c
 
 parser.add_argument("--simtime",type=float,default=1000.0,help="Biological simulation time in ms",)
 
+parser.add_argument("--eta", type=float, default=0.8, help="External drive relative to resting threshold current")
 
+parser.add_argument("--target_psp", type=float, default=0.15, help="Target excitatory PSP amplitude in mV")
+
+parser.add_argument("--g", type=float, default=5.0, help="Inhibitory/excitatory weight ratio")
 
 args = parser.parse_args()
 
@@ -381,44 +385,28 @@ startbuild = time.time()
 dt = 0.01  # the resolution in ms  
 delay = 1.5  # synaptic delay in ms
 
-###############################################################################
-# Definition of the parameters crucial for asynchronous irregular firing of
-# the neurons.
-
-g = 5.0  # ratio inhibitory weight/excitatory weight
-eta = 2.0  # external rate relative to threshold rate
 epsilon = 0.1  # connection probability
 
-###############################################################################
-# Definition of the number of neurons in the network and the number of neurons
-# recorded from
-
 order = args.network_scale
+
 NE = 4 * order  # number of excitatory neurons
 NI = 1 * order  # number of inhibitory neurons
 N_neurons = NE + NI  # number of neurons in total
+
 print(f"Number of neurons : {N_neurons}")
 
 N_rec_exc = min(500, NE) # record from this many neurons
 N_rec_inh = min(100, NI) 
 
-
-###############################################################################
-# Definition of connectivity parameters
-
-if args.smoke_test: 
-
-    # normal 10% connectivity enables small networks
-    CE = max(1, int(epsilon * NE))
+if args.smoke_test:  # if smoke_test is activated
+    
+    CE = max(1, int(epsilon * NE))    # normal 10% connectivity enables small networks
     CI = max(1, int(epsilon * NI))
 
-else:
-    
-    CE = int(epsilon * NE / (order / 2500))  # number of excitatory synapses per neuron
-    CI = int(epsilon * NI / (order / 2500))  # number of inhibitory synapses per neuron
+else:  
+    CE = int(epsilon * NE)  # number of excitatory synapses per neuron
+    CI = int(epsilon * NI)  # number of inhibitory synapses per neuron
 
-# CE = int(epsilon * NE)  # number of excitatory synapses per neuron
-# CI = int(epsilon * NI)  # number of inhibitory synapses per neuron
 C_tot = int(CI + CE)  # total number of synapses per neuron
 
 ###############################################################################
@@ -428,7 +416,6 @@ C_tot = int(CI + CE)  # total number of synapses per neuron
 
 theta = 20.0  # membrane threshold potential in mV
 neuron_params = {}
-
 
 common_params = {
     "tau_m": 10.0,
@@ -479,9 +466,9 @@ tauSynIn = 3.0
 E_L = -70.0
 omega = -65.0
 
-target_psp_mv = 0.15
-g = 5.0
-eta = 1.5
+target_psp_mv = args.target_psp
+g = args.g # ratio inhibitory weight/excitatory weight
+eta = args.eta  # external rate relative to threshold rate
 
 norm_ex = exp_psp_norm(tauMem, CMem, tauSynEx)
 
@@ -499,8 +486,6 @@ simtime = args.simtime
 # membrane potential around its threshold, the external firing rate and the
 # rate of the poisson generator which is multiplied by the in-degree CE and
 # converted to Hz by multiplication by 1000.
-
-
 ################################################################################
 # Configuration of the simulation kernel by the previously defined time
 # resolution used in the simulation. Setting ``print_time`` to `True` prints the
@@ -515,8 +500,6 @@ nest.overwrite_files = True
 # current_time_ms = int(datetime.now().timestamp() * 1000) % 2**31         
 nest.rng_seed = args.rng_seed
 print("The RNG seed is: " + str(nest.rng_seed))
-
-
 
 if module_name is not None:  # we defined the NEST model as None 
     print(f"installing nestml module: {module_name}")
@@ -702,7 +685,6 @@ sim_time = endsimulate - endbuild
 
 exc_spikes = [espikes.events["times"][espikes.events["senders"] == neuron_idx] for neuron_idx in np.unique(espikes.events["senders"])]
 cv_exc = compute_cv_for_neurons(exc_spikes)
-
 
 ###############################################################################
 # Printing the network properties, firing rates and building times.
