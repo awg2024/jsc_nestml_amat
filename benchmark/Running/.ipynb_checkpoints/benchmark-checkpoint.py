@@ -96,8 +96,6 @@ colors = {
 DEBUG = True
 
 # smoke test settings 
-
-
 NUMTHREADS = 1  # Total number of threads per node (128)
 
 # MPI Strong scaling  
@@ -218,20 +216,28 @@ def start_strong_scaling_benchmark_threads(iteration): # automates strong benchm
 
         result = subprocess.run(command, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
+    	print("Slurm submission")
+    	print("Model:", combination["simulated_neuron"])
+    	print("Command:", " ".join(command))
+    	print("Return code:", result.returncode) 
+
         if result.stdout:
+    	    print("stdout:", result.stdout.strip())
+
             fname = "stdout_strong_run_" + combined + "_[iter=" + str(iteration) + "].txt"
             with open(fname, "w") as f:
                 f.write(result.stdout)
 
         if result.stderr:
+    	    print("stderr:", result.stderr.strip())		
+
             fname = "stderr_strong_run_" + combined + "_[iter=" + str(iteration) + "].txt"
             with open(fname, "w") as f:
                 f.write(result.stderr)
 
         if result.returncode != 0:
-            log("\033[91m" + combination["name"] + " failed\033[0m")
-            log("\033[91m" + result.stderr + " failed\033[0m")
-
+    	    raise RuntimeError(f"sbatch failed for {combination['simulated_neuron']}: {result.stderr.strip()}")
+    
 def start_strong_scaling_benchmark_mpi(iteration): # automates strong scaling using MPI 
     dirname = os.path.join(output_folder, STRONGSCALINGFOLDERNAME)
     combinations = [
@@ -261,6 +267,28 @@ def start_strong_scaling_benchmark_mpi(iteration): # automates strong scaling us
         result = subprocess.run(command, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)# submit 
         #import pdb;pdb.set_trace() # injects python debugger after sbatch is submitted. 
 
+    
+        print("[info] sbatch submission for strong scaling benchmark mpi")
+        print("Model       :", combination["simulated_neuron"])
+        print("Nodes       :", combination["nodes"])
+        print("Command     :", " ".join(command))
+        print("Return code :", result.returncode)
+        
+        if result.stdout:
+            print("STDOUT:")
+            print(result.stdout.strip())
+        
+        if result.stderr:
+            print("STDERR:")
+            print(result.stderr.strip())
+        
+        if result.returncode != 0:
+            raise RuntimeError(
+                f"SBATCH FAILED for {combination['simulated_neuron']}\n"
+                f"{result.stderr.strip()}"
+            )
+        
+
 def start_weak_scaling_benchmark_threads(iteration):
     
     dirname = os.path.join(output_folder, WEAKSCALINGFOLDERNAME)
@@ -278,20 +306,33 @@ def start_weak_scaling_benchmark_threads(iteration):
 
         combined = combination["neuronmodel"]+","+str(combination["networksize"])
         log(f"\033[93m{combined}\033[0m" if DEBUG else combined)
-        result = subprocess.run(command, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        result = subprocess.run(command, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE) # submission of slurm 
+
+    	print("Slurm submission")
+        print("Model:", combination["simulated_neuron"])
+        print("Command:", " ".join(command))
+        print("Return code:", result.returncode)
 
         if result.stdout:
-            fname = "stdout_weak_run_" + combined + "_[iter=" + str(iteration) + "].txt"
+            print("stdout:", result.stdout.strip())
+
+            fname = "stdout_strong_run_" + combined + "_[iter=" + str(iteration) + "].txt"
             with open(fname, "w") as f:
                 f.write(result.stdout)
 
         if result.stderr:
-            fname = "stderr_weak_run_" + combined + "_[iter=" + str(iteration) + "].txt"
+            print("stderr:", result.stderr.strip())
+
+            fname = "stderr_strong_run_" + combined + "_[iter=" + str(iteration) + "].txt"
             with open(fname, "w") as f:
                 f.write(result.stderr)
 
         if result.returncode != 0:
-            log("\033[91m" + combination["neuronmodel"] + " failed\033[0m")
+            raise RuntimeError(
+                f"sbatch failed for {combination['simulated_neuron']}: "
+                f"{result.stderr.strip()}"
+                )
+            log("\033[91m" + combination["name"] + " failed\033[0m")
             log("\033[91m" + result.stderr + " failed\033[0m")
 
 def start_weak_scaling_benchmark_mpi(iteration):
@@ -323,6 +364,25 @@ def start_weak_scaling_benchmark_mpi(iteration):
         command = ["sbatch", f"{filename}"]
         result = subprocess.run(command, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
+        print("[info] sbatch submission for weak scaling benchmark mpi")
+        print("Model       :", combination["simulated_neuron"])
+        print("Nodes       :", combination["nodes"])
+        print("Command     :", " ".join(command))
+        print("Return code :", result.returncode)
+        
+        if result.stdout:
+            print("STDOUT:")
+            print(result.stdout.strip())
+        
+        if result.stderr:
+            print("STDERR:")
+            print(result.stderr.strip())
+        
+        if result.returncode != 0:
+            raise RuntimeError(
+                f"SBATCH FAILED for {combination['simulated_neuron']}\n"
+                f"{result.stderr.strip()}")
+
 
 def extract_value_from_filename(filename, key):
     pattern = fr"\[{key}=(.*?)\]"
@@ -331,6 +391,9 @@ def extract_value_from_filename(filename, key):
 
 
 def post_process_data(sim_data: dict):
+
+    if not sim_data: 
+        raise("no benchmark json files were found for analysis") 
 
     # Compute max simulation time between MPI ranks and add it to the data
     for neuron in NEURONMODELS:

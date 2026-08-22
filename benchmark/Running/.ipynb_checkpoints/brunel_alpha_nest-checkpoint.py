@@ -426,6 +426,31 @@ tauMem = 20.0  # time constant of membrane potential in ms
 CMem = 250.0  # capacitance of membrane in in pF
 theta = 20.0  # membrane threshold potential in mV
 neuron_params = {}
+
+if args.simulated_neuron == "amat2_psc_exp":
+    neuron_params = {
+        "tau_m": 10.0,
+        "C_m": 200.0,
+        "E_L": -70.0,
+        "alpha_1": 10.0,
+        "alpha_2": 0.0}
+    
+elif args.simulated_neuron == "amat_neuron_nestml":
+    neuron_params = {
+        "tau_m": 10.0,
+        "C_m": 200.0,
+        "E_L": -70.0,
+        "alpha_1": 10.0,
+        "alpha_2": 0.0}
+
+elif args.simulated_neuron == "amat_cse_neuron_nestml":
+    neuron_params = {
+        "tau_m": 10.0,
+        "C_m": 200.0,
+        "E_L": -70.0,
+        "alpha_1": 10.0,
+        "alpha_2": 0.0}
+
 """if args.simulated_neuron == "iaf_psc_alpha":
     neuron_params = {
         "C_m": CMem,
@@ -480,31 +505,6 @@ else:
     assert False, "Unknown neuron model: " + str(args.simulated_neuron)
 """
 
-
-###############################################################################
-# Initialization of the parameters for the AMAT neuronal model. can we 
-# utilise some of the aeif_cond_alpha params? 
-
-#tauSyn = 0.5  # synaptic time constant in ms
-#tauMem = 20.0  # time constant of membrane potential in ms
-#CMem = 250.0  # capacitance of membrane in in pF
-#theta = 20.0  # membrane threshold potential in mV
-
-
-
-#if args.simulated_neuron == "amat2_psc_exp": 
-#elif args.simulated_neuron == "amat_neuron_nestml": 
-#elif args.simulated_neuron == "amat_cse_neuron_nestml": 
-neuron_params = {}
-
-
-
-
-
-J = 0.1  # postsynaptic amplitude in mV
-J_unit = ComputePSPnorm(tauMem, CMem, tauSyn)
-J_ex = J / J_unit  # amplitude of excitatory postsynaptic current
-J_in = -g * J_ex  # amplitude of inhibitory postsynaptic current
 
 ###############################################################################
 # Definition of threshold rate, which is the external rate needed to fix the
