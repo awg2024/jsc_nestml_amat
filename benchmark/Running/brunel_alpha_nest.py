@@ -343,19 +343,22 @@ def LambertWm1(x):
     # Using scipy to mimic the gsl_sf_lambert_Wm1 function.
     return sp.lambertw(x, k=-1 if x < 0 else 0).real
 
+def exp_psp_norm(tau_m, C_m, tau_syn): # adjusted for the amat implementation instead of alpha- 
+    if np.isclose(tau_m, tau_syn):
+        return tau_m / (np.e * C_m)
 
-def ComputePSPnorm(tauMem, CMem, tauSyn):
-    a = tauMem / tauSyn
-    b = 1.0 / tauSyn - 1.0 / tauMem
+    t_peak = (
+        tau_m * tau_syn / (tau_m - tau_syn)
+        * np.log(tau_m / tau_syn)
+    )
 
-    # time of maximum
-    t_max = 1.0 / b * (-LambertWm1(-np.exp(-1.0 / a) / a) - 1.0 / a)
-
-    # maximum of PSP for current of unit amplitude
     return (
-        np.exp(1.0)
-        / (tauSyn * CMem * b)
-        * ((np.exp(-t_max / tauMem) - np.exp(-t_max / tauSyn)) / b - t_max * np.exp(-t_max / tauSyn))
+        tau_m * tau_syn
+        / (C_m * (tau_m - tau_syn))
+        * (
+            np.exp(-t_peak / tau_m)
+            - np.exp(-t_peak / tau_syn)
+        )
     )
 
 
@@ -420,10 +423,6 @@ C_tot = int(CI + CE)  # total number of synapses per neuron
 # synapses. The parameters of the neuron are stored in a dictionary. The
 # synaptic currents are normalized such that the amplitude of the PSP is J.
 
-tauSyn = 0.5  # synaptic time constant in ms
-tauMem = 20.0  # time constant of membrane potential in ms
-CMem = 250.0  # capacitance of membrane in in pF
-theta = 20.0  # membrane threshold potential in mV
 neuron_params = {}
 
 if args.simulated_neuron == "amat2_psc_exp":
@@ -449,66 +448,44 @@ elif args.simulated_neuron == "amat_cse_neuron_nestml":
         "E_L": -70.0,
         "alpha_1": 10.0,
         "alpha_2": 0.0}
-
-"""if args.simulated_neuron == "iaf_psc_alpha":
-    neuron_params = {
-        "C_m": CMem,
-        "tau_m": tauMem,
-        "tau_syn_ex": tauSyn,
-        "tau_syn_in": tauSyn,
-        "t_ref": 2.0,
-        "E_L": 0.0,
-        "V_reset": 0.0,
-        "V_m": 0.0,
-        "V_th": theta,
-    }
-elif args.simulated_neuron.startswith("iaf_psc_alpha") and "NESTML" in args.simulated_neuron.upper():
-    neuron_params = {
-        "C_m": CMem,
-        "tau_m": tauMem,
-        "tau_syn_exc": tauSyn,
-        "tau_syn_inh": tauSyn,
-        "refr_T": 2.0,
-        "E_L": 0.0,
-        "V_reset": 0.0,
-        "V_m": 0.0,
-        "V_th": theta,
-    }
-elif args.simulated_neuron == "aeif_psc_alpha":
-    neuron_params = {
-        "C_m": CMem,
-        "g_L": CMem / tauMem,
-        "tau_syn_ex": tauSyn,
-        "tau_syn_in": tauSyn,
-        "t_ref": 2.0,
-        "E_L": 0.0,
-        "V_reset": 0.0,
-        "V_m": 0.0,
-        "V_th": theta,
-        "V_peak": theta
-    }
-elif args.simulated_neuron.startswith("aeif_psc_alpha") and "NESTML" in args.simulated_neuron.upper():
-    neuron_params = {
-        "C_m": CMem,
-        "g_L": CMem / tauMem,
-        "tau_syn_exc": tauSyn,
-        "tau_syn_inh": tauSyn,
-        "refr_T": 2.0,
-        "E_L": 0.0,
-        "V_reset": 0.0,
-        "V_m": 0.0,
-        "V_th": theta,
-        "V_peak": theta
-    }
 else:
     assert False, "Unknown neuron model: " + str(args.simulated_neuron)
-"""
+
+
+# adjusted amat neuronal parameter 
+tauMem = 10.0
+CMem = 200.0
+tauSynEx = 1.0
+tauSynIn = 3.0
+
+E_L = -70.0
+omega = -65.0
+
+target_psp_mv = 0.15
+g = 5.0
+eta = 1.5
+
+norm_ex = exp_psp_norm(tauMem, CMem, tauSynEx)
+
+J_ex = target_psp_mv / norm_ex
+J_in = -g * J_ex
+
+baseline_current = ((omega - E_L) * CMem / tauMem)
+
+p_rate = (eta * 1000.0 * baseline_current / (J_ex * tauSynEx))
+
+J = 0.1  # postsynaptic amplitude in mV
+J_unit = exp_psp_norm(tauMem, CMem, tauSyn) # calculating offset weights  
+J_ex = J / J_unit  # amplitude of excitatory postsynaptic current
+J_in = -g * J_ex  # amplitude of inhibitory postsynaptic current
 
 ###############################################################################
 # Definition of threshold rate, which is the external rate needed to fix the
 # membrane potential around its threshold, the external firing rate and the
 # rate of the poisson generator which is multiplied by the in-degree CE and
 # converted to Hz by multiplication by 1000.
+
+simtime = args.simtime
 
 nu_th = (theta * CMem) / (J_ex * CE * np.exp(1) * tauMem * tauSyn)
 nu_ex = eta * nu_th
@@ -524,9 +501,11 @@ nest.resolution = dt
 nest.print_time = True
 nest.overwrite_files = True
 
-# current_time_ms = int(datetime.now().timestamp() * 1000) % 2**31           # Get the current time in milliseconds since the Unix epoch, modulo max nr of RNG seed bits in NEST (32)
+# Get the current time in milliseconds since the Unix epoch, modulo max nr of RNG seed bits in NEST (32)
+# current_time_ms = int(datetime.now().timestamp() * 1000) % 2**31         
 nest.rng_seed = args.rng_seed
 print("The RNG seed is: " + str(nest.rng_seed))
+
 
 
 if module_name is not None:  # we defined the NEST model as None 

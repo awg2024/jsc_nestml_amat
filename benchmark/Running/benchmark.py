@@ -104,13 +104,13 @@ MPI_STRONG_SCALE_NEURONS = 10  # The order of neurons in the Brunel network  (10
 # MPI Weak scaling
 MPI_WEAK_SCALE_NEURONS = 10 # The order of neurons in the Brunel network  (10,000) 
 
-
 STRONGSCALINGFOLDERNAME = "timings_strong_scaling_mpi" # output dir 
 WEAKSCALINGFOLDERNAME = "timings_weak_scaling_mpi" # output dir 
 
 # thread-based benchmarks
 NETWORK_BASE_SCALE = 100  # thread multiplier 
-N_THREADS = np.logspace(0, math.log2(16), num=4, base=2, dtype=int) # spreads 4 test points acorss log 2x ->> 1,2,4,16
+N_THREADS = np.array([1, 2, 4, 16])
+
 
 # if dont add short_sim to iteration clashes 
 ITERATIONS = 1 # init define 
@@ -175,46 +175,39 @@ def render_sbatch_template(combination, filename): # render sbatch template for 
         f.write(str(file))
         f.close()
 
-def start_strong_scaling_benchmark_threads(iteration): # automates strong benchmark across neuronal models (amat, aeif_psc_alpha etc.) 
-    log(f"Strong Scaling Benchmark {iteration}")
-
-    dirname = os.path.join(output_folder, STRONGSCALINGFOLDERNAME)
-    combinations = [{"n_threads": n_threads,
-                     "neuronmodel": neuronmodel,
-                     "name": f"{neuronmodel},{n_threads}"
-                     } for neuronmodel in NEURONMODELS for n_threads in N_THREADS]
-
-    for combination in combinations:
-        rng_seed = rng.integers(0, max_int32)
-
-        command = ["bash", "-c", f'source {PATHTOSTARTFILE} && python3 {PATHTOFILE} --simulated_neuron {combination["neuronmodel"]} --network_scale {MPI_STRONG_SCALE_NEURONS} --threads {combination["n_threads"]} --iteration {iteration} --rng_seed {rng_seed} --benchmarkPath {dirname}']
-
-        log(combination["name"]) 
-        combined = combination["name"]
-
-        result = subprocess.run(command, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-
-    	print("Slurm submission")
-    	print("Command:", " ".join(command))
-    	print("Return code:", result.returncode) 
-
+def start_strong_scaling_benchmark_threads(iteration): # automates strong benchmark across neuronal models (amat, aeif_psc_alpha etc.)  
+    log(f"Strong Scaling Benchmark {iteration}")  
+    dirname = os.path.join(output_folder, STRONGSCALINGFOLDERNAME) 
+    combinations = [{"n_threads": n_threads, "neuronmodel": neuronmodel, "name": f"{neuronmodel},{n_threads}" } for neuronmodel in NEURONMODELS for n_threads in N_THREADS]  
+    
+    for combination in combinations: 
+        rng_seed = rng.integers(0, max_int32)  
+        command = ["bash", "-c", f'source {PATHTOSTARTFILE} && python3 {PATHTOFILE} --simulated_neuron {combination["neuronmodel"]} --network_scale {MPI_STRONG_SCALE_NEURONS} --threads {combination["n_threads"]} --iteration {iteration} --rng_seed {rng_seed} --benchmarkPath {dirname}']  
+        
+        log(combination["name"])  
+        combined = combination["name"]  
+        result = subprocess.run(command, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)  
+        
+        print("Slurm submission") 
+        print("Command:", " ".join(command)) 
+        print("Return code:", result.returncode)   
+        
         if result.stdout:
-    	    print("stdout:", result.stdout.strip())
+            print(result.stdout)
 
-            fname = "stdout_strong_run_" + combined + "_[iter=" + str(iteration) + "].txt"
-            with open(fname, "w") as f:
-                f.write(result.stdout)
+            fname = "stdout_strong_run_" + combined + "_[iter=" + str(iteration) + "].txt" 
+            with open(fname, "w") as f: 
+                f.write(result.stdout)  
 
         if result.stderr:
-    	    print("stderr:", result.stderr.strip())		
-
-            fname = "stderr_strong_run_" + combined + "_[iter=" + str(iteration) + "].txt"
-            with open(fname, "w") as f:
-                f.write(result.stderr)
+            print(result.stderr)
 
         if result.returncode != 0:
-    	    raise RuntimeError(f"sbatch failed for {combination['simulated_neuron']}: {result.stderr.strip()}")
-    
+            raise RuntimeError(
+                f"Benchmark failed for "
+                f"{combination['neuronmodel']}: "
+                f"{result.stderr.strip()}")
+
 def start_strong_scaling_benchmark_mpi(iteration): # automates strong scaling using MPI 
     dirname = os.path.join(output_folder, STRONGSCALINGFOLDERNAME)
     combinations = [
@@ -266,49 +259,64 @@ def start_strong_scaling_benchmark_mpi(iteration): # automates strong scaling us
             )
         
 
+
 def start_weak_scaling_benchmark_threads(iteration):
-    
     dirname = os.path.join(output_folder, WEAKSCALINGFOLDERNAME)
-    combinations = [{"n_threads": n_threads, "neuronmodel": f"{neuronmodel}", 
-    "networksize": NETWORK_BASE_SCALE * n_threads} for neuronmodel in NEURONMODELS for n_threads in N_THREADS]
+    combinations = [
+        {
+            "n_threads": n_threads, 
+            "neuronmodel": f"{neuronmodel}", 
+            "networksize": NETWORK_BASE_SCALE * n_threads
+        } 
+        for neuronmodel in NEURONMODELS 
+        for n_threads in N_THREADS
+    ]
     log(f"\033[93mWeak Scaling Benchmark {iteration}\033[0m")
 
     for combination in combinations:
-        
         rng_seed = rng.integers(0, max_int32)
 
-        command = ["bash", "-c", f'source {PATHTOSTARTFILE} && python3 {PATHTOFILE} --simulated_neuron {combination["neuronmodel"]} --network_scale {NETWORK_BASE_SCALE * combination["n_threads"]} --threads {combination["n_threads"]} --rng_seed {rng_seed} --iteration {iteration} --benchmarkPath {dirname}']
+        command = [
+            "bash", "-c", 
+            f'source {PATHTOSTARTFILE} && python3 {PATHTOFILE} '
+            f'--simulated_neuron {combination["neuronmodel"]} '
+            f'--network_scale {NETWORK_BASE_SCALE * combination["n_threads"]} '
+            f'--threads {combination["n_threads"]} --rng_seed {rng_seed} '
+            f'--iteration {iteration} --benchmarkPath {dirname}'
+        ]
 
-        combined = combination["neuronmodel"]+","+str(combination["networksize"])
+        combined = combination["neuronmodel"] + "," + str(combination["networksize"])
         log(f"\033[93m{combined}\033[0m" if DEBUG else combined)
-        result = subprocess.run(command, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE) # submission of slurm 
+        
+        # Submission of slurm
+        result = subprocess.run(command, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE) 
 
-    	print("Slurm submission")
+        print("Slurm submission")
         print("Model:", combination["neuronmodel"])
         print("Command:", " ".join(command))
         print("Return code:", result.returncode)
 
         if result.stdout:
             print("stdout:", result.stdout.strip())
-
             fname = "stdout_strong_run_" + combined + "_[iter=" + str(iteration) + "].txt"
             with open(fname, "w") as f:
                 f.write(result.stdout)
 
         if result.stderr:
             print("stderr:", result.stderr.strip())
-
             fname = "stderr_strong_run_" + combined + "_[iter=" + str(iteration) + "].txt"
             with open(fname, "w") as f:
                 f.write(result.stderr)
 
         if result.returncode != 0:
+            # Fixed: Log the error BEFORE raising the runtime exception
+            log("\033[91m" + combination["neuronmodel"] + " failed\033[0m")
+            log("\033[91m" + result.stderr.strip() + " failed\033[0m")
             raise RuntimeError(
-                f"sbatch failed for {combination['simulated_neuron']}: "
+                f"sbatch failed for {combination['neuronmodel']}: "
                 f"{result.stderr.strip()}"
-                )
-            log("\033[91m" + combination["name"] + " failed\033[0m")
-            log("\033[91m" + result.stderr + " failed\033[0m")
+            )
+
 
 def start_weak_scaling_benchmark_mpi(iteration):
     dirname = os.path.join(output_folder, WEAKSCALINGFOLDERNAME)
@@ -366,9 +374,6 @@ def extract_value_from_filename(filename, key):
 
 
 def post_process_data(sim_data: dict):
-
-    if not sim_data: 
-        raise("no benchmark json files were found for analysis") 
 
     # Compute max simulation time between MPI ranks and add it to the data
     for neuron in NEURONMODELS:
