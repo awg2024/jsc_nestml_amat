@@ -31,12 +31,12 @@ export SRUN_CPUS_PER_TASK=${SLURM_CPUS_PER_TASK}
 
 export PROGRAM="python3 Running/brunel_alpha_nest.py \
 --simulated_neuron amat_nestml_cse \
---network_scale 2500 \
+--network_scale 50 \
 --nodes 1 \
 --threads 1 \
 --iteration 0 \
 --benchmarkPath /p/project1/paj2623/gray2/benchmark/Running/../Output_MPI/timings_strong_scaling_mpi \
---rng_seed 200085150 \
+--rng_seed 2073659601 \
 --smoke_test \
 --simtime 100"
 

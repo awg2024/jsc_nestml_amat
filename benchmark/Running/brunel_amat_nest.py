@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# brunel_alpha_nest.py
+# brunel_amat_nest.py
 #
 # This file is part of NEST.
 #
@@ -286,18 +286,9 @@ def plot_interspike_intervals(spike_times_list, path, fname_snip=""):
 
     np.savetxt(f"{path}/isi_distribution_" + fname_snip + "_isi_list.txt", interspike_intervals)
 
-
-
-
-
-###############################################################################
-# Definition of functions used in this example. First, define the `Lambert W`
-# function implemented in SLI. The second function computes the maximum of
-# the postsynaptic potential for a synaptic input current of unit amplitude
-# (1 pA) using the `Lambert W` function. Thus function will later be used to
-# calibrate the synaptic weights.
-
 # defining the exact flags this script will accept. read help="" for info on the flag. 
+# if arguments are not passed the script will assign default value onto it 
+
 parser = argparse.ArgumentParser(description="Run a simulation with NEST")
 
 parser.add_argument("--benchmarkPath", type=str, default="", help="Path to the nest installation")
@@ -326,7 +317,7 @@ parser.add_argument("--g", type=float, default=5.0, help="Inhibitory/excitatory 
 
 parser.add_argument("--beta", type=float, default=4.0, help="AMAT voltage-dependent threshold coefficient")
 
-args = parser.parse_args()
+args = parser.parse_args() # processes arguments and flags passed by user 
 
 MODEL_VARIANTS = {
     "amat_nestml": {
@@ -348,11 +339,11 @@ MODEL_VARIANTS = {
 if args.simulated_neuron not in MODEL_VARIANTS:
     raise ValueError(
         f"Unknown benchmark variant: {args.simulated_neuron}. "
-        f"Expected one of {list(MODEL_VARIANTS)}"
-    )
+        f"Expected one of {list(MODEL_VARIANTS)}")
+
 
 variant = MODEL_VARIANTS[args.simulated_neuron]
-module_name = variant["module"]
+module_name = variant["module"] # extracting model, module information for later nest calls 
 modelName = variant["model"]
 
 def LambertWm1(x):
@@ -382,144 +373,111 @@ nest.ResetKernel()
 nest.local_num_threads = args.threads
 
 
-###############################################################################
 # Assigning the current time to a variable in order to determine the build
-# time of the network.
-
+# time of the network. 
 startbuild = time.time()
 
+# simulation resolution in ms (original value 0.1)
+dt = 0.01  
 
-###############################################################################
-# Assigning the simulation parameters to variables.
+# synaptic delay in ms
+delay = 1.5 
 
+# connection probability 
+epsilon = 0.1  
 
-# previously 0.1 ? 
-dt = 0.01  # the resolution in ms  
-delay = 1.5  # synaptic delay in ms
-
-epsilon = 0.1  # connection probability
-
+# order or magnitude of the network 
 order = args.network_scale
 
+# defining neuronal cell coutns 
 NE = 4 * order  # number of excitatory neurons
 NI = 1 * order  # number of inhibitory neurons
 N_neurons = NE + NI  # number of neurons in total
-
 print(f"Number of neurons : {N_neurons}")
 
-N_rec_exc = min(500, NE) # record from this many neurons
+# record from this many neurons
+N_rec_exc = min(500, NE) 
 N_rec_inh = min(100, NI) 
 
-SMOKE_CE = 20
-SMOKE_CI = 5
-PRODUCTION_CE = 1000
-PRODUCTION_CI = 250
-
 if args.smoke_test:
-    CE = min(SMOKE_CE, NE)
-    CI = min(SMOKE_CI, NI)
+    
+    # connection probability for smoke test 
+    CE = min(20, NE)
+    CI = min(5, NI)
 
 else:
-    if NE < PRODUCTION_CE:
+    if NE < 1000: # exc check 
         raise ValueError(
-            f"Production CE={PRODUCTION_CE} requires at least "
-            f"{PRODUCTION_CE} excitatory neurons, but NE={NE}."
+            f"Production CE={1000} requires at least "
+            f"{1000} excitatory neurons, but NE={NE}."
         )
 
-    if NI < PRODUCTION_CI:
+    if NI < 250: # inh check 
         raise ValueError(
-            f"Production CI={PRODUCTION_CI} requires at least "
-            f"{PRODUCTION_CI} inhibitory neurons, but NI={NI}."
+            f"Production CI={250} requires at least "
+            f"{250} inhibitory neurons, but NI={NI}."
         )
 
-    CE = PRODUCTION_CE
-    CI = PRODUCTION_CI
+    CE = 1000  # every excneuron requires 1000 exc inputs
+    CI = 250 # every inhneuron requires 250 inh inputs 
 
+# total connection connections of exc check 
 C_tot = CE + CI
 
-###############################################################################
-# Initialization of the parameters of the integrate and fire neuron and the
-# synapses. The parameters of the neuron are stored in a dictionary. The
-# synaptic currents are normalized such that the amplitude of the PSP is J.
-
-theta = 20.0  # membrane threshold potential in mV
+# define common params that are accepted by amatnestml, amat2_psc_exp 
 neuron_params = {}
-
 common_params = {
     "tau_m": 10.0,
     "C_m": 200.0,
     "E_L": -70.0,
-    "tau_1": 10.0,
-    "tau_2": 200.0,
     "alpha_1": 10.0,
     "alpha_2": 0.0,
-    "omega": -65.0,
-    "tau_v": 5.0,
-    "beta": args.beta,
-    "I_e": 0.0,
 }
-
 
 if args.simulated_neuron == "amat2_psc_exp":
 
-    neuron_params = {
-        **common_params,
-
-        "tau_syn_ex": 1.0,
-        "tau_syn_in": 3.0,
-        "t_ref": 2.0,
-    }
+    neuron_params = {**common_params} # option to add in custom NEST params  
 
 
 elif args.simulated_neuron in ("amat_nestml","amat_nestml_cse"):
 
-    neuron_params = {
-        **common_params,
-        "tau_syn_exc": 1.0,
-        "tau_syn_inh": 3.0,
-        "refr_T": 2.0}
-
+    neuron_params = {**common_params}  # option to add in custom NESTML params 
+      
 else:
     
     raise ValueError(
         f"Unknown neuron benchmark variant: "
         f"{args.simulated_neuron}")
 
-# adjusted amat neuronal parameter 
-tauMem = 10.0
-CMem = 200.0
-tauSynEx = 1.0
-tauSynIn = 3.0
 
-E_L = -70.0
-omega = -65.0
+# defining exc/inh params 
+tauSynEx = 1.0      # Time constant for excitatory synapses (ms); determines how fast excitatory inputs decay
+tauSynIn = 3.0      # Time constant for inhibitory synapses (ms); determines how fast inhibitory inputs decay
 
-target_psp_mv = args.target_psp
-g = args.g # ratio inhibitory weight/excitatory weight
-eta = args.eta  # external rate relative to threshold rate
+tauMem = 10.0       # Overall membrane time constant (ms); dictates how fast the total membrane charges/discharges from inputs
+CMem = 200.0        # Membrane capacitance (pF); measures the charge storage capacity of the cell membrane
 
+E_L = -70.0         # Resting/Leak potential (mV); the steady-state baseline voltage of the neuron when completely at rest
+omega = -65.0       # Reset/Adaptation parameter (mV); typically the voltage target the threshold decays back toward in AMAT
+
+target_psp_mv = args.target_psp  # (default=0.15)
+g = args.g # ratio inhibitory weight/excitatory weight (default=5.0)
+eta = args.eta  # external rate relative to threshold rate (default = 0.8)
+
+# translates your desired biological voltage change (in millivolts) into the raw numerical synaptic weights used by the simulator.
 norm_ex = exp_psp_norm(tauMem, CMem, tauSynEx)
+J_ex = target_psp_mv / norm_ex # calculates the exc psp weight 
+J_in = -g * J_ex #  calculates the inh psp weight 
 
-J_ex = target_psp_mv / norm_ex
-J_in = -g * J_ex
 
+# This block calculates the baseline electrical current needed to initalise and determine speed of background spikes (p_rate) 
 baseline_current = ((omega - E_L) * CMem / tauMem)
+p_rate = (eta * 1000.0 * baseline_current / (J_ex * tauSynEx)) #  we want a randomness of spikes (aimed hz 0-40Hz)
 
-p_rate = (eta * 1000.0 * baseline_current / (J_ex * tauSynEx))
-
+# detach from args. 
 simtime = args.simtime
 
-###############################################################################
-# Definition of threshold rate, which is the external rate needed to fix the
-# membrane potential around its threshold, the external firing rate and the
-# rate of the poisson generator which is multiplied by the in-degree CE and
-# converted to Hz by multiplication by 1000.
-################################################################################
-# Configuration of the simulation kernel by the previously defined time
-# resolution used in the simulation. Setting ``print_time`` to `True` prints the
-# already processed simulation time as well as its percentage of the total
-# simulation time.
-
+# define nest module arguments 
 nest.resolution = dt
 nest.print_time = True
 nest.overwrite_files = True
@@ -537,7 +495,7 @@ print(f"Benchmarking variant: {args.simulated_neuron}")
 print(f"Actual NEST model: {modelName}")
 print("Building network")
 
-###############################################################################
+
 # Creation of the nodes using ``Create``. We store the returned handles in
 # variables for later reference. Here the excitatory and inhibitory, as well
 # as the poisson generator and two spike recorders. The spike recorders will
@@ -547,36 +505,14 @@ print("Building network")
 print(f"Creating the neuron model: {modelName}")
 print(f"Random seed: {args.rng_seed}")
 
+# creating population nodes 
 nodes_ex = nest.Create(modelName, NE, params=neuron_params)
 nodes_in = nest.Create(modelName, NI, params=neuron_params)
 
+# converts the random background spike rate back into a smooth, continuous electrical current value (measured in picoamperes, pA) for later debug print 
+mean_external_current = (p_rate * J_ex * tauSynEx / 1000.0)
 
-mean_external_current = (
-    p_rate
-    * J_ex
-    * tauSynEx
-    / 1000.0
-)
-
-print("\n========== BENCHMARK CONFIG ==========")
-print(f"Model             : {args.simulated_neuron}")
-print(f"Network scale     : {order}")
-print(f"NE / NI           : {NE} / {NI}")
-print(f"CE / CI           : {CE} / {CI}")
-print(f"Smoke test        : {args.smoke_test}")
-print(f"eta               : {eta}")
-print(f"target PSP        : {target_psp_mv:.4f} mV")
-print(f"g                 : {g}")
-print(f"J_ex              : {J_ex:.6f} pA")
-print(f"J_in              : {J_in:.6f} pA")
-print(f"Poisson rate      : {p_rate:.2f} Hz")
-print(f"Mean ext current  : {mean_external_current:.2f} pA")
-print(f"beta              : {neuron_params['beta']}")
-print(f"simtime           : {simtime} ms")
-print("======================================\n")
-
-
-
+# nest.create spikes, noise 
 noise = nest.Create("poisson_generator", params={"rate": p_rate})
 espikes = nest.Create("spike_recorder")
 espikes_ascii = nest.Create("spike_recorder")
@@ -745,6 +681,7 @@ cv_exc = compute_cv_for_neurons(exc_spikes)
 # Printing the network properties, firing rates and building times.
 
 print("Brunel network simulation (Python)")
+print(f"Model             : {args.simulated_neuron}")
 print(f"                CE: {CE}")
 print(f"                CI: {CI}")
 print(f"Number of synapses: {num_synapses}")
@@ -753,6 +690,9 @@ print(f"       Inhibitory : {num_synapses_in}")
 print(f"Excitatory CV     : {cv_exc:.2f}")
 print(f"Excitatory rate   : {rate_ex:.2f} Hz")
 print(f"Inhibitory rate   : {rate_in:.2f} Hz")
+print(f"Mean ext current  : {mean_external_current:.2f} pA")
+print(f"Poisson rate      : {p_rate:.2f} Hz")
+print(f"simtime           : {simtime} ms")
 
 print(f"Building time     : {build_time:.2f} s")
 print(f"Simulation time   : {sim_time:.2f} s")
