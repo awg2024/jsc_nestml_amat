@@ -455,7 +455,7 @@ def plot_scaling_data(sim_data_weak: dict, sim_data_strong: dict, file_prefix: s
             _ax.set_xlabel("Number of threads")
 
         for _ax in ax.flatten():
-            _ax.set_xlim(N_THREADS[0], N_THREADS[-1])  # warning UserWarning: Attempting to set identical low and high xlims makes transformation singular; automatically expanding.
+            _ax.set_xlim(N_THREADS[0], N_THREADS[-1])  
             _ax.set_xticks(N_THREADS, N_THREADS)
 
     for _ax in ax[0, :]:   # hide decimal points, set simple decimal formatter for top two panels y axis

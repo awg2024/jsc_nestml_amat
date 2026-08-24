@@ -29,15 +29,15 @@ export OMP_PROC_BIND=TRUE
 
 export SRUN_CPUS_PER_TASK=${SLURM_CPUS_PER_TASK}
 
-export PROGRAM="python3 Running/brunel_alpha_nest.py \
+export PROGRAM="python3 Running/brunel_amat_nest.py \
 --simulated_neuron amat_nestml \
 --network_scale 50 \
 --nodes 1 \
 --threads 1 \
 --iteration 0 \
 --benchmarkPath /p/project1/paj2623/gray2/benchmark/Running/../Output_MPI/timings_weak_scaling_mpi \
---rng_seed 1159624155 \
---smoke_test True \
---simtime 250.0"
+--rng_seed 1332259815 \
+--simtime 250.0 \
+--smoke_test"
 
 srun $PROGRAM

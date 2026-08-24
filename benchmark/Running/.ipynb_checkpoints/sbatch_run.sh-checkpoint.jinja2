@@ -29,17 +29,15 @@ export OMP_PROC_BIND=TRUE
 
 export SRUN_CPUS_PER_TASK=${SLURM_CPUS_PER_TASK}
 
-export PROGRAM="python3 Running/brunel_alpha_nest.py \
---simulated_neuron {{combination["simulated_neuron"]}} \
---network_scale {{combination["network_scale"]}} \
---nodes {{combination["nodes"]}} \
---threads {{combination["threads"]}} \
---iteration {{combination["iteration"]}} \
---benchmarkPath {{combination["benchmarkPath"]}} \
---rng_seed {{combination["rng_seed"]}}
---smoke_test
---simtime 100"
-
-
+export PROGRAM="python3 Running/brunel_amat_nest.py \
+--simulated_neuron {{ combination['simulated_neuron'] }} \
+--network_scale {{ combination['network_scale'] }} \
+--nodes {{ combination['nodes'] }} \
+--threads {{ combination['threads'] }} \
+--iteration {{ combination['iteration'] }} \
+--benchmarkPath {{ combination['benchmarkPath'] }} \
+--rng_seed {{ combination['rng_seed'] }} \
+--simtime {{ combination['simtime'] }} \
+{% if combination['smoke_test'] %}--smoke_test{% endif %}"
 
 srun $PROGRAM
