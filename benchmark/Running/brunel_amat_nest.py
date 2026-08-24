@@ -307,15 +307,8 @@ parser.add_argument("--rng_seed", type=int, help="random seed", default=123)
 
 parser.add_argument("--smoke_test",action="store_true",help="Use small-network connectivity for low-cost functional testing",)
 
-parser.add_argument("--simtime",type=float,default=1000.0,help="Biological simulation time in ms",)
+parser.add_argument("--simtime",type=float,default=999.0,help="Biological simulation time in ms",)
 
-parser.add_argument("--eta", type=float, default=0.8, help="External drive relative to resting threshold current")
-
-parser.add_argument("--target_psp", type=float, default=0.15, help="Target excitatory PSP amplitude in mV")
-
-parser.add_argument("--g", type=float, default=5.0, help="Inhibitory/excitatory weight ratio")
-
-parser.add_argument("--beta", type=float, default=4.0, help="AMAT voltage-dependent threshold coefficient")
 
 args = parser.parse_args() # processes arguments and flags passed by user 
 
@@ -418,7 +411,7 @@ else: # if smoke-test is false
 # total connection connections of e
 C_tot = CE + CI
 
-# define common params that are accepted by amatnestml, amat2_psc_exp 
+# define common params that are accepted by amat_nestml, amat2_psc_exp 
 neuron_params = {}
 common_params = {
     "tau_m": 10.0,
@@ -454,9 +447,9 @@ CMem = 200.0        # Membrane capacitance (pF); measures the charge storage cap
 E_L = -70.0         # Resting/Leak potential (mV); the steady-state baseline voltage of the neuron when completely at rest
 omega = -65.0       # Reset/Adaptation parameter (mV); typically the voltage target the threshold decays back toward in AMAT
 
-target_psp_mv = args.target_psp  # (default=0.15)
-g = args.g # ratio inhibitory weight/excitatory weight (default=5.0)
-eta = args.eta  # external rate relative to threshold rate (default = 0.8)
+target_psp_mv = 0.15 
+g = 5.0 # ratio inhibitory weight/excitatory weight
+eta = 0.8  # external rate relative to threshold rate 
 
 # translates your desired biological voltage change (in millivolts) into the raw numerical synaptic weights used by the simulator.
 norm_ex = exp_psp_norm(tauMem, CMem, tauSynEx)

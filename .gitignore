@@ -6,6 +6,7 @@ _neuron_nestml/
 # Slurm output logs
 *.out
 *.err
+*.dat
 slurm-*.out
 
 # Benchmark-specific runtime text outputs
