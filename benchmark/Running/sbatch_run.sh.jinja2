@@ -37,9 +37,7 @@ export PROGRAM="python3 Running/brunel_alpha_nest.py \
 --iteration {{ combination['iteration'] }} \
 --benchmarkPath {{ combination['benchmarkPath'] }} \
 --rng_seed {{ combination['rng_seed'] }} \
---smoke_test \
---simtime 100"
-
-
+--smoke_test {{ combination['smoke_test'] }} \
+--simtime {{ combination['simtime'] }}"
 
 srun $PROGRAM

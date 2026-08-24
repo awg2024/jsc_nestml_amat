@@ -20,7 +20,7 @@
 # along with NEST.  If not, see <http://www.gnu.org/licenses/>.
 
 """
-Random balanced network (alpha synapses) connected with NEST
+Random balanced network (amat synapses) connected with NEST
 ------------------------------------------------------------
 
 This script simulates an excitatory and an inhibitory population on
@@ -293,7 +293,7 @@ parser = argparse.ArgumentParser(description="Run a simulation with NEST")
 
 parser.add_argument("--benchmarkPath", type=str, default="", help="Path to the nest installation")
 
-parser.add_argument("--simulated_neuron", type=str, default="iaf_psc_alpha_neuron_Nestml", help="Name of the model to use")
+parser.add_argument("--simulated_neuron", type=str, default="amat2_psc_exp", help="Name of the model to use")
 
 parser.add_argument("--network_scale", type=int, default=2500, help="Number of neurons to use")
 
@@ -399,29 +399,23 @@ print(f"Number of neurons : {N_neurons}")
 N_rec_exc = min(500, NE) 
 N_rec_inh = min(100, NI) 
 
-if args.smoke_test:
+# Calculate raw dynamic values based on network scaling
+raw_CE = int(epsilon * NE / (order / 2500))
+raw_CI = int(epsilon * NI / (order / 2500))
+
+if args.smoke_test: # if true 
     
-    # connection probability for smoke test 
-    CE = min(20, NE)
-    CI = min(5, NI)
+    # Strict low limits for rapid smoke testing
+    CE = max(1, min(20, NE))
+    CI = max(1, min(5, NI))
 
-else:
-    if NE < 1000: # exc check 
-        raise ValueError(
-            f"Production CE={1000} requires at least "
-            f"{1000} excitatory neurons, but NE={NE}."
-        )
+else: # if smoke-test is false 
+    # Production dynamic scaling with structural safeguards
+    # max ensures you never get 0 synapses, min ensures you never request more than the available neurons 
+    CE = max(1, min(raw_CE, NE))
+    CI = max(1, min(raw_CI, NI))
 
-    if NI < 250: # inh check 
-        raise ValueError(
-            f"Production CI={250} requires at least "
-            f"{250} inhibitory neurons, but NI={NI}."
-        )
-
-    CE = 1000  # every excneuron requires 1000 exc inputs
-    CI = 250 # every inhneuron requires 250 inh inputs 
-
-# total connection connections of exc check 
+# total connection connections of e
 C_tot = CE + CI
 
 # define common params that are accepted by amatnestml, amat2_psc_exp 

@@ -51,7 +51,7 @@ from plotting_options import * # import everything
 
 # the benchmark script to run
 current_dir = os.path.dirname(os.path.abspath(__file__))
-PATHTOFILE = os.path.join(current_dir, "brunel_alpha_nest.py")
+PATHTOFILE = os.path.join(current_dir, "brunel_amat_nest.py")
 
 # RNG options
 seed: int = int(datetime.datetime.now().timestamp() * 1000) % 2**31
@@ -112,7 +112,6 @@ WEAKSCALINGFOLDERNAME = "timings_weak_scaling_mpi" # output dir
 # thread-based benchmarks
 NETWORK_BASE_SCALE = 100  # thread multiplier 
 N_THREADS = np.array([1, 2, 4, 16])
-
 
 # if dont add short_sim to iteration clashes 
 ITERATIONS = 1 # init define 
@@ -184,7 +183,9 @@ def start_strong_scaling_benchmark_threads(iteration):
     dirname = os.path.join(output_folder, STRONGSCALINGFOLDERNAME)
     combinations = [{"n_threads": n_threads,
                      "neuronmodel": neuronmodel,
-                     "name": f"{neuronmodel},{n_threads}"
+                     "name": f"{neuronmodel},{n_threads}",
+                     "smoke_test": short_sim,
+                     "simtime": 250.0 if short_sim else args.simtime,
                      } for neuronmodel in NEURONMODELS for n_threads in N_THREADS]
 
     for combination in combinations:
@@ -233,6 +234,8 @@ def start_strong_scaling_benchmark_mpi(iteration):
             "error_file": f"slurm_outputs/run_simulation_{neuronmodel}_{compute_nodes}_{iteration}_%j.err",
             "benchmarkPath": dirname,
             "rng_seed": rng.integers(0, max_int32),
+            "smoke_test": short_sim,
+            "simtime": 250.0 if short_sim else args.simtime,
         } for neuronmodel in NEURONMODELS for compute_nodes in MPI_SCALES]
 
     for combination in combinations:
@@ -255,7 +258,10 @@ def start_weak_scaling_benchmark_threads(iteration):
         {
             "n_threads": n_threads,
             "neuronmodel": f"{neuronmodel}",
-            "networksize": NETWORK_BASE_SCALE * n_threads} for neuronmodel in NEURONMODELS for n_threads in N_THREADS]
+            "networksize": NETWORK_BASE_SCALE * n_threads,
+            "smoke_test": short_sim,
+            "simtime": 250.0 if short_sim else args.simtime,
+            } for neuronmodel in NEURONMODELS for n_threads in N_THREADS]
     log(f"\033[93mWeak Scaling Benchmark {iteration}\033[0m")
 
     for combination in combinations:
@@ -290,6 +296,7 @@ def start_weak_scaling_benchmark_threads(iteration):
                 f"{result.stderr.strip()}"
             )
 
+
 def start_weak_scaling_benchmark_mpi(iteration):
     dirname = os.path.join(output_folder, WEAKSCALINGFOLDERNAME)
     combinations = [
@@ -303,6 +310,8 @@ def start_weak_scaling_benchmark_mpi(iteration):
             "error_file": f"slurm_outputs/run_simulation_{neuronmodel}_{compute_nodes}_{MPI_WEAK_SCALE_NEURONS * compute_nodes}_{iteration}_%j.err",
             "benchmarkPath": dirname,
             "rng_seed": rng.integers(0, max_int32),
+            "smoke_test": short_sim,
+            "simtime": 250.0 if short_sim else args.simtime,
         } for neuronmodel in NEURONMODELS for compute_nodes in MPI_SCALES]
 
     for combination in combinations:
@@ -439,14 +448,14 @@ def plot_scaling_data(sim_data_weak: dict, sim_data_strong: dict, file_prefix: s
             _ax.set_xlabel("Number of nodes")
 
         for _ax in ax.flatten():
-            _ax.set_xlim(MPI_SCALES[0], MPI_SCALES[-1])
+            _ax.set_xlim(MPI_SCALES[0], MPI_SCALES[-1]) # warning UserWarning: Attempting to set identical low and high xlims makes transformation singular; automatically expanding.
             _ax.set_xticks(MPI_SCALES, MPI_SCALES)
     else:
         for _ax in ax[1, :]:
             _ax.set_xlabel("Number of threads")
 
         for _ax in ax.flatten():
-            _ax.set_xlim(N_THREADS[0], N_THREADS[-1])
+            _ax.set_xlim(N_THREADS[0], N_THREADS[-1])  # warning UserWarning: Attempting to set identical low and high xlims makes transformation singular; automatically expanding.
             _ax.set_xticks(N_THREADS, N_THREADS)
 
     for _ax in ax[0, :]:   # hide decimal points, set simple decimal formatter for top two panels y axis

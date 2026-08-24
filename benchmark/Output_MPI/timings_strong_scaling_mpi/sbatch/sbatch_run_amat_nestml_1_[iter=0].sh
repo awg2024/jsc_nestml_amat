@@ -10,8 +10,8 @@
 #SBATCH --cpus-per-task=1
 #SBATCH --hint=nomultithread
 
-#SBATCH --output=run_simulation_amat_nestml_1_0_%j.out
-#SBATCH --error=run_simulation_amat_nestml_1_0_%j.err
+#SBATCH --output=slurm_outputs/run_simulation_amat_nestml_1_0_%j.out
+#SBATCH --error=slurm_outputs/run_simulation_amat_nestml_1_0_%j.err
 
 module load Stages/2026
 module load GCC/14.3.0
@@ -36,10 +36,8 @@ export PROGRAM="python3 Running/brunel_alpha_nest.py \
 --threads 1 \
 --iteration 0 \
 --benchmarkPath /p/project1/paj2623/gray2/benchmark/Running/../Output_MPI/timings_strong_scaling_mpi \
---rng_seed 1884963982 \
---smoke_test \
---simtime 100"
-
-
+--rng_seed 67664411 \
+--smoke_test True \
+--simtime 250.0"
 
 srun $PROGRAM
