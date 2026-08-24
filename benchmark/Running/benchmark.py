@@ -101,17 +101,17 @@ DEBUG = True
 NUMTHREADS = 1  # Total number of threads per node (128)
 
 # MPI Strong scaling  
-MPI_STRONG_SCALE_NEURONS = 50  # The order of neurons in the Brunel network  (10,000) 
+MPI_STRONG_SCALE_NEURONS = 500  # The order of neurons in the Brunel network, scaled dynamically as compute increases (50, 500, 10,000)
 
 # MPI Weak scaling
-MPI_WEAK_SCALE_NEURONS = 50 # The order of neurons in the Brunel network  (10,000) 
+MPI_WEAK_SCALE_NEURONS = 500 # The order of neurons in the Brunel network, fixed base scale as compute increases  (50, 100, 10,000) 
 
 STRONGSCALINGFOLDERNAME = "timings_strong_scaling_mpi" # output dir 
 WEAKSCALINGFOLDERNAME = "timings_weak_scaling_mpi" # output dir 
 
 # thread-based benchmarks
-NETWORK_BASE_SCALE = 100  # thread multiplier 
-N_THREADS = np.array([1, 2, 4, 16])
+NETWORK_BASE_SCALE = 500  # thread multiplier for weak-scaling (compute scales with network)
+N_THREADS = np.array([1, 2, 4, 8]) # 1,2,4,16,32,64
 
 # if dont add short_sim to iteration clashes 
 ITERATIONS = 1 # init define 
@@ -183,7 +183,7 @@ def start_strong_scaling_benchmark_threads(iteration):
     dirname = os.path.join(output_folder, STRONGSCALINGFOLDERNAME)
     combinations = [{"n_threads": n_threads,
                      "neuronmodel": neuronmodel,
-                     "name": f"{neuronmodel},{n_threads}",
+                     "name": f"{neuronmodel},threads={n_threads},network_scale={MPI_STRONG_SCALE_NEURONS}",
                      "smoke_test": short_sim,
                      "simtime": 250.0 if short_sim else args.simtime,
                      } for neuronmodel in NEURONMODELS for n_threads in N_THREADS]
@@ -258,7 +258,7 @@ def start_weak_scaling_benchmark_threads(iteration):
         {
             "n_threads": n_threads,
             "neuronmodel": f"{neuronmodel}",
-            "networksize": NETWORK_BASE_SCALE * n_threads,
+            "networksize": NETWORK_BASE_SCALE * n_threads, # scaling network size for weak scaling 
             "smoke_test": short_sim,
             "simtime": 250.0 if short_sim else args.simtime,
             } for neuronmodel in NEURONMODELS for n_threads in N_THREADS]
@@ -269,7 +269,7 @@ def start_weak_scaling_benchmark_threads(iteration):
 
         command = ["bash", "-c", f'source {PATHTOSTARTFILE} && python3 {PATHTOFILE} --simulated_neuron {combination["neuronmodel"]} --network_scale {NETWORK_BASE_SCALE * combination["n_threads"]} --threads {combination["n_threads"]} --rng_seed {rng_seed} --iteration {iteration} --benchmarkPath {dirname}']
 
-        combined = combination["neuronmodel"]+","+str(combination["networksize"])
+        combined = combination["neuronmodel"]+","+str(combination["n_threads"])+","+str(combination["networksize"])
         log(f"\033[93m{combined}\033[0m" if DEBUG else combined)
         result = subprocess.run(command, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 

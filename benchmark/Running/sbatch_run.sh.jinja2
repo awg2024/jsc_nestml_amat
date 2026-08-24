@@ -3,16 +3,17 @@
 #SBATCH --job-name=nestml_amat_benchmark
 #SBATCH --account=paj2623 
 #SBATCH --partition=dc-cpu
-#SBATCH --time=00:10:00
+#SBATCH --time=00:20:00
 
 #SBATCH --nodes={{nodes}}
-#SBATCH --ntasks-per-node={{ntasks_per_node}}
+#SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task={{cpus_per_task}}
 #SBATCH --hint=nomultithread
 
 #SBATCH --output={{combination["output_file"]}}
 #SBATCH --error={{combination["error_file"]}}
 
+# #SBATCH --ntasks-per-node={{ntasks_per_node}} removed for this medium test. 
 module load Stages/2026
 module load GCC/14.3.0
 module load ParaStationMPI/5.13.0-1

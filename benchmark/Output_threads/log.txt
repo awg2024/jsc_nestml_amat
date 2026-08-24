@@ -1,0 +1,14 @@
+Strong Scaling Benchmark 0
+amat_nestml,threads=1,network_scale=500
+amat_nestml,threads=2,network_scale=500
+amat_nestml,threads=4,network_scale=500
+amat_nestml,threads=8,network_scale=500
+amat_nestml_cse,threads=1,network_scale=500
+amat_nestml_cse,threads=2,network_scale=500
+amat_nestml_cse,threads=4,network_scale=500
+amat_nestml_cse,threads=8,network_scale=500
+amat2_psc_exp,threads=1,network_scale=500
+amat2_psc_exp,threads=2,network_scale=500
+amat2_psc_exp,threads=4,network_scale=500
+amat2_psc_exp,threads=8,network_scale=500
+[93mWeak Scaling Benchmark 0[0m
