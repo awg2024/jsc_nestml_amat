@@ -101,16 +101,16 @@ DEBUG = True
 NUMTHREADS = 1  # Total number of threads per node (128)
 
 # MPI Strong scaling  
-MPI_STRONG_SCALE_NEURONS = 500  # The order of neurons in the Brunel network, scaled dynamically as compute increases (50, 500, 10,000)
+MPI_STRONG_SCALE_NEURONS = 2500  # The order of neurons in the Brunel network, scaled dynamically as compute increases (past values: 50, 500, 2500, 5,000, 10,000)
 
 # MPI Weak scaling
-MPI_WEAK_SCALE_NEURONS = 500 # The order of neurons in the Brunel network, fixed base scale as compute increases  (50, 100, 10,000) 
+MPI_WEAK_SCALE_NEURONS = 2500 # The order of neurons in the Brunel network, fixed base scale as compute increases  (past values: 50, 500, 2500, 5,000, 10,000) 
 
 STRONGSCALINGFOLDERNAME = "timings_strong_scaling_mpi" # output dir 
 WEAKSCALINGFOLDERNAME = "timings_weak_scaling_mpi" # output dir 
 
 # thread-based benchmarks
-NETWORK_BASE_SCALE = 500  # thread multiplier for weak-scaling (compute scales with network)
+NETWORK_BASE_SCALE = 2500  # thread multiplier for weak-scaling (compute scales with network)
 N_THREADS = np.array([1, 2, 4, 8]) # 1,2,4,16,32,64
 
 # if dont add short_sim to iteration clashes 
@@ -187,13 +187,12 @@ def start_strong_scaling_benchmark_threads(iteration):
     combinations = [{"n_threads": n_threads,
                      "neuronmodel": neuronmodel,
                      "name": f"{neuronmodel},threads={n_threads},network_scale={MPI_STRONG_SCALE_NEURONS}",
+                     "rng_seed": seeds_per_condition[n_threads],
                      "smoke_test": short_sim,
                      "simtime": 250.0 if short_sim else args.simtime,
                      } for neuronmodel in NEURONMODELS for n_threads in N_THREADS]
 
     for combination in combinations:
-
-        rng_seed = combination["rng_seed"] # use shared seed 
 
         command = ["bash", "-c", f'source {PATHTOSTARTFILE} && python3 {PATHTOFILE} --simulated_neuron {combination["neuronmodel"]} --network_scale {MPI_STRONG_SCALE_NEURONS} --threads {combination["n_threads"]} --iteration {iteration} --rng_seed {rng_seed} --benchmarkPath {dirname} --simtime {combination["simtime"]}']
         log(combination["name"])
@@ -268,6 +267,7 @@ def start_weak_scaling_benchmark_threads(iteration):
     
     dirname = os.path.join(output_folder, WEAKSCALINGFOLDERNAME)
     
+    # TO DO: make sure these seeds are the same per condition but across trials these diff (so CSE, NESTML, NEST should all be the same for each trial)
     seeds_per_condition = {n_threads: rng.integers(0, max_int32) for n_threads in N_THREADS}
     
     combinations = [
@@ -276,14 +276,13 @@ def start_weak_scaling_benchmark_threads(iteration):
             "neuronmodel": f"{neuronmodel}",
             "networksize": NETWORK_BASE_SCALE * n_threads, # scaling network size for weak scaling 
             "smoke_test": short_sim,
+            "rng_seed": seeds_per_condition[n_threads],
             "simtime": 250.0 if short_sim else args.simtime,
             } for neuronmodel in NEURONMODELS for n_threads in N_THREADS]
     log(f"\033[93mWeak Scaling Benchmark {iteration}\033[0m")
 
     for combination in combinations:
         
-        rng_seed = combination["rng_seed"]
-
         command = ["bash", "-c", f'source {PATHTOSTARTFILE} && python3 {PATHTOFILE} --simulated_neuron {combination["neuronmodel"]} --network_scale {NETWORK_BASE_SCALE * combination["n_threads"]} --threads {combination["n_threads"]} --rng_seed {rng_seed} --iteration {iteration} --benchmarkPath {dirname} --simtime {combination["simtime"]}']
 
         combined = combination["neuronmodel"]+","+str(combination["n_threads"])+","+str(combination["networksize"])

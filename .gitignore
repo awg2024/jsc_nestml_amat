@@ -1,9 +1,14 @@
 # NESTML generated artifacts
+ode-toolbox-cse/
 src/nestml/
 _neuron_nestml/
 *targets_amat*/
 
+
+
 # Slurm output logs
+*.txt
+*.png
 *.out
 *.err
 *.dat

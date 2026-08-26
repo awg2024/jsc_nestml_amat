@@ -5,15 +5,15 @@
 #SBATCH --partition=dc-cpu
 #SBATCH --time=01:00:00
 
-#SBATCH --nodes={{nodes}}
+#SBATCH --nodes=4
 #SBATCH --ntasks-per-node=1
-#SBATCH --cpus-per-task={{cpus_per_task}}
+#SBATCH --cpus-per-task=1
 #SBATCH --hint=nomultithread
 
-#SBATCH --output={{combination["output_file"]}}
-#SBATCH --error={{combination["error_file"]}}
+#SBATCH --output=slurm_outputs/run_simulation_amat2_psc_exp_4_10000_2_%j.out
+#SBATCH --error=slurm_outputs/run_simulation_amat2_psc_exp_4_10000_2_%j.err
 
-# --ntasks-per-node={{ntasks_per_node}} removed for this medium test. 
+# --ntasks-per-node=1 removed for this medium test. 
 module load Stages/2026
 module load GCC/14.3.0
 module load ParaStationMPI/5.13.0-1
@@ -31,14 +31,14 @@ export OMP_PROC_BIND=TRUE
 export SRUN_CPUS_PER_TASK=${SLURM_CPUS_PER_TASK}
 
 export PROGRAM="python3 Running/brunel_amat_nest.py \
---simulated_neuron {{ combination['simulated_neuron'] }} \
---network_scale {{ combination['network_scale'] }} \
---nodes {{ combination['nodes'] }} \
---threads {{ combination['threads'] }} \
---iteration {{ combination['iteration'] }} \
---benchmarkPath {{ combination['benchmarkPath'] }} \
---rng_seed {{ combination['rng_seed'] }} \
---simtime {{ combination['simtime'] }} \
-{% if combination['smoke_test'] %}--smoke_test{% endif %}"
+--simulated_neuron amat2_psc_exp \
+--network_scale 10000 \
+--nodes 4 \
+--threads 1 \
+--iteration 2 \
+--benchmarkPath /p/project1/paj2623/gray2/benchmark/Running/../Output_MPI/timings_weak_scaling_mpi \
+--rng_seed 380781303 \
+--simtime 999.0 \
+"
 
 srun $PROGRAM

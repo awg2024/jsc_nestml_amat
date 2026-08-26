@@ -10,13 +10,13 @@ NESTCodeGeneratorUtils.generate_code_for(
     module_name="nestml_amat_module",
     logging_level="WARNING")
 
-#print("AMAT NESTML module successfully built.")
+print("AMAT NESTML module successfully built. Check for numeric solver. ")
 
 # nestml amat cse generation template 
-NESTCodeGeneratorUtils.generate_code_for(
-    "amat_neuron_cse.nestml",
-    target_path="benchmark/Running/targets_amat_optimised_cse/target",
-    module_name="nestml_amat_cse_module",
-    logging_level="WARNING"
-)
-print("AMAT NEST CSE template for optimisation.")
+#NESTCodeGeneratorUtils.generate_code_for(
+#    "amat_neuron_cse.nestml",
+#    target_path="benchmark/Running/targets_amat_optimised_cse/target",
+#    module_name="nestml_amat_cse_module",
+#    logging_level="WARNING"
+#)
+#print("AMAT NEST CSE template for optimisation.")
