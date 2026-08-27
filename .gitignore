@@ -1,9 +1,6 @@
 # NESTML generated artifacts
 ode-toolbox-cse/
-src/nestml/
-_neuron_nestml/
-*targets_amat*/
-
+src/
 
 
 # Slurm output logs

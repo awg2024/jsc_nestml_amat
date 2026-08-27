@@ -19,7 +19,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with NEST.  If not, see <http://www.gnu.org/licenses/>.
  *
- *  Generated from NESTML 8.3.0-rc3-post-dev at time: 2026-08-19 12:55:53.877211
+ *  Generated from NESTML 8.3.0-rc3-post-dev at time: 2026-08-27 15:52:03.758081
 **/
 
 // C++ includes:
@@ -63,8 +63,8 @@ template <> void RecordablesMap<amat_neuron_nestml>::create()
     insert_(amat_neuron_nestml_names::_V_th_v_aux, &amat_neuron_nestml::get_V_th_v_aux);
     insert_(amat_neuron_nestml_names::_V_m, &amat_neuron_nestml::get_V_m);
     insert_(amat_neuron_nestml_names::_refr_t, &amat_neuron_nestml::get_refr_t);
-    insert_(amat_neuron_nestml_names::_I_kernel_exc__X__exc_spikes, &amat_neuron_nestml::get_I_kernel_exc__X__exc_spikes);
     insert_(amat_neuron_nestml_names::_I_kernel_inh__X__inh_spikes, &amat_neuron_nestml::get_I_kernel_inh__X__inh_spikes);
+    insert_(amat_neuron_nestml_names::_I_kernel_exc__X__exc_spikes, &amat_neuron_nestml::get_I_kernel_exc__X__exc_spikes);
     // add recordable inline expressions to recordables map
     insert_(amat_neuron_nestml_names::_I_syn_ex, &amat_neuron_nestml::get_I_syn_ex);
     insert_(amat_neuron_nestml_names::_I_syn_in, &amat_neuron_nestml::get_I_syn_in);
@@ -104,7 +104,6 @@ amat_neuron_nestml::Buffers_::Buffers_(amat_neuron_nestml &n):
   , spike_input_received_grid_sum_( std::vector< double >( NUM_SPIKE_RECEPTORS ) )
   , continuous_inputs_( std::vector< nest::RingBuffer >( NUM_CONTINUOUS_INPUT_PORTS ) )
   , continuous_inputs_grid_sum_( std::vector< double >( NUM_CONTINUOUS_INPUT_PORTS ) )
-  , __s( nullptr ), __c( nullptr ), __e( nullptr )
 {
   // Initialization of the remaining members is deferred to init_buffers_().
 }
@@ -117,7 +116,6 @@ amat_neuron_nestml::Buffers_::Buffers_(const Buffers_ &, amat_neuron_nestml &n):
   , spike_input_received_grid_sum_( std::vector< double >( NUM_SPIKE_RECEPTORS ) )
   , continuous_inputs_( std::vector< nest::RingBuffer >( NUM_CONTINUOUS_INPUT_PORTS ) )
   , continuous_inputs_grid_sum_( std::vector< double >( NUM_CONTINUOUS_INPUT_PORTS ) )
-  , __s( nullptr ), __c( nullptr ), __e( nullptr )
 {
   // Initialization of the remaining members is deferred to init_buffers_().
 }
@@ -157,26 +155,113 @@ amat_neuron_nestml::amat_neuron_nestml(const amat_neuron_nestml& __n):
   P_.I_e = __n.P_.I_e;
 
   // copy state struct S_
-  S_.ode_state[State_::V_th_alpha_1] = __n.S_.ode_state[State_::V_th_alpha_1];
-  S_.ode_state[State_::V_th_alpha_2] = __n.S_.ode_state[State_::V_th_alpha_2];
-  S_.ode_state[State_::V_th_v] = __n.S_.ode_state[State_::V_th_v];
-  S_.ode_state[State_::V_th_v_aux] = __n.S_.ode_state[State_::V_th_v_aux];
-  S_.ode_state[State_::V_m] = __n.S_.ode_state[State_::V_m];
-  S_.ode_state[State_::refr_t] = __n.S_.ode_state[State_::refr_t];
-  S_.ode_state[State_::I_kernel_exc__X__exc_spikes] = __n.S_.ode_state[State_::I_kernel_exc__X__exc_spikes];
-  S_.ode_state[State_::I_kernel_inh__X__inh_spikes] = __n.S_.ode_state[State_::I_kernel_inh__X__inh_spikes];
+  S_.V_th_alpha_1 = __n.S_.V_th_alpha_1;
+  S_.V_th_alpha_2 = __n.S_.V_th_alpha_2;
+  S_.V_th_v = __n.S_.V_th_v;
+  S_.V_th_v_aux = __n.S_.V_th_v_aux;
+  S_.V_m = __n.S_.V_m;
+  S_.refr_t = __n.S_.refr_t;
+  S_.I_kernel_inh__X__inh_spikes = __n.S_.I_kernel_inh__X__inh_spikes;
+  S_.I_kernel_exc__X__exc_spikes = __n.S_.I_kernel_exc__X__exc_spikes;
 
   // copy internals V_
   V_.unit_psc = __n.V_.unit_psc;
   V_.__h = __n.V_.__h;
+  V_.__ode_cse_prop_0 = __n.V_.__ode_cse_prop_0;
+  V_.__ode_cse_prop_1 = __n.V_.__ode_cse_prop_1;
+  V_.__ode_cse_prop_2 = __n.V_.__ode_cse_prop_2;
+  V_.__ode_cse_prop_3 = __n.V_.__ode_cse_prop_3;
+  V_.__ode_cse_prop_4 = __n.V_.__ode_cse_prop_4;
+  V_.__ode_cse_prop_5 = __n.V_.__ode_cse_prop_5;
+  V_.__ode_cse_prop_6 = __n.V_.__ode_cse_prop_6;
+  V_.__ode_cse_prop_7 = __n.V_.__ode_cse_prop_7;
+  V_.__ode_cse_prop_8 = __n.V_.__ode_cse_prop_8;
+  V_.__ode_cse_prop_9 = __n.V_.__ode_cse_prop_9;
+  V_.__ode_cse_prop_10 = __n.V_.__ode_cse_prop_10;
+  V_.__ode_cse_prop_11 = __n.V_.__ode_cse_prop_11;
+  V_.__ode_cse_prop_12 = __n.V_.__ode_cse_prop_12;
+  V_.__ode_cse_prop_13 = __n.V_.__ode_cse_prop_13;
+  V_.__ode_cse_prop_14 = __n.V_.__ode_cse_prop_14;
+  V_.__ode_cse_prop_15 = __n.V_.__ode_cse_prop_15;
+  V_.__ode_cse_prop_16 = __n.V_.__ode_cse_prop_16;
+  V_.__ode_cse_prop_17 = __n.V_.__ode_cse_prop_17;
+  V_.__ode_cse_prop_18 = __n.V_.__ode_cse_prop_18;
+  V_.__ode_cse_prop_19 = __n.V_.__ode_cse_prop_19;
+  V_.__ode_cse_prop_20 = __n.V_.__ode_cse_prop_20;
+  V_.__ode_cse_prop_21 = __n.V_.__ode_cse_prop_21;
+  V_.__ode_cse_prop_22 = __n.V_.__ode_cse_prop_22;
+  V_.__ode_cse_prop_23 = __n.V_.__ode_cse_prop_23;
+  V_.__ode_cse_prop_24 = __n.V_.__ode_cse_prop_24;
+  V_.__ode_cse_prop_25 = __n.V_.__ode_cse_prop_25;
+  V_.__ode_cse_prop_26 = __n.V_.__ode_cse_prop_26;
+  V_.__ode_cse_prop_27 = __n.V_.__ode_cse_prop_27;
+  V_.__ode_cse_prop_28 = __n.V_.__ode_cse_prop_28;
+  V_.__ode_cse_prop_29 = __n.V_.__ode_cse_prop_29;
+  V_.__ode_cse_prop_30 = __n.V_.__ode_cse_prop_30;
+  V_.__ode_cse_prop_31 = __n.V_.__ode_cse_prop_31;
+  V_.__ode_cse_prop_32 = __n.V_.__ode_cse_prop_32;
+  V_.__ode_cse_prop_33 = __n.V_.__ode_cse_prop_33;
+  V_.__ode_cse_prop_34 = __n.V_.__ode_cse_prop_34;
+  V_.__ode_cse_prop_35 = __n.V_.__ode_cse_prop_35;
+  V_.__ode_cse_prop_36 = __n.V_.__ode_cse_prop_36;
+  V_.__ode_cse_prop_37 = __n.V_.__ode_cse_prop_37;
+  V_.__ode_cse_prop_38 = __n.V_.__ode_cse_prop_38;
+  V_.__ode_cse_prop_39 = __n.V_.__ode_cse_prop_39;
+  V_.__ode_cse_prop_40 = __n.V_.__ode_cse_prop_40;
+  V_.__ode_cse_prop_41 = __n.V_.__ode_cse_prop_41;
+  V_.__ode_cse_prop_42 = __n.V_.__ode_cse_prop_42;
+  V_.__ode_cse_prop_43 = __n.V_.__ode_cse_prop_43;
+  V_.__ode_cse_prop_44 = __n.V_.__ode_cse_prop_44;
+  V_.__ode_cse_prop_45 = __n.V_.__ode_cse_prop_45;
+  V_.__ode_cse_prop_46 = __n.V_.__ode_cse_prop_46;
+  V_.__ode_cse_prop_47 = __n.V_.__ode_cse_prop_47;
+  V_.__ode_cse_prop_48 = __n.V_.__ode_cse_prop_48;
+  V_.__ode_cse_prop_49 = __n.V_.__ode_cse_prop_49;
+  V_.__ode_cse_prop_50 = __n.V_.__ode_cse_prop_50;
+  V_.__ode_cse_prop_51 = __n.V_.__ode_cse_prop_51;
+  V_.__ode_cse_prop_52 = __n.V_.__ode_cse_prop_52;
+  V_.__ode_cse_prop_53 = __n.V_.__ode_cse_prop_53;
+  V_.__ode_cse_prop_54 = __n.V_.__ode_cse_prop_54;
+  V_.__ode_cse_prop_55 = __n.V_.__ode_cse_prop_55;
+  V_.__ode_cse_prop_56 = __n.V_.__ode_cse_prop_56;
+  V_.__ode_cse_prop_57 = __n.V_.__ode_cse_prop_57;
+  V_.__ode_cse_prop_58 = __n.V_.__ode_cse_prop_58;
+  V_.__ode_cse_prop_59 = __n.V_.__ode_cse_prop_59;
+  V_.__ode_cse_prop_60 = __n.V_.__ode_cse_prop_60;
+  V_.__ode_cse_prop_61 = __n.V_.__ode_cse_prop_61;
+  V_.__ode_cse_prop_62 = __n.V_.__ode_cse_prop_62;
+  V_.__ode_cse_prop_63 = __n.V_.__ode_cse_prop_63;
+  V_.__ode_cse_prop_64 = __n.V_.__ode_cse_prop_64;
+  V_.__ode_cse_prop_65 = __n.V_.__ode_cse_prop_65;
+  V_.__ode_cse_prop_66 = __n.V_.__ode_cse_prop_66;
+  V_.__ode_cse_prop_67 = __n.V_.__ode_cse_prop_67;
+  V_.__ode_cse_prop_68 = __n.V_.__ode_cse_prop_68;
+  V_.__ode_cse_prop_69 = __n.V_.__ode_cse_prop_69;
+  V_.__ode_cse_prop_70 = __n.V_.__ode_cse_prop_70;
+  V_.__ode_cse_prop_71 = __n.V_.__ode_cse_prop_71;
+  V_.__ode_cse_prop_72 = __n.V_.__ode_cse_prop_72;
+  V_.__ode_cse_prop_73 = __n.V_.__ode_cse_prop_73;
+  V_.__ode_cse_prop_74 = __n.V_.__ode_cse_prop_74;
+  V_.__ode_cse_prop_75 = __n.V_.__ode_cse_prop_75;
+  V_.__ode_cse_prop_76 = __n.V_.__ode_cse_prop_76;
+  V_.__ode_cse_prop_77 = __n.V_.__ode_cse_prop_77;
   V_.__P__V_th_alpha_1__V_th_alpha_1 = __n.V_.__P__V_th_alpha_1__V_th_alpha_1;
   V_.__P__V_th_alpha_2__V_th_alpha_2 = __n.V_.__P__V_th_alpha_2__V_th_alpha_2;
   V_.__P__V_m__V_m = __n.V_.__P__V_m__V_m;
-  V_.__P__V_m__I_kernel_exc__X__exc_spikes = __n.V_.__P__V_m__I_kernel_exc__X__exc_spikes;
   V_.__P__V_m__I_kernel_inh__X__inh_spikes = __n.V_.__P__V_m__I_kernel_inh__X__inh_spikes;
+  V_.__P__V_m__I_kernel_exc__X__exc_spikes = __n.V_.__P__V_m__I_kernel_exc__X__exc_spikes;
+  V_.__P__V_th_v_aux__V_m = __n.V_.__P__V_th_v_aux__V_m;
+  V_.__P__V_th_v_aux__V_th_v_aux = __n.V_.__P__V_th_v_aux__V_th_v_aux;
+  V_.__P__V_th_v_aux__I_kernel_inh__X__inh_spikes = __n.V_.__P__V_th_v_aux__I_kernel_inh__X__inh_spikes;
+  V_.__P__V_th_v_aux__I_kernel_exc__X__exc_spikes = __n.V_.__P__V_th_v_aux__I_kernel_exc__X__exc_spikes;
+  V_.__P__V_th_v__V_m = __n.V_.__P__V_th_v__V_m;
+  V_.__P__V_th_v__V_th_v_aux = __n.V_.__P__V_th_v__V_th_v_aux;
+  V_.__P__V_th_v__V_th_v = __n.V_.__P__V_th_v__V_th_v;
+  V_.__P__V_th_v__I_kernel_inh__X__inh_spikes = __n.V_.__P__V_th_v__I_kernel_inh__X__inh_spikes;
+  V_.__P__V_th_v__I_kernel_exc__X__exc_spikes = __n.V_.__P__V_th_v__I_kernel_exc__X__exc_spikes;
   V_.__P__refr_t__refr_t = __n.V_.__P__refr_t__refr_t;
-  V_.__P__I_kernel_exc__X__exc_spikes__I_kernel_exc__X__exc_spikes = __n.V_.__P__I_kernel_exc__X__exc_spikes__I_kernel_exc__X__exc_spikes;
   V_.__P__I_kernel_inh__X__inh_spikes__I_kernel_inh__X__inh_spikes = __n.V_.__P__I_kernel_inh__X__inh_spikes__I_kernel_inh__X__inh_spikes;
+  V_.__P__I_kernel_exc__X__exc_spikes__I_kernel_exc__X__exc_spikes = __n.V_.__P__I_kernel_exc__X__exc_spikes__I_kernel_exc__X__exc_spikes;
 }
 
 // ---------------------------------------------------------------------------
@@ -185,22 +270,6 @@ amat_neuron_nestml::amat_neuron_nestml(const amat_neuron_nestml& __n):
 
 amat_neuron_nestml::~amat_neuron_nestml()
 {
-  // GSL structs may not have been allocated, so we need to protect destruction
-
-  if (B_.__s)
-  {
-    gsl_odeiv_step_free( B_.__s );
-  }
-
-  if (B_.__c)
-  {
-    gsl_odeiv_control_free( B_.__c );
-  }
-
-  if (B_.__e)
-  {
-    gsl_odeiv_evolve_free( B_.__e );
-  }
 }
 
 // ---------------------------------------------------------------------------
@@ -221,9 +290,6 @@ void amat_neuron_nestml::init_state_internal_()
 #endif
 
   const double __timestep = nest::Time::get_resolution().get_ms();  // do not remove, this is necessary for the timestep() function
-  // by default, integrate all variables with a conservative tolerance, in the sense that we err on the side of integrating very precisely at the expense of extra computation
-  P_.__gsl_abs_error_tol = 1e-6;
-  P_.__gsl_rel_error_tol = 1e-6;
   // initial values for parameters
   P_.tau_m = 10; // as ms
   P_.C_m = 200; // as pF
@@ -243,14 +309,14 @@ void amat_neuron_nestml::init_state_internal_()
   V_.__h = nest::Time::get_resolution().get_ms();
   recompute_internal_variables();
   // initial values for state variables
-  S_.ode_state[State_::V_th_alpha_1] = 0; // as mV
-  S_.ode_state[State_::V_th_alpha_2] = 0; // as mV
-  S_.ode_state[State_::V_th_v] = 0; // as mV
-  S_.ode_state[State_::V_th_v_aux] = 0; // as mV / ms
-  S_.ode_state[State_::V_m] = P_.E_L; // as mV
-  S_.ode_state[State_::refr_t] = 0; // as ms
-  S_.ode_state[State_::I_kernel_exc__X__exc_spikes] = 0; // as real
-  S_.ode_state[State_::I_kernel_inh__X__inh_spikes] = 0; // as real
+  S_.V_th_alpha_1 = 0; // as mV
+  S_.V_th_alpha_2 = 0; // as mV
+  S_.V_th_v = 0; // as mV
+  S_.V_th_v_aux = 0; // as mV / ms
+  S_.V_m = P_.E_L; // as mV
+  S_.refr_t = 0; // as ms
+  S_.I_kernel_inh__X__inh_spikes = 0; // as real
+  S_.I_kernel_exc__X__exc_spikes = 0; // as real
 }
 
 void amat_neuron_nestml::init_buffers_()
@@ -270,98 +336,209 @@ void amat_neuron_nestml::init_buffers_()
   B_.logger_.reset();
 
 
-
-  if ( not B_.__s )
-  {
-    B_.__s = gsl_odeiv_step_alloc( gsl_odeiv_step_rkf45, State_::STATE_VEC_SIZE );
-  }
-  else
-  {
-    gsl_odeiv_step_reset( B_.__s );
-  }
-
-  if ( not B_.__c )
-  {
-    B_.__c = gsl_odeiv_control_y_new( P_.__gsl_abs_error_tol, P_.__gsl_rel_error_tol );
-  }
-  else
-  {
-    gsl_odeiv_control_init( B_.__c, P_.__gsl_abs_error_tol, P_.__gsl_rel_error_tol, 1.0, 0.0 );
-
-  }
-
-  if ( not B_.__e )
-  {
-    B_.__e = gsl_odeiv_evolve_alloc( State_::STATE_VEC_SIZE );
-  }
-  else
-  {
-    gsl_odeiv_evolve_reset( B_.__e );
-  }
-
-  // B_.__sys.function = amat_neuron_nestml_dynamics; // will be set just prior to the call to gsl_odeiv_evolve_apply()
-  B_.__sys.jacobian = nullptr;
-  B_.__sys.dimension = State_::STATE_VEC_SIZE;
-  B_.__sys.params = reinterpret_cast< void* >( this );
-  B_.__step = nest::Time::get_resolution().get_ms();
-  B_.__integration_step = nest::Time::get_resolution().get_ms();
 }
 
 void amat_neuron_nestml::recompute_internal_variables(bool exclude_timestep)
 {
   const double __timestep = nest::Time::get_resolution().get_ms();  // do not remove, this is necessary for the timestep() function
 
-
-
-/**
-exclude_timestep(). When a neuron spike handles an event it doesn't happen on a perfect grid boundary. 
-instead nest calculates the remaining time of that specific timestep of let's say 0.1. (H_remainder)
-in this difference nest ensures the state variables decay as intended. 
-OR ELSE: 
-this code just compute the state variables so they decay as intended. this is being run 99% of the time here. 
-**/
-
-
-// tau_m = determines how fast a neuron membrane potential decays back to resting
-// c_m = represents the ability of the cell to store electrical charge. 
-
   if (exclude_timestep)
   {    
     V_.unit_psc = 1; // as pA
+    V_.__ode_cse_prop_0 = V_.__h / P_.tau_m; // as real
+    V_.__ode_cse_prop_1 = V_.__h / P_.tau_syn_inh; // as real
+    V_.__ode_cse_prop_2 = P_.C_m * std::exp(V_.__ode_cse_prop_1); // as real
+    V_.__ode_cse_prop_3 = V_.__ode_cse_prop_2 * P_.tau_m; // as real
+    V_.__ode_cse_prop_4 = V_.__ode_cse_prop_2 * P_.tau_syn_inh; // as real
+    V_.__ode_cse_prop_5 = pow(P_.tau_m, 3); // as real
+    V_.__ode_cse_prop_6 = pow(P_.tau_m, 2); // as real
+    V_.__ode_cse_prop_7 = std::exp(V_.__ode_cse_prop_0); // as real
+    V_.__ode_cse_prop_8 = V_.__ode_cse_prop_6 * V_.__ode_cse_prop_7; // as real
+    V_.__ode_cse_prop_9 = P_.C_m * V_.__ode_cse_prop_8; // as real
+    V_.__ode_cse_prop_10 = pow(P_.tau_v, 2); // as real
+    V_.__ode_cse_prop_11 = V_.__ode_cse_prop_10 * V_.__ode_cse_prop_7; // as real
+    V_.__ode_cse_prop_12 = P_.C_m * V_.__ode_cse_prop_11; // as real
+    V_.__ode_cse_prop_13 = P_.C_m * V_.__ode_cse_prop_7; // as real
+    V_.__ode_cse_prop_14 = 2 * P_.tau_v; // as real
+    V_.__ode_cse_prop_15 = V_.__ode_cse_prop_14 * P_.tau_m; // as real
+    V_.__ode_cse_prop_16 = V_.__ode_cse_prop_13 * V_.__ode_cse_prop_15; // as real
+    V_.__ode_cse_prop_17 = V_.__ode_cse_prop_12 * P_.tau_m + V_.__ode_cse_prop_13 * V_.__ode_cse_prop_5 - V_.__ode_cse_prop_14 * V_.__ode_cse_prop_9; // as real
+    V_.__ode_cse_prop_18 = 1 / ((-V_.__ode_cse_prop_12) * P_.tau_syn_inh + V_.__ode_cse_prop_16 * P_.tau_syn_inh + V_.__ode_cse_prop_17 - V_.__ode_cse_prop_9 * P_.tau_syn_inh); // as real
+    V_.__ode_cse_prop_19 = P_.tau_syn_inh * V_.unit_psc; // as real
+    V_.__ode_cse_prop_20 = V_.__ode_cse_prop_18 * V_.__ode_cse_prop_19; // as real
+    V_.__ode_cse_prop_21 = V_.__ode_cse_prop_19 * P_.tau_m; // as real
+    V_.__ode_cse_prop_22 = V_.__ode_cse_prop_18 * V_.__ode_cse_prop_21; // as real
+    V_.__ode_cse_prop_23 = V_.__h / P_.tau_syn_exc; // as real
+    V_.__ode_cse_prop_24 = P_.C_m * std::exp(V_.__ode_cse_prop_23); // as real
+    V_.__ode_cse_prop_25 = V_.__ode_cse_prop_24 * P_.tau_m; // as real
+    V_.__ode_cse_prop_26 = V_.__ode_cse_prop_24 * P_.tau_syn_exc; // as real
+    V_.__ode_cse_prop_27 = P_.tau_syn_exc * V_.unit_psc; // as real
+    V_.__ode_cse_prop_28 = V_.__ode_cse_prop_27 * P_.tau_m; // as real
+    V_.__ode_cse_prop_29 = 1 / ((-V_.__ode_cse_prop_12) * P_.tau_syn_exc + V_.__ode_cse_prop_16 * P_.tau_syn_exc + V_.__ode_cse_prop_17 - V_.__ode_cse_prop_9 * P_.tau_syn_exc); // as real
+    V_.__ode_cse_prop_30 = V_.__ode_cse_prop_27 * V_.__ode_cse_prop_29; // as real
+    V_.__ode_cse_prop_31 = V_.__h / P_.tau_v; // as real
+    V_.__ode_cse_prop_32 = std::exp(V_.__ode_cse_prop_31); // as real
+    V_.__ode_cse_prop_33 = V_.__ode_cse_prop_32 * P_.tau_m; // as real
+    V_.__ode_cse_prop_34 = V_.__ode_cse_prop_32 * P_.tau_v; // as real
+    V_.__ode_cse_prop_35 = P_.beta * P_.tau_v; // as real
+    V_.__ode_cse_prop_36 = V_.__ode_cse_prop_35 / (V_.__ode_cse_prop_33 - V_.__ode_cse_prop_34); // as real
+    V_.__ode_cse_prop_37 = 1 / (V_.__ode_cse_prop_11 - V_.__ode_cse_prop_15 * V_.__ode_cse_prop_7 + V_.__ode_cse_prop_8); // as real
+    V_.__ode_cse_prop_38 = V_.__ode_cse_prop_10 * P_.beta; // as real
+    V_.__ode_cse_prop_39 = V_.__ode_cse_prop_37 * V_.__ode_cse_prop_38; // as real
+    V_.__ode_cse_prop_40 = std::exp((-V_.__ode_cse_prop_31)); // as real
+    V_.__ode_cse_prop_41 = P_.C_m * V_.__ode_cse_prop_33; // as real
+    V_.__ode_cse_prop_42 = V_.__ode_cse_prop_41 * P_.tau_syn_inh; // as real
+    V_.__ode_cse_prop_43 = P_.C_m * V_.__ode_cse_prop_34; // as real
+    V_.__ode_cse_prop_44 = V_.__ode_cse_prop_43 * P_.tau_syn_inh; // as real
+    V_.__ode_cse_prop_45 = V_.__ode_cse_prop_10 * V_.__ode_cse_prop_32; // as real
+    V_.__ode_cse_prop_46 = P_.C_m * V_.__ode_cse_prop_45; // as real
+    V_.__ode_cse_prop_47 = (-V_.__ode_cse_prop_41) * P_.tau_v + V_.__ode_cse_prop_46; // as real
+    V_.__ode_cse_prop_48 = V_.__ode_cse_prop_21 * V_.__ode_cse_prop_35; // as real
+    V_.__ode_cse_prop_49 = V_.__ode_cse_prop_48 / (V_.__ode_cse_prop_42 - V_.__ode_cse_prop_44 + V_.__ode_cse_prop_47); // as real
+    V_.__ode_cse_prop_50 = V_.__ode_cse_prop_3 * P_.tau_syn_inh; // as real
+    V_.__ode_cse_prop_51 = pow(P_.tau_syn_inh, 2); // as real
+    V_.__ode_cse_prop_52 = V_.__ode_cse_prop_2 * V_.__ode_cse_prop_51; // as real
+    V_.__ode_cse_prop_53 = V_.__ode_cse_prop_35 * V_.__ode_cse_prop_6; // as real
+    V_.__ode_cse_prop_54 = V_.__ode_cse_prop_41 * P_.tau_syn_exc; // as real
+    V_.__ode_cse_prop_55 = V_.__ode_cse_prop_43 * P_.tau_syn_exc; // as real
+    V_.__ode_cse_prop_56 = V_.__ode_cse_prop_28 * V_.__ode_cse_prop_35 / (V_.__ode_cse_prop_47 + V_.__ode_cse_prop_54 - V_.__ode_cse_prop_55); // as real
+    V_.__ode_cse_prop_57 = V_.__ode_cse_prop_25 * P_.tau_syn_exc; // as real
+    V_.__ode_cse_prop_58 = pow(P_.tau_syn_exc, 2); // as real
+    V_.__ode_cse_prop_59 = V_.__ode_cse_prop_24 * V_.__ode_cse_prop_58; // as real
+    V_.__ode_cse_prop_60 = V_.__h * V_.__ode_cse_prop_32; // as real
+    V_.__ode_cse_prop_61 = V_.__ode_cse_prop_6 * V_.__ode_cse_prop_60; // as real
+    V_.__ode_cse_prop_62 = V_.__h * V_.__ode_cse_prop_14; // as real
+    V_.__ode_cse_prop_63 = V_.__ode_cse_prop_38 * P_.tau_m; // as real
+    V_.__ode_cse_prop_64 = V_.__ode_cse_prop_38 * V_.__ode_cse_prop_6; // as real
+    V_.__ode_cse_prop_65 = P_.C_m * V_.__ode_cse_prop_61; // as real
+    V_.__ode_cse_prop_66 = V_.__h * V_.__ode_cse_prop_46; // as real
+    V_.__ode_cse_prop_67 = P_.C_m * V_.__ode_cse_prop_60; // as real
+    V_.__ode_cse_prop_68 = 2 * pow(P_.tau_v, 3); // as real
+    V_.__ode_cse_prop_69 = V_.__ode_cse_prop_67 * V_.__ode_cse_prop_68; // as real
+    V_.__ode_cse_prop_70 = V_.__ode_cse_prop_41 * V_.__ode_cse_prop_62; // as real
+    V_.__ode_cse_prop_71 = 2 * V_.__h * V_.__ode_cse_prop_6; // as real
+    V_.__ode_cse_prop_72 = 4 * V_.__h * V_.__ode_cse_prop_10; // as real
+    V_.__ode_cse_prop_73 = pow(P_.tau_v, 4); // as real
+    V_.__ode_cse_prop_74 = (-V_.__h) * V_.__ode_cse_prop_41 * V_.__ode_cse_prop_68 + V_.__ode_cse_prop_6 * V_.__ode_cse_prop_66 + V_.__ode_cse_prop_67 * V_.__ode_cse_prop_73; // as real
+    V_.__ode_cse_prop_75 = V_.__h / (V_.__ode_cse_prop_42 * V_.__ode_cse_prop_72 - V_.__ode_cse_prop_44 * V_.__ode_cse_prop_71 + V_.__ode_cse_prop_51 * V_.__ode_cse_prop_65 + V_.__ode_cse_prop_51 * V_.__ode_cse_prop_66 - V_.__ode_cse_prop_51 * V_.__ode_cse_prop_70 - V_.__ode_cse_prop_69 * P_.tau_syn_inh + V_.__ode_cse_prop_74); // as real
+    V_.__ode_cse_prop_76 = V_.__ode_cse_prop_64 * V_.unit_psc; // as real
+    V_.__ode_cse_prop_77 = 1 / (V_.__ode_cse_prop_54 * V_.__ode_cse_prop_72 - V_.__ode_cse_prop_55 * V_.__ode_cse_prop_71 + V_.__ode_cse_prop_58 * V_.__ode_cse_prop_65 + V_.__ode_cse_prop_58 * V_.__ode_cse_prop_66 - V_.__ode_cse_prop_58 * V_.__ode_cse_prop_70 - V_.__ode_cse_prop_69 * P_.tau_syn_exc + V_.__ode_cse_prop_74); // as real
     V_.__P__V_th_alpha_1__V_th_alpha_1 = std::exp((-V_.__h) / P_.tau_1); // as real
     V_.__P__V_th_alpha_2__V_th_alpha_2 = std::exp((-V_.__h) / P_.tau_2); // as real
-    V_.__P__V_m__V_m = std::exp((-V_.__h) / P_.tau_m); // as real
-    V_.__P__V_m__I_kernel_exc__X__exc_spikes = P_.tau_m * P_.tau_syn_exc * V_.unit_psc * ((-std::exp(V_.__h / P_.tau_m)) + std::exp(V_.__h / P_.tau_syn_exc)) * std::exp((-V_.__h) * (P_.tau_m + P_.tau_syn_exc) / (P_.tau_m * P_.tau_syn_exc)) / (P_.C_m * (P_.tau_m - P_.tau_syn_exc)); // as real
-
-    // declared as doubles in .header file as well. 
-    // Patch 1 for CSE new precomputed coefficients 
-    V_.__P__V_m__I_input     = (P_.tau_m / P_.C_m) * (1.0 - V_.__P__V_m__V_m); // constant multiplying the external/input current in the analytical v_m update 
-    V_.__P__V_m__E_L_offset = P_.E_L * (1.0 - V_.__P__V_m__V_m);  // offset of E_L from the analytical V_M update 
-      
-    V_.__P__V_m__I_kernel_inh__X__inh_spikes = P_.tau_m * P_.tau_syn_inh * V_.unit_psc * (std::exp(V_.__h / P_.tau_m) - std::exp(V_.__h / P_.tau_syn_inh)) * std::exp((-V_.__h) * (P_.tau_m + P_.tau_syn_inh) / (P_.tau_m * P_.tau_syn_inh)) / (P_.C_m * (P_.tau_m - P_.tau_syn_inh)); // as real
+    V_.__P__V_m__V_m = std::exp((-V_.__ode_cse_prop_0)); // as real
+    V_.__P__V_m__I_kernel_inh__X__inh_spikes = (-V_.__ode_cse_prop_10) * V_.__ode_cse_prop_22 + 2 * V_.__ode_cse_prop_18 * V_.__ode_cse_prop_6 * P_.tau_syn_inh * P_.tau_v * V_.unit_psc - V_.__ode_cse_prop_20 * V_.__ode_cse_prop_5 + P_.tau_m * P_.tau_syn_inh * V_.unit_psc / (V_.__ode_cse_prop_3 - V_.__ode_cse_prop_4); // as real
+    V_.__P__V_m__I_kernel_exc__X__exc_spikes = V_.__ode_cse_prop_10 * V_.__ode_cse_prop_30 * P_.tau_m - V_.__ode_cse_prop_14 * V_.__ode_cse_prop_30 * V_.__ode_cse_prop_6 - V_.__ode_cse_prop_28 / (V_.__ode_cse_prop_25 - V_.__ode_cse_prop_26) + V_.__ode_cse_prop_30 * V_.__ode_cse_prop_5; // as real
+    V_.__P__V_th_v_aux__V_m = (-V_.__ode_cse_prop_35) * V_.__ode_cse_prop_37 * P_.tau_m + V_.__ode_cse_prop_36 + V_.__ode_cse_prop_39; // as real
+    V_.__P__V_th_v_aux__V_th_v_aux = V_.__ode_cse_prop_40; // as real
+    V_.__P__V_th_v_aux__I_kernel_inh__X__inh_spikes = V_.__ode_cse_prop_20 * V_.__ode_cse_prop_53 - V_.__ode_cse_prop_22 * V_.__ode_cse_prop_38 - V_.__ode_cse_prop_48 / ((-V_.__ode_cse_prop_3) * P_.tau_v + V_.__ode_cse_prop_4 * P_.tau_v + V_.__ode_cse_prop_50 - V_.__ode_cse_prop_52) + V_.__ode_cse_prop_49; // as real
+    V_.__P__V_th_v_aux__I_kernel_exc__X__exc_spikes = V_.__ode_cse_prop_10 * V_.__ode_cse_prop_29 * P_.beta * P_.tau_m * P_.tau_syn_exc * V_.unit_psc - V_.__ode_cse_prop_30 * V_.__ode_cse_prop_53 - V_.__ode_cse_prop_56 + P_.beta * P_.tau_m * P_.tau_syn_exc * P_.tau_v * V_.unit_psc / ((-V_.__ode_cse_prop_25) * P_.tau_v + V_.__ode_cse_prop_26 * P_.tau_v + V_.__ode_cse_prop_57 - V_.__ode_cse_prop_59); // as real
+    V_.__P__V_th_v__V_m = V_.__h * V_.__ode_cse_prop_36 + V_.__h * V_.__ode_cse_prop_63 / (V_.__h * V_.__ode_cse_prop_45 - V_.__ode_cse_prop_33 * V_.__ode_cse_prop_62 + V_.__ode_cse_prop_61) - V_.__ode_cse_prop_39 * P_.tau_m; // as real
+    V_.__P__V_th_v__V_th_v_aux = V_.__h * V_.__ode_cse_prop_40; // as real
+    V_.__P__V_th_v__V_th_v = V_.__ode_cse_prop_40; // as real
+    V_.__P__V_th_v__I_kernel_inh__X__inh_spikes = V_.__h * V_.__ode_cse_prop_49 + V_.__ode_cse_prop_20 * V_.__ode_cse_prop_64 - V_.__ode_cse_prop_21 * V_.__ode_cse_prop_73 * V_.__ode_cse_prop_75 * P_.beta - V_.__ode_cse_prop_51 * V_.__ode_cse_prop_63 * V_.unit_psc / (V_.__ode_cse_prop_10 * V_.__ode_cse_prop_3 - V_.__ode_cse_prop_10 * V_.__ode_cse_prop_4 - V_.__ode_cse_prop_14 * V_.__ode_cse_prop_50 + V_.__ode_cse_prop_14 * V_.__ode_cse_prop_52 - V_.__ode_cse_prop_2 * pow(P_.tau_syn_inh, 3) + V_.__ode_cse_prop_3 * V_.__ode_cse_prop_51) + V_.__ode_cse_prop_51 * V_.__ode_cse_prop_75 * V_.__ode_cse_prop_76; // as real
+    V_.__P__V_th_v__I_kernel_exc__X__exc_spikes = (-V_.__h) * V_.__ode_cse_prop_56 - V_.__h * V_.__ode_cse_prop_58 * V_.__ode_cse_prop_76 * V_.__ode_cse_prop_77 + V_.__h * V_.__ode_cse_prop_73 * V_.__ode_cse_prop_77 * P_.beta * P_.tau_m * P_.tau_syn_exc * V_.unit_psc + V_.__ode_cse_prop_10 * V_.__ode_cse_prop_58 * P_.beta * P_.tau_m * V_.unit_psc / (V_.__ode_cse_prop_10 * V_.__ode_cse_prop_25 - V_.__ode_cse_prop_10 * V_.__ode_cse_prop_26 - V_.__ode_cse_prop_14 * V_.__ode_cse_prop_57 + V_.__ode_cse_prop_14 * V_.__ode_cse_prop_59 - V_.__ode_cse_prop_24 * pow(P_.tau_syn_exc, 3) + V_.__ode_cse_prop_25 * V_.__ode_cse_prop_58) - V_.__ode_cse_prop_30 * V_.__ode_cse_prop_64; // as real
     V_.__P__refr_t__refr_t = 1; // as real
-    V_.__P__I_kernel_exc__X__exc_spikes__I_kernel_exc__X__exc_spikes = std::exp((-V_.__h) / P_.tau_syn_exc); // as real
-    V_.__P__I_kernel_inh__X__inh_spikes__I_kernel_inh__X__inh_spikes = std::exp((-V_.__h) / P_.tau_syn_inh); // as real
+    V_.__P__I_kernel_inh__X__inh_spikes__I_kernel_inh__X__inh_spikes = std::exp((-V_.__ode_cse_prop_1)); // as real
+    V_.__P__I_kernel_exc__X__exc_spikes__I_kernel_exc__X__exc_spikes = std::exp((-V_.__ode_cse_prop_23)); // as real
   }
   else {    
     V_.unit_psc = 1; // as pA
     V_.__h = nest::Time::get_resolution().get_ms(); // as ms
+    V_.__ode_cse_prop_0 = V_.__h / P_.tau_m; // as real
+    V_.__ode_cse_prop_1 = V_.__h / P_.tau_syn_inh; // as real
+    V_.__ode_cse_prop_2 = P_.C_m * std::exp(V_.__ode_cse_prop_1); // as real
+    V_.__ode_cse_prop_3 = V_.__ode_cse_prop_2 * P_.tau_m; // as real
+    V_.__ode_cse_prop_4 = V_.__ode_cse_prop_2 * P_.tau_syn_inh; // as real
+    V_.__ode_cse_prop_5 = pow(P_.tau_m, 3); // as real
+    V_.__ode_cse_prop_6 = pow(P_.tau_m, 2); // as real
+    V_.__ode_cse_prop_7 = std::exp(V_.__ode_cse_prop_0); // as real
+    V_.__ode_cse_prop_8 = V_.__ode_cse_prop_6 * V_.__ode_cse_prop_7; // as real
+    V_.__ode_cse_prop_9 = P_.C_m * V_.__ode_cse_prop_8; // as real
+    V_.__ode_cse_prop_10 = pow(P_.tau_v, 2); // as real
+    V_.__ode_cse_prop_11 = V_.__ode_cse_prop_10 * V_.__ode_cse_prop_7; // as real
+    V_.__ode_cse_prop_12 = P_.C_m * V_.__ode_cse_prop_11; // as real
+    V_.__ode_cse_prop_13 = P_.C_m * V_.__ode_cse_prop_7; // as real
+    V_.__ode_cse_prop_14 = 2 * P_.tau_v; // as real
+    V_.__ode_cse_prop_15 = V_.__ode_cse_prop_14 * P_.tau_m; // as real
+    V_.__ode_cse_prop_16 = V_.__ode_cse_prop_13 * V_.__ode_cse_prop_15; // as real
+    V_.__ode_cse_prop_17 = V_.__ode_cse_prop_12 * P_.tau_m + V_.__ode_cse_prop_13 * V_.__ode_cse_prop_5 - V_.__ode_cse_prop_14 * V_.__ode_cse_prop_9; // as real
+    V_.__ode_cse_prop_18 = 1 / ((-V_.__ode_cse_prop_12) * P_.tau_syn_inh + V_.__ode_cse_prop_16 * P_.tau_syn_inh + V_.__ode_cse_prop_17 - V_.__ode_cse_prop_9 * P_.tau_syn_inh); // as real
+    V_.__ode_cse_prop_19 = P_.tau_syn_inh * V_.unit_psc; // as real
+    V_.__ode_cse_prop_20 = V_.__ode_cse_prop_18 * V_.__ode_cse_prop_19; // as real
+    V_.__ode_cse_prop_21 = V_.__ode_cse_prop_19 * P_.tau_m; // as real
+    V_.__ode_cse_prop_22 = V_.__ode_cse_prop_18 * V_.__ode_cse_prop_21; // as real
+    V_.__ode_cse_prop_23 = V_.__h / P_.tau_syn_exc; // as real
+    V_.__ode_cse_prop_24 = P_.C_m * std::exp(V_.__ode_cse_prop_23); // as real
+    V_.__ode_cse_prop_25 = V_.__ode_cse_prop_24 * P_.tau_m; // as real
+    V_.__ode_cse_prop_26 = V_.__ode_cse_prop_24 * P_.tau_syn_exc; // as real
+    V_.__ode_cse_prop_27 = P_.tau_syn_exc * V_.unit_psc; // as real
+    V_.__ode_cse_prop_28 = V_.__ode_cse_prop_27 * P_.tau_m; // as real
+    V_.__ode_cse_prop_29 = 1 / ((-V_.__ode_cse_prop_12) * P_.tau_syn_exc + V_.__ode_cse_prop_16 * P_.tau_syn_exc + V_.__ode_cse_prop_17 - V_.__ode_cse_prop_9 * P_.tau_syn_exc); // as real
+    V_.__ode_cse_prop_30 = V_.__ode_cse_prop_27 * V_.__ode_cse_prop_29; // as real
+    V_.__ode_cse_prop_31 = V_.__h / P_.tau_v; // as real
+    V_.__ode_cse_prop_32 = std::exp(V_.__ode_cse_prop_31); // as real
+    V_.__ode_cse_prop_33 = V_.__ode_cse_prop_32 * P_.tau_m; // as real
+    V_.__ode_cse_prop_34 = V_.__ode_cse_prop_32 * P_.tau_v; // as real
+    V_.__ode_cse_prop_35 = P_.beta * P_.tau_v; // as real
+    V_.__ode_cse_prop_36 = V_.__ode_cse_prop_35 / (V_.__ode_cse_prop_33 - V_.__ode_cse_prop_34); // as real
+    V_.__ode_cse_prop_37 = 1 / (V_.__ode_cse_prop_11 - V_.__ode_cse_prop_15 * V_.__ode_cse_prop_7 + V_.__ode_cse_prop_8); // as real
+    V_.__ode_cse_prop_38 = V_.__ode_cse_prop_10 * P_.beta; // as real
+    V_.__ode_cse_prop_39 = V_.__ode_cse_prop_37 * V_.__ode_cse_prop_38; // as real
+    V_.__ode_cse_prop_40 = std::exp((-V_.__ode_cse_prop_31)); // as real
+    V_.__ode_cse_prop_41 = P_.C_m * V_.__ode_cse_prop_33; // as real
+    V_.__ode_cse_prop_42 = V_.__ode_cse_prop_41 * P_.tau_syn_inh; // as real
+    V_.__ode_cse_prop_43 = P_.C_m * V_.__ode_cse_prop_34; // as real
+    V_.__ode_cse_prop_44 = V_.__ode_cse_prop_43 * P_.tau_syn_inh; // as real
+    V_.__ode_cse_prop_45 = V_.__ode_cse_prop_10 * V_.__ode_cse_prop_32; // as real
+    V_.__ode_cse_prop_46 = P_.C_m * V_.__ode_cse_prop_45; // as real
+    V_.__ode_cse_prop_47 = (-V_.__ode_cse_prop_41) * P_.tau_v + V_.__ode_cse_prop_46; // as real
+    V_.__ode_cse_prop_48 = V_.__ode_cse_prop_21 * V_.__ode_cse_prop_35; // as real
+    V_.__ode_cse_prop_49 = V_.__ode_cse_prop_48 / (V_.__ode_cse_prop_42 - V_.__ode_cse_prop_44 + V_.__ode_cse_prop_47); // as real
+    V_.__ode_cse_prop_50 = V_.__ode_cse_prop_3 * P_.tau_syn_inh; // as real
+    V_.__ode_cse_prop_51 = pow(P_.tau_syn_inh, 2); // as real
+    V_.__ode_cse_prop_52 = V_.__ode_cse_prop_2 * V_.__ode_cse_prop_51; // as real
+    V_.__ode_cse_prop_53 = V_.__ode_cse_prop_35 * V_.__ode_cse_prop_6; // as real
+    V_.__ode_cse_prop_54 = V_.__ode_cse_prop_41 * P_.tau_syn_exc; // as real
+    V_.__ode_cse_prop_55 = V_.__ode_cse_prop_43 * P_.tau_syn_exc; // as real
+    V_.__ode_cse_prop_56 = V_.__ode_cse_prop_28 * V_.__ode_cse_prop_35 / (V_.__ode_cse_prop_47 + V_.__ode_cse_prop_54 - V_.__ode_cse_prop_55); // as real
+    V_.__ode_cse_prop_57 = V_.__ode_cse_prop_25 * P_.tau_syn_exc; // as real
+    V_.__ode_cse_prop_58 = pow(P_.tau_syn_exc, 2); // as real
+    V_.__ode_cse_prop_59 = V_.__ode_cse_prop_24 * V_.__ode_cse_prop_58; // as real
+    V_.__ode_cse_prop_60 = V_.__h * V_.__ode_cse_prop_32; // as real
+    V_.__ode_cse_prop_61 = V_.__ode_cse_prop_6 * V_.__ode_cse_prop_60; // as real
+    V_.__ode_cse_prop_62 = V_.__h * V_.__ode_cse_prop_14; // as real
+    V_.__ode_cse_prop_63 = V_.__ode_cse_prop_38 * P_.tau_m; // as real
+    V_.__ode_cse_prop_64 = V_.__ode_cse_prop_38 * V_.__ode_cse_prop_6; // as real
+    V_.__ode_cse_prop_65 = P_.C_m * V_.__ode_cse_prop_61; // as real
+    V_.__ode_cse_prop_66 = V_.__h * V_.__ode_cse_prop_46; // as real
+    V_.__ode_cse_prop_67 = P_.C_m * V_.__ode_cse_prop_60; // as real
+    V_.__ode_cse_prop_68 = 2 * pow(P_.tau_v, 3); // as real
+    V_.__ode_cse_prop_69 = V_.__ode_cse_prop_67 * V_.__ode_cse_prop_68; // as real
+    V_.__ode_cse_prop_70 = V_.__ode_cse_prop_41 * V_.__ode_cse_prop_62; // as real
+    V_.__ode_cse_prop_71 = 2 * V_.__h * V_.__ode_cse_prop_6; // as real
+    V_.__ode_cse_prop_72 = 4 * V_.__h * V_.__ode_cse_prop_10; // as real
+    V_.__ode_cse_prop_73 = pow(P_.tau_v, 4); // as real
+    V_.__ode_cse_prop_74 = (-V_.__h) * V_.__ode_cse_prop_41 * V_.__ode_cse_prop_68 + V_.__ode_cse_prop_6 * V_.__ode_cse_prop_66 + V_.__ode_cse_prop_67 * V_.__ode_cse_prop_73; // as real
+    V_.__ode_cse_prop_75 = V_.__h / (V_.__ode_cse_prop_42 * V_.__ode_cse_prop_72 - V_.__ode_cse_prop_44 * V_.__ode_cse_prop_71 + V_.__ode_cse_prop_51 * V_.__ode_cse_prop_65 + V_.__ode_cse_prop_51 * V_.__ode_cse_prop_66 - V_.__ode_cse_prop_51 * V_.__ode_cse_prop_70 - V_.__ode_cse_prop_69 * P_.tau_syn_inh + V_.__ode_cse_prop_74); // as real
+    V_.__ode_cse_prop_76 = V_.__ode_cse_prop_64 * V_.unit_psc; // as real
+    V_.__ode_cse_prop_77 = 1 / (V_.__ode_cse_prop_54 * V_.__ode_cse_prop_72 - V_.__ode_cse_prop_55 * V_.__ode_cse_prop_71 + V_.__ode_cse_prop_58 * V_.__ode_cse_prop_65 + V_.__ode_cse_prop_58 * V_.__ode_cse_prop_66 - V_.__ode_cse_prop_58 * V_.__ode_cse_prop_70 - V_.__ode_cse_prop_69 * P_.tau_syn_exc + V_.__ode_cse_prop_74); // as real
     V_.__P__V_th_alpha_1__V_th_alpha_1 = std::exp((-V_.__h) / P_.tau_1); // as real
     V_.__P__V_th_alpha_2__V_th_alpha_2 = std::exp((-V_.__h) / P_.tau_2); // as real
-    V_.__P__V_m__V_m = std::exp((-V_.__h) / P_.tau_m); // as real
-
-    // declared as doubles in .header file as well. 
-    // Patch 1 for CSE new precomputed coefficients 
-    V_.__P__V_m__I_input     = (P_.tau_m / P_.C_m) * (1.0 - V_.__P__V_m__V_m);
-    V_.__P__V_m__E_L_offset = P_.E_L * (1.0 - V_.__P__V_m__V_m);
-
-
-      
-    V_.__P__V_m__I_kernel_exc__X__exc_spikes = P_.tau_m * P_.tau_syn_exc * V_.unit_psc * ((-std::exp(V_.__h / P_.tau_m)) + std::exp(V_.__h / P_.tau_syn_exc)) * std::exp((-V_.__h) * (P_.tau_m + P_.tau_syn_exc) / (P_.tau_m * P_.tau_syn_exc)) / (P_.C_m * (P_.tau_m - P_.tau_syn_exc)); // as real
-    V_.__P__V_m__I_kernel_inh__X__inh_spikes = P_.tau_m * P_.tau_syn_inh * V_.unit_psc * (std::exp(V_.__h / P_.tau_m) - std::exp(V_.__h / P_.tau_syn_inh)) * std::exp((-V_.__h) * (P_.tau_m + P_.tau_syn_inh) / (P_.tau_m * P_.tau_syn_inh)) / (P_.C_m * (P_.tau_m - P_.tau_syn_inh)); // as real
+    V_.__P__V_m__V_m = std::exp((-V_.__ode_cse_prop_0)); // as real
+    V_.__P__V_m__I_kernel_inh__X__inh_spikes = (-V_.__ode_cse_prop_10) * V_.__ode_cse_prop_22 + 2 * V_.__ode_cse_prop_18 * V_.__ode_cse_prop_6 * P_.tau_syn_inh * P_.tau_v * V_.unit_psc - V_.__ode_cse_prop_20 * V_.__ode_cse_prop_5 + P_.tau_m * P_.tau_syn_inh * V_.unit_psc / (V_.__ode_cse_prop_3 - V_.__ode_cse_prop_4); // as real
+    V_.__P__V_m__I_kernel_exc__X__exc_spikes = V_.__ode_cse_prop_10 * V_.__ode_cse_prop_30 * P_.tau_m - V_.__ode_cse_prop_14 * V_.__ode_cse_prop_30 * V_.__ode_cse_prop_6 - V_.__ode_cse_prop_28 / (V_.__ode_cse_prop_25 - V_.__ode_cse_prop_26) + V_.__ode_cse_prop_30 * V_.__ode_cse_prop_5; // as real
+    V_.__P__V_th_v_aux__V_m = (-V_.__ode_cse_prop_35) * V_.__ode_cse_prop_37 * P_.tau_m + V_.__ode_cse_prop_36 + V_.__ode_cse_prop_39; // as real
+    V_.__P__V_th_v_aux__V_th_v_aux = V_.__ode_cse_prop_40; // as real
+    V_.__P__V_th_v_aux__I_kernel_inh__X__inh_spikes = V_.__ode_cse_prop_20 * V_.__ode_cse_prop_53 - V_.__ode_cse_prop_22 * V_.__ode_cse_prop_38 - V_.__ode_cse_prop_48 / ((-V_.__ode_cse_prop_3) * P_.tau_v + V_.__ode_cse_prop_4 * P_.tau_v + V_.__ode_cse_prop_50 - V_.__ode_cse_prop_52) + V_.__ode_cse_prop_49; // as real
+    V_.__P__V_th_v_aux__I_kernel_exc__X__exc_spikes = V_.__ode_cse_prop_10 * V_.__ode_cse_prop_29 * P_.beta * P_.tau_m * P_.tau_syn_exc * V_.unit_psc - V_.__ode_cse_prop_30 * V_.__ode_cse_prop_53 - V_.__ode_cse_prop_56 + P_.beta * P_.tau_m * P_.tau_syn_exc * P_.tau_v * V_.unit_psc / ((-V_.__ode_cse_prop_25) * P_.tau_v + V_.__ode_cse_prop_26 * P_.tau_v + V_.__ode_cse_prop_57 - V_.__ode_cse_prop_59); // as real
+    V_.__P__V_th_v__V_m = V_.__h * V_.__ode_cse_prop_36 + V_.__h * V_.__ode_cse_prop_63 / (V_.__h * V_.__ode_cse_prop_45 - V_.__ode_cse_prop_33 * V_.__ode_cse_prop_62 + V_.__ode_cse_prop_61) - V_.__ode_cse_prop_39 * P_.tau_m; // as real
+    V_.__P__V_th_v__V_th_v_aux = V_.__h * V_.__ode_cse_prop_40; // as real
+    V_.__P__V_th_v__V_th_v = V_.__ode_cse_prop_40; // as real
+    V_.__P__V_th_v__I_kernel_inh__X__inh_spikes = V_.__h * V_.__ode_cse_prop_49 + V_.__ode_cse_prop_20 * V_.__ode_cse_prop_64 - V_.__ode_cse_prop_21 * V_.__ode_cse_prop_73 * V_.__ode_cse_prop_75 * P_.beta - V_.__ode_cse_prop_51 * V_.__ode_cse_prop_63 * V_.unit_psc / (V_.__ode_cse_prop_10 * V_.__ode_cse_prop_3 - V_.__ode_cse_prop_10 * V_.__ode_cse_prop_4 - V_.__ode_cse_prop_14 * V_.__ode_cse_prop_50 + V_.__ode_cse_prop_14 * V_.__ode_cse_prop_52 - V_.__ode_cse_prop_2 * pow(P_.tau_syn_inh, 3) + V_.__ode_cse_prop_3 * V_.__ode_cse_prop_51) + V_.__ode_cse_prop_51 * V_.__ode_cse_prop_75 * V_.__ode_cse_prop_76; // as real
+    V_.__P__V_th_v__I_kernel_exc__X__exc_spikes = (-V_.__h) * V_.__ode_cse_prop_56 - V_.__h * V_.__ode_cse_prop_58 * V_.__ode_cse_prop_76 * V_.__ode_cse_prop_77 + V_.__h * V_.__ode_cse_prop_73 * V_.__ode_cse_prop_77 * P_.beta * P_.tau_m * P_.tau_syn_exc * V_.unit_psc + V_.__ode_cse_prop_10 * V_.__ode_cse_prop_58 * P_.beta * P_.tau_m * V_.unit_psc / (V_.__ode_cse_prop_10 * V_.__ode_cse_prop_25 - V_.__ode_cse_prop_10 * V_.__ode_cse_prop_26 - V_.__ode_cse_prop_14 * V_.__ode_cse_prop_57 + V_.__ode_cse_prop_14 * V_.__ode_cse_prop_59 - V_.__ode_cse_prop_24 * pow(P_.tau_syn_exc, 3) + V_.__ode_cse_prop_25 * V_.__ode_cse_prop_58) - V_.__ode_cse_prop_30 * V_.__ode_cse_prop_64; // as real
     V_.__P__refr_t__refr_t = 1; // as real
-    V_.__P__I_kernel_exc__X__exc_spikes__I_kernel_exc__X__exc_spikes = std::exp((-V_.__h) / P_.tau_syn_exc); // as real
-    V_.__P__I_kernel_inh__X__inh_spikes__I_kernel_inh__X__inh_spikes = std::exp((-V_.__h) / P_.tau_syn_inh); // as real
+    V_.__P__I_kernel_inh__X__inh_spikes__I_kernel_inh__X__inh_spikes = std::exp((-V_.__ode_cse_prop_1)); // as real
+    V_.__P__I_kernel_exc__X__exc_spikes__I_kernel_exc__X__exc_spikes = std::exp((-V_.__ode_cse_prop_23)); // as real
   }
 }
 void amat_neuron_nestml::pre_run_hook()
@@ -390,72 +567,23 @@ void amat_neuron_nestml::pre_run_hook()
 //   Update and spike handling functions
 // ---------------------------------------------------------------------------
 
-extern "C" inline int amat_neuron_nestml_dynamics_V_m_V_th_alpha_1_V_th_alpha_2_V_th_v_V_th_v_aux_refr_t(double __time, const double ode_state[], double f[], void* pnode)
-{
-  typedef amat_neuron_nestml::State_ State_;
-   // get access to node so we can almost work as in a member function
-  assert( pnode );
-  const amat_neuron_nestml& node = *( reinterpret_cast< amat_neuron_nestml* >( pnode ) );
-  constexpr int I_STIM = amat_neuron_nestml::I_STIM;
-  // ode_state[] here is---and must be---the state vector supplied by the integrator,
-  // not the state vector in the node, node.S_.ode_state[].
-
-
-  f[State_::V_th_alpha_1] = (-ode_state[State_::V_th_alpha_1]) / node.P_.tau_1;
-  f[State_::V_th_alpha_2] = (-ode_state[State_::V_th_alpha_2]) / node.P_.tau_2;
-  f[State_::V_m] = (node.P_.E_L - ode_state[State_::V_m]) / node.P_.tau_m + (node.P_.I_e + ode_state[State_::I_kernel_exc__X__exc_spikes] * node.V_.unit_psc - ode_state[State_::I_kernel_inh__X__inh_spikes] * node.V_.unit_psc + node.B_.continuous_inputs_grid_sum_[I_STIM]) / node.P_.C_m;
-  f[State_::V_th_v_aux] = (-ode_state[State_::V_th_v_aux]) / node.P_.tau_v + node.P_.beta * ((node.P_.E_L - ode_state[State_::V_m]) / node.P_.tau_m + (node.P_.I_e + ode_state[State_::I_kernel_exc__X__exc_spikes] * node.V_.unit_psc - ode_state[State_::I_kernel_inh__X__inh_spikes] * node.V_.unit_psc + node.B_.continuous_inputs_grid_sum_[I_STIM]) / node.P_.C_m);
-  f[State_::V_th_v] = (-ode_state[State_::V_th_v]) / node.P_.tau_v + ode_state[State_::V_th_v_aux];
-  f[State_::refr_t] = (-1.);
-  f[State_::I_kernel_exc__X__exc_spikes] = (-ode_state[State_::I_kernel_exc__X__exc_spikes]) / node.P_.tau_syn_exc;
-  f[State_::I_kernel_inh__X__inh_spikes] = (-ode_state[State_::I_kernel_inh__X__inh_spikes]) / node.P_.tau_syn_inh;
-  return GSL_SUCCESS;
-}
-
-extern "C" inline int amat_neuron_nestml_dynamics_V_m_V_th_alpha_1_V_th_alpha_2_V_th_v_V_th_v_aux(double __time, const double ode_state[], double f[], void* pnode)
-{
-  typedef amat_neuron_nestml::State_ State_;
-   // get access to node so we can almost work as in a member function
-  assert( pnode );
-  const amat_neuron_nestml& node = *( reinterpret_cast< amat_neuron_nestml* >( pnode ) );
-  constexpr int I_STIM = amat_neuron_nestml::I_STIM;
-  // ode_state[] here is---and must be---the state vector supplied by the integrator,
-  // not the state vector in the node, node.S_.ode_state[].
-
-
-  f[State_::V_th_alpha_1] = (-ode_state[State_::V_th_alpha_1]) / node.P_.tau_1;
-  f[State_::V_th_alpha_2] = (-ode_state[State_::V_th_alpha_2]) / node.P_.tau_2;
-  f[State_::V_m] = (node.P_.E_L - ode_state[State_::V_m]) / node.P_.tau_m + (node.P_.I_e + ode_state[State_::I_kernel_exc__X__exc_spikes] * node.V_.unit_psc - ode_state[State_::I_kernel_inh__X__inh_spikes] * node.V_.unit_psc + node.B_.continuous_inputs_grid_sum_[I_STIM]) / node.P_.C_m;
-  f[State_::V_th_v_aux] = (-ode_state[State_::V_th_v_aux]) / node.P_.tau_v + node.P_.beta * ((node.P_.E_L - ode_state[State_::V_m]) / node.P_.tau_m + (node.P_.I_e + ode_state[State_::I_kernel_exc__X__exc_spikes] * node.V_.unit_psc - ode_state[State_::I_kernel_inh__X__inh_spikes] * node.V_.unit_psc + node.B_.continuous_inputs_grid_sum_[I_STIM]) / node.P_.C_m);
-  f[State_::V_th_v] = (-ode_state[State_::V_th_v]) / node.P_.tau_v + ode_state[State_::V_th_v_aux];
-  f[State_::refr_t] = 0;
-  f[State_::I_kernel_exc__X__exc_spikes] = (-ode_state[State_::I_kernel_exc__X__exc_spikes]) / node.P_.tau_syn_exc;
-  f[State_::I_kernel_inh__X__inh_spikes] = (-ode_state[State_::I_kernel_inh__X__inh_spikes]) / node.P_.tau_syn_inh;
-  return GSL_SUCCESS;
-}
-
-
-
-
-// UPDATE FUNCTION. for each neuron in each timestep. 
 void amat_neuron_nestml::update(nest::Time const & origin, const long from, const long to)
 {
   const double __timestep = nest::Time::get_resolution().get_ms();  // do not remove, this is necessary for the timestep() function
 
-  for ( long lag = from ; lag < to ; ++lag ) // core function that updates each timestep for each neuron 
+  for ( long lag = from ; lag < to ; ++lag )
   {
 
-     // expression determines the NEST timestep, converting it into NEST object nest::time:step for ms    
+
     auto get_t = [origin, lag](){ return nest::Time( nest::Time::step( origin.get_steps() + lag + 1) ).get_ms(); };
 
-        // conditional debugger, if loggingtype=DEBUG, we can print the following std::cout
 #ifdef DEBUG
     std::cout << "[neuron " << this << "] amat_neuron_nestml::update: handling post spike at t = " << get_t() << std::endl;
 #endif
     /**
      * buffer spikes from spiking input ports
     **/
- 
+
     for (long i = 0; i < NUM_SPIKE_RECEPTORS; ++i)
     {
       get_spike_inputs_grid_sum_()[i] = get_spike_inputs_()[i].get_value(lag);
@@ -468,134 +596,48 @@ void amat_neuron_nestml::update(nest::Time const & origin, const long from, cons
      * step 1: regardless of whether and how integrate_odes() will be called, update variables due to convolutions
     **/
 
-    const double I_kernel_exc__X__exc_spikes__tmp_ = S_.ode_state[State_::I_kernel_exc__X__exc_spikes] * V_.__P__I_kernel_exc__X__exc_spikes__I_kernel_exc__X__exc_spikes;
-    const double I_kernel_inh__X__inh_spikes__tmp_ = S_.ode_state[State_::I_kernel_inh__X__inh_spikes] * V_.__P__I_kernel_inh__X__inh_spikes__I_kernel_inh__X__inh_spikes;
+    const double I_kernel_inh__X__inh_spikes__tmp_ = S_.I_kernel_inh__X__inh_spikes * V_.__P__I_kernel_inh__X__inh_spikes__I_kernel_inh__X__inh_spikes;
+    const double I_kernel_exc__X__exc_spikes__tmp_ = S_.I_kernel_exc__X__exc_spikes * V_.__P__I_kernel_exc__X__exc_spikes__I_kernel_exc__X__exc_spikes;
 
-    
+
     /**
-    === Patch 2 CSE
-    These are analytical values which are identical in both refractory and non-refractory 
-    branches. the if/else only chnages which system GSL integrates. 
+     * Begin NESTML generated code for the update block(s)
     **/
-    
-    const double V_th_alpha_1__tmp =
-        S_.ode_state[State_::V_th_alpha_1]
-        * V_.__P__V_th_alpha_1__V_th_alpha_1;
-    
-    const double V_th_alpha_2__tmp =
-        S_.ode_state[State_::V_th_alpha_2]
-        * V_.__P__V_th_alpha_2__V_th_alpha_2;
-    
-    const double V_m__tmp = 
-        V_.__P__V_m__E_L_offset
-        + S_.ode_state[State_::I_kernel_exc__X__exc_spikes]
-            * V_.__P__V_m__I_kernel_exc__X__exc_spikes
-        + S_.ode_state[State_::I_kernel_inh__X__inh_spikes]
-            * V_.__P__V_m__I_kernel_inh__X__inh_spikes
-        + S_.ode_state[State_::V_m]
-            * V_.__P__V_m__V_m
-        + (P_.I_e + B_.continuous_inputs_grid_sum_[I_STIM])
-            * V_.__P__V_m__I_input;
-    
-    // we can see the coefficients that were defined previously. 
-    // we can remove the alpha_1, alpha_2, v_m temp variables in the upduate function. 
-    
-      
 
-      
-/**
-the following if statements determine if the neuron is currently
-in a refractory period. if it is, we update all the state variables
-but exclude the t_ref. however if it's not we update all the state 
-variables and update t_ref as well. 
-**/
-
-  
-  if (S_.ode_state[State_::refr_t] > 0)  // if neuron is currently in REFRACTORY 
+  if (S_.refr_t > 0)
   {  
-
-      
-    const double refr_t__tmp = V_.__P__refr_t__refr_t * S_.ode_state[State_::refr_t] - 1. * V_.__h;
-
-      
-
-    double __t = 0;
-
-    B_.__sys.function = amat_neuron_nestml_dynamics_V_m_V_th_alpha_1_V_th_alpha_2_V_th_v_V_th_v_aux_refr_t;
-    // numerical integration with adaptive step size control:
-    // ------------------------------------------------------
-    // gsl_odeiv_evolve_apply performs only a single numerical
-    // integration step, starting from t and bounded by step;
-    // the while-loop ensures integration over the whole simulation
-    // step (0, step] if more than one integration step is needed due
-    // to a small integration step size;
-    // note that (t+IntegrationStep > step) leads to integration over
-    // (t, step] and afterwards setting t to step, but it does not
-    // enforce setting IntegrationStep to step-t; this is of advantage
-    // for a consistent and efficient integration across subsequent
-    // simulation intervals
-    while ( __t < B_.__step )
-    {
-
-      const int status = gsl_odeiv_evolve_apply(B_.__e,
-                                                B_.__c,
-                                                B_.__s,
-                                                &B_.__sys,              // system of ODE
-                                                &__t,                   // from t
-                                                B_.__step,              // to t <= step
-                                                &B_.__integration_step, // integration step size
-                                                S_.ode_state);          // neuronal state
-
-      if ( status != GSL_SUCCESS )
-      {
-        throw nest::GSLSolverFailure( get_name(), status );
-      }
-    }
-    // analytic solver: integrating state variables V_th_alpha_1, V_th_alpha_2, V_m, refr_t (second step: replace analytically solvable variables with precisely integrated values)
-    S_.ode_state[State_::V_th_alpha_1] = V_th_alpha_1__tmp;
-    S_.ode_state[State_::V_th_alpha_2] = V_th_alpha_2__tmp;
-    S_.ode_state[State_::V_m] = V_m__tmp;
-    S_.ode_state[State_::refr_t] = refr_t__tmp;
+    // start rendered code for integrate_odes(V_m, V_th_alpha_1, V_th_alpha_2, V_th_v, V_th_v_aux, refr_t)
+    // analytic solver: integrating state variables V_th_alpha_1, V_th_alpha_2, V_m, V_th_v_aux, V_th_v, refr_t (first step: compute new values)
+    const double V_th_alpha_1__tmp = S_.V_th_alpha_1 * V_.__P__V_th_alpha_1__V_th_alpha_1;
+    const double V_th_alpha_2__tmp = S_.V_th_alpha_2 * V_.__P__V_th_alpha_2__V_th_alpha_2;
+    const double V_m__tmp = (-P_.E_L) * V_.__P__V_m__V_m + P_.E_L + S_.I_kernel_exc__X__exc_spikes * V_.__P__V_m__I_kernel_exc__X__exc_spikes + S_.I_kernel_inh__X__inh_spikes * V_.__P__V_m__I_kernel_inh__X__inh_spikes + S_.V_m * V_.__P__V_m__V_m - V_.__P__V_m__V_m *  - V_.__P__V_m__V_m *  +  + ;
+    const double V_th_v_aux__tmp = S_.I_kernel_exc__X__exc_spikes * V_.__P__V_th_v_aux__I_kernel_exc__X__exc_spikes + S_.I_kernel_inh__X__inh_spikes * V_.__P__V_th_v_aux__I_kernel_inh__X__inh_spikes + S_.V_m * V_.__P__V_th_v_aux__V_m + S_.V_th_v_aux * V_.__P__V_th_v_aux__V_th_v_aux - V_.__P__V_th_v_aux__V_th_v_aux *  - V_.__P__V_th_v_aux__V_th_v_aux *  - V_.__P__V_th_v_aux__V_th_v_aux *  +  +  + ;
+    const double V_th_v__tmp = S_.I_kernel_exc__X__exc_spikes * V_.__P__V_th_v__I_kernel_exc__X__exc_spikes + S_.I_kernel_inh__X__inh_spikes * V_.__P__V_th_v__I_kernel_inh__X__inh_spikes + S_.V_m * V_.__P__V_th_v__V_m + S_.V_th_v * V_.__P__V_th_v__V_th_v + S_.V_th_v_aux * V_.__P__V_th_v__V_th_v_aux;
+    const double refr_t__tmp = V_.__P__refr_t__refr_t * S_.refr_t - 1. * V_.__h;
+    // analytic solver: integrating state variables V_th_alpha_1, V_th_alpha_2, V_m, V_th_v_aux, V_th_v, refr_t (second step: replace analytically solvable variables with precisely integrated values)
+    S_.V_th_alpha_1 = V_th_alpha_1__tmp;
+    S_.V_th_alpha_2 = V_th_alpha_2__tmp;
+    S_.V_m = V_m__tmp;
+    S_.V_th_v_aux = V_th_v_aux__tmp;
+    S_.V_th_v = V_th_v__tmp;
+    S_.refr_t = refr_t__tmp;
     // end rendered code for integrate_odes(V_m, V_th_alpha_1, V_th_alpha_2, V_th_v, V_th_v_aux, refr_t)
   }
-  else // else if the neuron is NOT REFRACTORY 
+  else
   {  
- 
-    double __t = 0;
-    B_.__sys.function = amat_neuron_nestml_dynamics_V_m_V_th_alpha_1_V_th_alpha_2_V_th_v_V_th_v_aux;
-    // numerical integration with adaptive step size control:
-    // ------------------------------------------------------
-    // gsl_odeiv_evolve_apply performs only a single numerical
-    // integration step, starting from t and bounded by step;
-    // the while-loop ensures integration over the whole simulation
-    // step (0, step] if more than one integration step is needed due
-    // to a small integration step size;
-    // note that (t+IntegrationStep > step) leads to integration over
-    // (t, step] and afterwards setting t to step, but it does not
-    // enforce setting IntegrationStep to step-t; this is of advantage
-    // for a consistent and efficient integration across subsequent
-    // simulation intervals
-    while ( __t < B_.__step )
-    {
-
-      const int status = gsl_odeiv_evolve_apply(B_.__e,
-                                                B_.__c,
-                                                B_.__s,
-                                                &B_.__sys,              // system of ODE
-                                                &__t,                   // from t
-                                                B_.__step,              // to t <= step
-                                                &B_.__integration_step, // integration step size
-                                                S_.ode_state);          // neuronal state
-
-      if ( status != GSL_SUCCESS )
-      {
-        throw nest::GSLSolverFailure( get_name(), status );
-      }
-    }
-    // analytic solver: integrating state variables V_th_alpha_1, V_th_alpha_2, V_m (second step: replace analytically solvable variables with precisely integrated values)
-    S_.ode_state[State_::V_th_alpha_1] = V_th_alpha_1__tmp;
-    S_.ode_state[State_::V_th_alpha_2] = V_th_alpha_2__tmp;
-    S_.ode_state[State_::V_m] = V_m__tmp;
+    // start rendered code for integrate_odes(V_m, V_th_alpha_1, V_th_alpha_2, V_th_v, V_th_v_aux)
+    // analytic solver: integrating state variables V_th_alpha_1, V_th_alpha_2, V_m, V_th_v_aux, V_th_v (first step: compute new values)
+    const double V_th_alpha_1__tmp = S_.V_th_alpha_1 * V_.__P__V_th_alpha_1__V_th_alpha_1;
+    const double V_th_alpha_2__tmp = S_.V_th_alpha_2 * V_.__P__V_th_alpha_2__V_th_alpha_2;
+    const double V_m__tmp = (-P_.E_L) * V_.__P__V_m__V_m + P_.E_L + S_.I_kernel_exc__X__exc_spikes * V_.__P__V_m__I_kernel_exc__X__exc_spikes + S_.I_kernel_inh__X__inh_spikes * V_.__P__V_m__I_kernel_inh__X__inh_spikes + S_.V_m * V_.__P__V_m__V_m - V_.__P__V_m__V_m *  - V_.__P__V_m__V_m *  +  + ;
+    const double V_th_v_aux__tmp = S_.I_kernel_exc__X__exc_spikes * V_.__P__V_th_v_aux__I_kernel_exc__X__exc_spikes + S_.I_kernel_inh__X__inh_spikes * V_.__P__V_th_v_aux__I_kernel_inh__X__inh_spikes + S_.V_m * V_.__P__V_th_v_aux__V_m + S_.V_th_v_aux * V_.__P__V_th_v_aux__V_th_v_aux - V_.__P__V_th_v_aux__V_th_v_aux *  - V_.__P__V_th_v_aux__V_th_v_aux *  - V_.__P__V_th_v_aux__V_th_v_aux *  +  +  + ;
+    const double V_th_v__tmp = S_.I_kernel_exc__X__exc_spikes * V_.__P__V_th_v__I_kernel_exc__X__exc_spikes + S_.I_kernel_inh__X__inh_spikes * V_.__P__V_th_v__I_kernel_inh__X__inh_spikes + S_.V_m * V_.__P__V_th_v__V_m + S_.V_th_v * V_.__P__V_th_v__V_th_v + S_.V_th_v_aux * V_.__P__V_th_v__V_th_v_aux;
+    // analytic solver: integrating state variables V_th_alpha_1, V_th_alpha_2, V_m, V_th_v_aux, V_th_v (second step: replace analytically solvable variables with precisely integrated values)
+    S_.V_th_alpha_1 = V_th_alpha_1__tmp;
+    S_.V_th_alpha_2 = V_th_alpha_2__tmp;
+    S_.V_m = V_m__tmp;
+    S_.V_th_v_aux = V_th_v_aux__tmp;
+    S_.V_th_v = V_th_v__tmp;
     // end rendered code for integrate_odes(V_m, V_th_alpha_1, V_th_alpha_2, V_th_v, V_th_v_aux)
   }
 
@@ -610,8 +652,8 @@ variables and update t_ref as well.
      * step 2: regardless of whether and how integrate_odes() was called, update variables due to convolutions. Set to the updated values at the end of the timestep.
     **/
 
-    S_.ode_state[State_::I_kernel_exc__X__exc_spikes] = I_kernel_exc__X__exc_spikes__tmp_;
-    S_.ode_state[State_::I_kernel_inh__X__inh_spikes] = I_kernel_inh__X__inh_spikes__tmp_;
+    S_.I_kernel_inh__X__inh_spikes = I_kernel_inh__X__inh_spikes__tmp_;
+    S_.I_kernel_exc__X__exc_spikes = I_kernel_exc__X__exc_spikes__tmp_;
 
 
 
@@ -619,18 +661,18 @@ variables and update t_ref as well.
      * spike updates due to convolutions
     **/
 
-    S_.ode_state[State_::I_kernel_exc__X__exc_spikes] += ((0.001 * B_.spike_inputs_grid_sum_[EXC_SPIKES - MIN_SPIKE_RECEPTOR])) / (1 / 1000.0);
-    S_.ode_state[State_::I_kernel_inh__X__inh_spikes] += ((0.001 * B_.spike_inputs_grid_sum_[INH_SPIKES - MIN_SPIKE_RECEPTOR])) / (1 / 1000.0);
+    S_.I_kernel_inh__X__inh_spikes += ((0.001 * B_.spike_inputs_grid_sum_[INH_SPIKES - MIN_SPIKE_RECEPTOR])) / (1 / 1000.0);
+    S_.I_kernel_exc__X__exc_spikes += ((0.001 * B_.spike_inputs_grid_sum_[EXC_SPIKES - MIN_SPIKE_RECEPTOR])) / (1 / 1000.0);
 
     /**
      * Begin NESTML generated code for the onCondition block(s)
     **/
 
-    if (S_.ode_state[State_::refr_t] <= 0 && S_.ode_state[State_::V_m] >= get_V_th())
+    if (S_.refr_t <= 0 && S_.V_m >= get_V_th())
     {
-      S_.ode_state[State_::refr_t] = P_.refr_T;
-      S_.ode_state[State_::V_th_alpha_1] += P_.alpha_1;
-      S_.ode_state[State_::V_th_alpha_2] += P_.alpha_2;
+      S_.refr_t = P_.refr_T;
+      S_.V_th_alpha_1 += P_.alpha_1;
+      S_.V_th_alpha_2 += P_.alpha_2;
 
       // begin generated code for emit_spike() function
 
