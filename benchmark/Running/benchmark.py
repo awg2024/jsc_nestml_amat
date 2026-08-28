@@ -691,7 +691,7 @@ def read_isis_from_files(neuron_models):
 
         if args.enable_mpi:
             threads = NUMTHREADS # original value was hard coding 128
-            nodes = int(MPI_SCALES[0])  # original value was hard coding 2
+            nodes = 2
         else:
             threads = N_THREADS[0]
             nodes = 1
@@ -715,6 +715,7 @@ def read_isis_from_files(neuron_models):
                     if iteration >= len(data[neuron_model]["isis"]):
                         data[neuron_model]["isis"].append([])
 
+                    # error here iteration has not been initialised
                     data[neuron_model]["isis"][iteration].extend(isis)
 
                 rank += 1

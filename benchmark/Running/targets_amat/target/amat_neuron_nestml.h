@@ -19,7 +19,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with NEST.  If not, see <http://www.gnu.org/licenses/>.
  *
- *  Generated from NESTML 8.3.0-rc3-post-dev at time: 2026-08-19 09:48:26.794164
+ *  Generated from NESTML 8.3.0-rc3-post-dev at time: 2026-08-28 06:55:01.412118
 **/
 #ifndef AMAT_NEURON_NESTML
 #define AMAT_NEURON_NESTML
@@ -32,15 +32,6 @@
 #include <cmath>
 
 #include "config.h"
-
-#ifndef HAVE_GSL
-#error "The GSL library is required for the Runge-Kutta solver."
-#endif
-
-// External includes:
-#include <gsl/gsl_errno.h>
-#include <gsl/gsl_matrix.h>
-#include <gsl/gsl_odeiv.h>
 
 // Includes from nestkernel:
 #include "structural_plasticity_node.h"
@@ -97,6 +88,15 @@ namespace amat_neuron_nestml_names
     const Name ___P__V_m__V_m( "__P__V_m__V_m" );
     const Name ___P__V_m__I_kernel_exc__X__exc_spikes( "__P__V_m__I_kernel_exc__X__exc_spikes" );
     const Name ___P__V_m__I_kernel_inh__X__inh_spikes( "__P__V_m__I_kernel_inh__X__inh_spikes" );
+    const Name ___P__V_th_v_aux__V_m( "__P__V_th_v_aux__V_m" );
+    const Name ___P__V_th_v_aux__V_th_v_aux( "__P__V_th_v_aux__V_th_v_aux" );
+    const Name ___P__V_th_v_aux__I_kernel_exc__X__exc_spikes( "__P__V_th_v_aux__I_kernel_exc__X__exc_spikes" );
+    const Name ___P__V_th_v_aux__I_kernel_inh__X__inh_spikes( "__P__V_th_v_aux__I_kernel_inh__X__inh_spikes" );
+    const Name ___P__V_th_v__V_m( "__P__V_th_v__V_m" );
+    const Name ___P__V_th_v__V_th_v_aux( "__P__V_th_v__V_th_v_aux" );
+    const Name ___P__V_th_v__V_th_v( "__P__V_th_v__V_th_v" );
+    const Name ___P__V_th_v__I_kernel_exc__X__exc_spikes( "__P__V_th_v__I_kernel_exc__X__exc_spikes" );
+    const Name ___P__V_th_v__I_kernel_inh__X__inh_spikes( "__P__V_th_v__I_kernel_inh__X__inh_spikes" );
     const Name ___P__refr_t__refr_t( "__P__refr_t__refr_t" );
     const Name ___P__I_kernel_exc__X__exc_spikes__I_kernel_exc__X__exc_spikes( "__P__I_kernel_exc__X__exc_spikes__I_kernel_exc__X__exc_spikes" );
     const Name ___P__I_kernel_inh__X__inh_spikes__I_kernel_inh__X__inh_spikes( "__P__I_kernel_inh__X__inh_spikes__I_kernel_inh__X__inh_spikes" );
@@ -108,45 +108,6 @@ namespace amat_neuron_nestml_names
 
 
 
-/**
- * Function computing right-hand side of ODE for GSL solver.
- * @note Must be declared here so we can befriend it in class.
- * @note Must have C-linkage for passing to GSL. Internally, it is
- *       a first-class C++ function, but cannot be a member function
- *       because of the C-linkage.
- * @note No point in declaring it inline, since it is called
- *       through a function pointer.
- * @param void* Pointer to model neuron instance.
- *
- * Integrate the variables: V_m_V_th_alpha_1_V_th_alpha_2_V_th_v_V_th_v_aux_refr_t
-**/
-extern "C" inline int amat_neuron_nestml_dynamics_V_m_V_th_alpha_1_V_th_alpha_2_V_th_v_V_th_v_aux_refr_t( double, const double ode_state[], double f[], void* pnode );
-/**
- * Function computing right-hand side of ODE for GSL solver.
- * @note Must be declared here so we can befriend it in class.
- * @note Must have C-linkage for passing to GSL. Internally, it is
- *       a first-class C++ function, but cannot be a member function
- *       because of the C-linkage.
- * @note No point in declaring it inline, since it is called
- *       through a function pointer.
- * @param void* Pointer to model neuron instance.
- *
- * Integrate the variables: V_m_V_th_alpha_1_V_th_alpha_2_V_th_v_V_th_v_aux
-**/
-extern "C" inline int amat_neuron_nestml_dynamics_V_m_V_th_alpha_1_V_th_alpha_2_V_th_v_V_th_v_aux( double, const double ode_state[], double f[], void* pnode );
-/**
- * Function computing right-hand side of ODE for GSL solver.
- * @note Must be declared here so we can befriend it in class.
- * @note Must have C-linkage for passing to GSL. Internally, it is
- *       a first-class C++ function, but cannot be a member function
- *       because of the C-linkage.
- * @note No point in declaring it inline, since it is called
- *       through a function pointer.
- * @param void* Pointer to model neuron instance.
- *
- * Integrate the variables: 
-**/
-extern "C" inline int amat_neuron_nestml_dynamics( double, const double ode_state[], double f[], void* pnode );
 
 #include "nest_time.h"
 
@@ -390,66 +351,66 @@ public:
 
   inline double get_V_th_alpha_1() const
   {
-    return S_.ode_state[State_::V_th_alpha_1];
+    return S_.V_th_alpha_1;
   }inline void set_V_th_alpha_1(const double __v)
   {
-    S_.ode_state[State_::V_th_alpha_1] = __v;
+    S_.V_th_alpha_1 = __v;
   }
 
   inline double get_V_th_alpha_2() const
   {
-    return S_.ode_state[State_::V_th_alpha_2];
+    return S_.V_th_alpha_2;
   }inline void set_V_th_alpha_2(const double __v)
   {
-    S_.ode_state[State_::V_th_alpha_2] = __v;
+    S_.V_th_alpha_2 = __v;
   }
 
   inline double get_V_th_v() const
   {
-    return S_.ode_state[State_::V_th_v];
+    return S_.V_th_v;
   }inline void set_V_th_v(const double __v)
   {
-    S_.ode_state[State_::V_th_v] = __v;
+    S_.V_th_v = __v;
   }
 
   inline double get_V_th_v_aux() const
   {
-    return S_.ode_state[State_::V_th_v_aux];
+    return S_.V_th_v_aux;
   }inline void set_V_th_v_aux(const double __v)
   {
-    S_.ode_state[State_::V_th_v_aux] = __v;
+    S_.V_th_v_aux = __v;
   }
 
   inline double get_V_m() const
   {
-    return S_.ode_state[State_::V_m];
+    return S_.V_m;
   }inline void set_V_m(const double __v)
   {
-    S_.ode_state[State_::V_m] = __v;
+    S_.V_m = __v;
   }
 
   inline double get_refr_t() const
   {
-    return S_.ode_state[State_::refr_t];
+    return S_.refr_t;
   }inline void set_refr_t(const double __v)
   {
-    S_.ode_state[State_::refr_t] = __v;
+    S_.refr_t = __v;
   }
 
   inline double get_I_kernel_exc__X__exc_spikes() const
   {
-    return S_.ode_state[State_::I_kernel_exc__X__exc_spikes];
+    return S_.I_kernel_exc__X__exc_spikes;
   }inline void set_I_kernel_exc__X__exc_spikes(const double __v)
   {
-    S_.ode_state[State_::I_kernel_exc__X__exc_spikes] = __v;
+    S_.I_kernel_exc__X__exc_spikes = __v;
   }
 
   inline double get_I_kernel_inh__X__inh_spikes() const
   {
-    return S_.ode_state[State_::I_kernel_inh__X__inh_spikes];
+    return S_.I_kernel_inh__X__inh_spikes;
   }inline void set_I_kernel_inh__X__inh_spikes(const double __v)
   {
-    S_.ode_state[State_::I_kernel_inh__X__inh_spikes] = __v;
+    S_.I_kernel_inh__X__inh_spikes = __v;
   }
 
 
@@ -623,6 +584,69 @@ public:
   {
     V_.__P__V_m__I_kernel_inh__X__inh_spikes = __v;
   }
+  inline double get___P__V_th_v_aux__V_m() const
+  {
+    return V_.__P__V_th_v_aux__V_m;
+  }inline void set___P__V_th_v_aux__V_m(const double __v)
+  {
+    V_.__P__V_th_v_aux__V_m = __v;
+  }
+  inline double get___P__V_th_v_aux__V_th_v_aux() const
+  {
+    return V_.__P__V_th_v_aux__V_th_v_aux;
+  }inline void set___P__V_th_v_aux__V_th_v_aux(const double __v)
+  {
+    V_.__P__V_th_v_aux__V_th_v_aux = __v;
+  }
+  inline double get___P__V_th_v_aux__I_kernel_exc__X__exc_spikes() const
+  {
+    return V_.__P__V_th_v_aux__I_kernel_exc__X__exc_spikes;
+  }inline void set___P__V_th_v_aux__I_kernel_exc__X__exc_spikes(const double __v)
+  {
+    V_.__P__V_th_v_aux__I_kernel_exc__X__exc_spikes = __v;
+  }
+  inline double get___P__V_th_v_aux__I_kernel_inh__X__inh_spikes() const
+  {
+    return V_.__P__V_th_v_aux__I_kernel_inh__X__inh_spikes;
+  }inline void set___P__V_th_v_aux__I_kernel_inh__X__inh_spikes(const double __v)
+  {
+    V_.__P__V_th_v_aux__I_kernel_inh__X__inh_spikes = __v;
+  }
+  inline double get___P__V_th_v__V_m() const
+  {
+    return V_.__P__V_th_v__V_m;
+  }inline void set___P__V_th_v__V_m(const double __v)
+  {
+    V_.__P__V_th_v__V_m = __v;
+  }
+  inline double get___P__V_th_v__V_th_v_aux() const
+  {
+    return V_.__P__V_th_v__V_th_v_aux;
+  }inline void set___P__V_th_v__V_th_v_aux(const double __v)
+  {
+    V_.__P__V_th_v__V_th_v_aux = __v;
+  }
+  inline double get___P__V_th_v__V_th_v() const
+  {
+    return V_.__P__V_th_v__V_th_v;
+  }inline void set___P__V_th_v__V_th_v(const double __v)
+  {
+    V_.__P__V_th_v__V_th_v = __v;
+  }
+  inline double get___P__V_th_v__I_kernel_exc__X__exc_spikes() const
+  {
+    return V_.__P__V_th_v__I_kernel_exc__X__exc_spikes;
+  }inline void set___P__V_th_v__I_kernel_exc__X__exc_spikes(const double __v)
+  {
+    V_.__P__V_th_v__I_kernel_exc__X__exc_spikes = __v;
+  }
+  inline double get___P__V_th_v__I_kernel_inh__X__inh_spikes() const
+  {
+    return V_.__P__V_th_v__I_kernel_inh__X__inh_spikes;
+  }inline void set___P__V_th_v__I_kernel_inh__X__inh_spikes(const double __v)
+  {
+    V_.__P__V_th_v__I_kernel_inh__X__inh_spikes = __v;
+  }
   inline double get___P__refr_t__refr_t() const
   {
     return V_.__P__refr_t__refr_t;
@@ -762,9 +786,6 @@ static std::vector< std::tuple< int, int > > rport_to_nestml_buffer_idx;
     //!  constant external input current
     double I_e;
 
-    double __gsl_abs_error_tol;
-    double __gsl_rel_error_tol;
-
     /**
      * Initialize parameters to their default values.
     **/
@@ -792,26 +813,26 @@ static std::vector< std::tuple< int, int > > rport_to_nestml_buffer_idx;
    *         assignment operator to copy those members.
   **/
   struct State_
-  {
-
-    // non-ODE state variables
-    //! Symbolic indices to the elements of the state vector y
-    enum StateVecElems
-    {
-      V_th_alpha_1,
-      V_th_alpha_2,
-      V_m,
-      V_th_v_aux,
-      V_th_v,
-      refr_t,
-      I_kernel_exc__X__exc_spikes,
-      I_kernel_inh__X__inh_spikes,
-      // final entry to easily get the vector size
-      STATE_VEC_SIZE
-    };
-
-    //! state vector, must be C-array for GSL solver
-    double ode_state[STATE_VEC_SIZE];
+  {    
+    //! spike-history threshold (oringal MAT neuronal model)
+    //!  theta_1(t): short-timescale spike-history threshold
+    double V_th_alpha_1;
+    //!  theta_2(t): long-timescale spike-history threshold
+    double V_th_alpha_2;
+    //! voltage-dependent threshold (AMAT extension)
+    //!  theta_V(t): voltage-dependent threshold term
+    double V_th_v;
+    //!  Auxiliary variable w = dtheta_V/dt + theta_V/tau_V,
+    double V_th_v_aux;
+    //! needed to express the alpha-kernel convolution as two
+    //! coupled first-order ODEs instead of one 2nd-order ODE. 
+    //! membrane potential and refractory timer 
+    //!  Absolute membrane potential; never reset on spike
+    double V_m;
+    //!  Refractory period timer; counts down to 0 after a spike
+    double refr_t;
+    double I_kernel_exc__X__exc_spikes;
+    double I_kernel_inh__X__inh_spikes;
 
     State_();
   };
@@ -841,6 +862,15 @@ static std::vector< std::tuple< int, int > > rport_to_nestml_buffer_idx;
     double __P__V_m__V_m;
     double __P__V_m__I_kernel_exc__X__exc_spikes;
     double __P__V_m__I_kernel_inh__X__inh_spikes;
+    double __P__V_th_v_aux__V_m;
+    double __P__V_th_v_aux__V_th_v_aux;
+    double __P__V_th_v_aux__I_kernel_exc__X__exc_spikes;
+    double __P__V_th_v_aux__I_kernel_inh__X__inh_spikes;
+    double __P__V_th_v__V_m;
+    double __P__V_th_v__V_th_v_aux;
+    double __P__V_th_v__V_th_v;
+    double __P__V_th_v__I_kernel_exc__X__exc_spikes;
+    double __P__V_th_v__I_kernel_inh__X__inh_spikes;
     double __P__refr_t__refr_t;
     double __P__I_kernel_exc__X__exc_spikes__I_kernel_exc__X__exc_spikes;
     double __P__I_kernel_inh__X__inh_spikes__I_kernel_inh__X__inh_spikes;
@@ -934,22 +964,6 @@ static std::vector< std::tuple< int, int > > rport_to_nestml_buffer_idx;
         return continuous_inputs_grid_sum_;
     }
     std::vector< double > continuous_inputs_grid_sum_;
-
-    // -----------------------------------------------------------------------
-    //   GSL ODE solver data structures
-    // -----------------------------------------------------------------------
-
-    gsl_odeiv_step* __s;    //!< stepping function
-    gsl_odeiv_control* __c; //!< adaptive stepsize control function
-    gsl_odeiv_evolve* __e;  //!< evolution function
-    gsl_odeiv_system __sys; //!< struct describing system
-
-    // __integration_step should be reset with the neuron on ResetNetwork,
-    // but remain unchanged during calibration. Since it is initialized with
-    // step_, and the resolution cannot change after nodes have been created,
-    // it is safe to place both here.
-    double __step;             //!< step size in ms
-    double __integration_step; //!< current integration time step, updated by GSL
   };
 
   // -------------------------------------------------------------------------
@@ -958,47 +972,32 @@ static std::vector< std::tuple< int, int > > rport_to_nestml_buffer_idx;
 public:
   inline double get_I_syn_ex() const
   {
-    return (V_.unit_psc * S_.ode_state[State_::I_kernel_exc__X__exc_spikes]);
+    return (V_.unit_psc * S_.I_kernel_exc__X__exc_spikes);
   }
 
   inline double get_I_syn_in() const
   {
-    return ((-V_.unit_psc) * S_.ode_state[State_::I_kernel_inh__X__inh_spikes]);
+    return ((-V_.unit_psc) * S_.I_kernel_inh__X__inh_spikes);
   }
 
   inline double get_I_syn() const
   {
-    return ((V_.unit_psc * S_.ode_state[State_::I_kernel_exc__X__exc_spikes])) + (((-V_.unit_psc) * S_.ode_state[State_::I_kernel_inh__X__inh_spikes]));
+    return ((V_.unit_psc * S_.I_kernel_exc__X__exc_spikes)) + (((-V_.unit_psc) * S_.I_kernel_inh__X__inh_spikes));
   }
 
   inline double get_dV_dt() const
   {
-    return (-(S_.ode_state[State_::V_m] - P_.E_L)) / P_.tau_m + ((((V_.unit_psc * S_.ode_state[State_::I_kernel_exc__X__exc_spikes])) + (((-V_.unit_psc) * S_.ode_state[State_::I_kernel_inh__X__inh_spikes]))) + P_.I_e + B_.continuous_inputs_grid_sum_[I_STIM]) / P_.C_m;
+    return (-(S_.V_m - P_.E_L)) / P_.tau_m + ((((V_.unit_psc * S_.I_kernel_exc__X__exc_spikes)) + (((-V_.unit_psc) * S_.I_kernel_inh__X__inh_spikes))) + P_.I_e + B_.continuous_inputs_grid_sum_[I_STIM]) / P_.C_m;
   }
 
   inline double get_V_th() const
   {
-    return (P_.omega + S_.ode_state[State_::V_th_alpha_1] + S_.ode_state[State_::V_th_alpha_2] + S_.ode_state[State_::V_th_v]);
+    return (P_.omega + S_.V_th_alpha_1 + S_.V_th_alpha_2 + S_.V_th_v);
   }
 
 
 
-  // -------------------------------------------------------------------------
-  //   Setters for inline expressions (this is allowed for expressions containing a convolve() call)
-  // -------------------------------------------------------------------------
 private:
-  
-
-
-
-
-
-
-
-
-
-
-
   // -------------------------------------------------------------------------
   //   Getters/setters for input buffers
   // -------------------------------------------------------------------------  
@@ -1067,7 +1066,6 @@ private:
   //   ``Device`` child class they belong to.
   // -------------------------------------------------------------------------
 
-
   Parameters_       P_;        //!< Free parameters.
   State_            S_;        //!< Dynamic state.
   DelayedVariables_ DV_;       //!< Delayed state variables.
@@ -1076,9 +1074,6 @@ private:
 
   //! Mapping of recordables names to access functions
   static nest::RecordablesMap<amat_neuron_nestml> recordablesMap_;
-  friend int amat_neuron_nestml_dynamics_V_m_V_th_alpha_1_V_th_alpha_2_V_th_v_V_th_v_aux_refr_t( double, const double ode_state[], double f[], void* pnode );
-  friend int amat_neuron_nestml_dynamics_V_m_V_th_alpha_1_V_th_alpha_2_V_th_v_V_th_v_aux( double, const double ode_state[], double f[], void* pnode );
-  friend int amat_neuron_nestml_dynamics( double, const double ode_state[], double f[], void* pnode );
 
 }; /* neuron amat_neuron_nestml */
 
@@ -1181,6 +1176,24 @@ inline void amat_neuron_nestml::get_status(DictionaryDatum&__d) const
 
   def< double >(__d, nest::amat_neuron_nestml_names::___P__V_m__I_kernel_inh__X__inh_spikes, get___P__V_m__I_kernel_inh__X__inh_spikes());
 
+  def< double >(__d, nest::amat_neuron_nestml_names::___P__V_th_v_aux__V_m, get___P__V_th_v_aux__V_m());
+
+  def< double >(__d, nest::amat_neuron_nestml_names::___P__V_th_v_aux__V_th_v_aux, get___P__V_th_v_aux__V_th_v_aux());
+
+  def< double >(__d, nest::amat_neuron_nestml_names::___P__V_th_v_aux__I_kernel_exc__X__exc_spikes, get___P__V_th_v_aux__I_kernel_exc__X__exc_spikes());
+
+  def< double >(__d, nest::amat_neuron_nestml_names::___P__V_th_v_aux__I_kernel_inh__X__inh_spikes, get___P__V_th_v_aux__I_kernel_inh__X__inh_spikes());
+
+  def< double >(__d, nest::amat_neuron_nestml_names::___P__V_th_v__V_m, get___P__V_th_v__V_m());
+
+  def< double >(__d, nest::amat_neuron_nestml_names::___P__V_th_v__V_th_v_aux, get___P__V_th_v__V_th_v_aux());
+
+  def< double >(__d, nest::amat_neuron_nestml_names::___P__V_th_v__V_th_v, get___P__V_th_v__V_th_v());
+
+  def< double >(__d, nest::amat_neuron_nestml_names::___P__V_th_v__I_kernel_exc__X__exc_spikes, get___P__V_th_v__I_kernel_exc__X__exc_spikes());
+
+  def< double >(__d, nest::amat_neuron_nestml_names::___P__V_th_v__I_kernel_inh__X__inh_spikes, get___P__V_th_v__I_kernel_inh__X__inh_spikes());
+
   def< double >(__d, nest::amat_neuron_nestml_names::___P__refr_t__refr_t, get___P__refr_t__refr_t());
 
   def< double >(__d, nest::amat_neuron_nestml_names::___P__I_kernel_exc__X__exc_spikes__I_kernel_exc__X__exc_spikes, get___P__I_kernel_exc__X__exc_spikes__I_kernel_exc__X__exc_spikes());
@@ -1209,16 +1222,6 @@ inline void amat_neuron_nestml::get_status(DictionaryDatum&__d) const
 
   
 def< ArrayDatum >(__d, nest::names::recordables, recordablesMap_.get_list());
-  
-def< double >(__d, nest::amat_neuron_nestml_names::gsl_abs_error_tol, P_.__gsl_abs_error_tol);
-  if ( P_.__gsl_abs_error_tol <= 0. ){
-    throw nest::BadProperty( "The gsl_abs_error_tol must be strictly positive." );
-  }
-  
-def< double >(__d, nest::amat_neuron_nestml_names::gsl_rel_error_tol, P_.__gsl_rel_error_tol);
-  if ( P_.__gsl_rel_error_tol < 0. ){
-    throw nest::BadProperty( "The gsl_rel_error_tol must be zero or positive." );
-  }
 }
 
 inline void amat_neuron_nestml::set_status(const DictionaryDatum&__d)
@@ -1304,16 +1307,6 @@ inline void amat_neuron_nestml::set_status(const DictionaryDatum&__d)
 
 
 
-  updateValue<double>(__d, nest::amat_neuron_nestml_names::gsl_abs_error_tol, P_.__gsl_abs_error_tol);
-  if ( P_.__gsl_abs_error_tol <= 0. )
-  {
-    throw nest::BadProperty( "The gsl_abs_error_tol must be strictly positive." );
-  }
-  updateValue<double>(__d, nest::amat_neuron_nestml_names::gsl_rel_error_tol, P_.__gsl_rel_error_tol);
-  if ( P_.__gsl_rel_error_tol < 0. )
-  {
-    throw nest::BadProperty( "The gsl_rel_error_tol must be zero or positive." );
-  }
 
   // recompute internal variables in case they are dependent on parameters or state that might have been updated in this call to set_status()
   recompute_internal_variables();

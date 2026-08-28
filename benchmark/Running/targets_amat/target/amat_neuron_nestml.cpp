@@ -19,7 +19,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with NEST.  If not, see <http://www.gnu.org/licenses/>.
  *
- *  Generated from NESTML 8.3.0-rc3-post-dev at time: 2026-08-19 09:48:26.794164
+ *  Generated from NESTML 8.3.0-rc3-post-dev at time: 2026-08-28 06:55:01.412118
 **/
 
 // C++ includes:
@@ -104,7 +104,6 @@ amat_neuron_nestml::Buffers_::Buffers_(amat_neuron_nestml &n):
   , spike_input_received_grid_sum_( std::vector< double >( NUM_SPIKE_RECEPTORS ) )
   , continuous_inputs_( std::vector< nest::RingBuffer >( NUM_CONTINUOUS_INPUT_PORTS ) )
   , continuous_inputs_grid_sum_( std::vector< double >( NUM_CONTINUOUS_INPUT_PORTS ) )
-  , __s( nullptr ), __c( nullptr ), __e( nullptr )
 {
   // Initialization of the remaining members is deferred to init_buffers_().
 }
@@ -117,7 +116,6 @@ amat_neuron_nestml::Buffers_::Buffers_(const Buffers_ &, amat_neuron_nestml &n):
   , spike_input_received_grid_sum_( std::vector< double >( NUM_SPIKE_RECEPTORS ) )
   , continuous_inputs_( std::vector< nest::RingBuffer >( NUM_CONTINUOUS_INPUT_PORTS ) )
   , continuous_inputs_grid_sum_( std::vector< double >( NUM_CONTINUOUS_INPUT_PORTS ) )
-  , __s( nullptr ), __c( nullptr ), __e( nullptr )
 {
   // Initialization of the remaining members is deferred to init_buffers_().
 }
@@ -157,14 +155,14 @@ amat_neuron_nestml::amat_neuron_nestml(const amat_neuron_nestml& __n):
   P_.I_e = __n.P_.I_e;
 
   // copy state struct S_
-  S_.ode_state[State_::V_th_alpha_1] = __n.S_.ode_state[State_::V_th_alpha_1];
-  S_.ode_state[State_::V_th_alpha_2] = __n.S_.ode_state[State_::V_th_alpha_2];
-  S_.ode_state[State_::V_th_v] = __n.S_.ode_state[State_::V_th_v];
-  S_.ode_state[State_::V_th_v_aux] = __n.S_.ode_state[State_::V_th_v_aux];
-  S_.ode_state[State_::V_m] = __n.S_.ode_state[State_::V_m];
-  S_.ode_state[State_::refr_t] = __n.S_.ode_state[State_::refr_t];
-  S_.ode_state[State_::I_kernel_exc__X__exc_spikes] = __n.S_.ode_state[State_::I_kernel_exc__X__exc_spikes];
-  S_.ode_state[State_::I_kernel_inh__X__inh_spikes] = __n.S_.ode_state[State_::I_kernel_inh__X__inh_spikes];
+  S_.V_th_alpha_1 = __n.S_.V_th_alpha_1;
+  S_.V_th_alpha_2 = __n.S_.V_th_alpha_2;
+  S_.V_th_v = __n.S_.V_th_v;
+  S_.V_th_v_aux = __n.S_.V_th_v_aux;
+  S_.V_m = __n.S_.V_m;
+  S_.refr_t = __n.S_.refr_t;
+  S_.I_kernel_exc__X__exc_spikes = __n.S_.I_kernel_exc__X__exc_spikes;
+  S_.I_kernel_inh__X__inh_spikes = __n.S_.I_kernel_inh__X__inh_spikes;
 
   // copy internals V_
   V_.unit_psc = __n.V_.unit_psc;
@@ -174,6 +172,15 @@ amat_neuron_nestml::amat_neuron_nestml(const amat_neuron_nestml& __n):
   V_.__P__V_m__V_m = __n.V_.__P__V_m__V_m;
   V_.__P__V_m__I_kernel_exc__X__exc_spikes = __n.V_.__P__V_m__I_kernel_exc__X__exc_spikes;
   V_.__P__V_m__I_kernel_inh__X__inh_spikes = __n.V_.__P__V_m__I_kernel_inh__X__inh_spikes;
+  V_.__P__V_th_v_aux__V_m = __n.V_.__P__V_th_v_aux__V_m;
+  V_.__P__V_th_v_aux__V_th_v_aux = __n.V_.__P__V_th_v_aux__V_th_v_aux;
+  V_.__P__V_th_v_aux__I_kernel_exc__X__exc_spikes = __n.V_.__P__V_th_v_aux__I_kernel_exc__X__exc_spikes;
+  V_.__P__V_th_v_aux__I_kernel_inh__X__inh_spikes = __n.V_.__P__V_th_v_aux__I_kernel_inh__X__inh_spikes;
+  V_.__P__V_th_v__V_m = __n.V_.__P__V_th_v__V_m;
+  V_.__P__V_th_v__V_th_v_aux = __n.V_.__P__V_th_v__V_th_v_aux;
+  V_.__P__V_th_v__V_th_v = __n.V_.__P__V_th_v__V_th_v;
+  V_.__P__V_th_v__I_kernel_exc__X__exc_spikes = __n.V_.__P__V_th_v__I_kernel_exc__X__exc_spikes;
+  V_.__P__V_th_v__I_kernel_inh__X__inh_spikes = __n.V_.__P__V_th_v__I_kernel_inh__X__inh_spikes;
   V_.__P__refr_t__refr_t = __n.V_.__P__refr_t__refr_t;
   V_.__P__I_kernel_exc__X__exc_spikes__I_kernel_exc__X__exc_spikes = __n.V_.__P__I_kernel_exc__X__exc_spikes__I_kernel_exc__X__exc_spikes;
   V_.__P__I_kernel_inh__X__inh_spikes__I_kernel_inh__X__inh_spikes = __n.V_.__P__I_kernel_inh__X__inh_spikes__I_kernel_inh__X__inh_spikes;
@@ -185,22 +192,6 @@ amat_neuron_nestml::amat_neuron_nestml(const amat_neuron_nestml& __n):
 
 amat_neuron_nestml::~amat_neuron_nestml()
 {
-  // GSL structs may not have been allocated, so we need to protect destruction
-
-  if (B_.__s)
-  {
-    gsl_odeiv_step_free( B_.__s );
-  }
-
-  if (B_.__c)
-  {
-    gsl_odeiv_control_free( B_.__c );
-  }
-
-  if (B_.__e)
-  {
-    gsl_odeiv_evolve_free( B_.__e );
-  }
 }
 
 // ---------------------------------------------------------------------------
@@ -221,9 +212,6 @@ void amat_neuron_nestml::init_state_internal_()
 #endif
 
   const double __timestep = nest::Time::get_resolution().get_ms();  // do not remove, this is necessary for the timestep() function
-  // by default, integrate all variables with a conservative tolerance, in the sense that we err on the side of integrating very precisely at the expense of extra computation
-  P_.__gsl_abs_error_tol = 1e-6;
-  P_.__gsl_rel_error_tol = 1e-6;
   // initial values for parameters
   P_.tau_m = 10; // as ms
   P_.C_m = 200; // as pF
@@ -243,14 +231,14 @@ void amat_neuron_nestml::init_state_internal_()
   V_.__h = nest::Time::get_resolution().get_ms();
   recompute_internal_variables();
   // initial values for state variables
-  S_.ode_state[State_::V_th_alpha_1] = 0; // as mV
-  S_.ode_state[State_::V_th_alpha_2] = 0; // as mV
-  S_.ode_state[State_::V_th_v] = 0; // as mV
-  S_.ode_state[State_::V_th_v_aux] = 0; // as mV / ms
-  S_.ode_state[State_::V_m] = P_.E_L; // as mV
-  S_.ode_state[State_::refr_t] = 0; // as ms
-  S_.ode_state[State_::I_kernel_exc__X__exc_spikes] = 0; // as real
-  S_.ode_state[State_::I_kernel_inh__X__inh_spikes] = 0; // as real
+  S_.V_th_alpha_1 = 0; // as mV
+  S_.V_th_alpha_2 = 0; // as mV
+  S_.V_th_v = 0; // as mV
+  S_.V_th_v_aux = 0; // as mV / ms
+  S_.V_m = P_.E_L; // as mV
+  S_.refr_t = 0; // as ms
+  S_.I_kernel_exc__X__exc_spikes = 0; // as real
+  S_.I_kernel_inh__X__inh_spikes = 0; // as real
 }
 
 void amat_neuron_nestml::init_buffers_()
@@ -270,41 +258,6 @@ void amat_neuron_nestml::init_buffers_()
   B_.logger_.reset();
 
 
-
-  if ( not B_.__s )
-  {
-    B_.__s = gsl_odeiv_step_alloc( gsl_odeiv_step_rkf45, State_::STATE_VEC_SIZE );
-  }
-  else
-  {
-    gsl_odeiv_step_reset( B_.__s );
-  }
-
-  if ( not B_.__c )
-  {
-    B_.__c = gsl_odeiv_control_y_new( P_.__gsl_abs_error_tol, P_.__gsl_rel_error_tol );
-  }
-  else
-  {
-    gsl_odeiv_control_init( B_.__c, P_.__gsl_abs_error_tol, P_.__gsl_rel_error_tol, 1.0, 0.0 );
-
-  }
-
-  if ( not B_.__e )
-  {
-    B_.__e = gsl_odeiv_evolve_alloc( State_::STATE_VEC_SIZE );
-  }
-  else
-  {
-    gsl_odeiv_evolve_reset( B_.__e );
-  }
-
-  // B_.__sys.function = amat_neuron_nestml_dynamics; // will be set just prior to the call to gsl_odeiv_evolve_apply()
-  B_.__sys.jacobian = nullptr;
-  B_.__sys.dimension = State_::STATE_VEC_SIZE;
-  B_.__sys.params = reinterpret_cast< void* >( this );
-  B_.__step = nest::Time::get_resolution().get_ms();
-  B_.__integration_step = nest::Time::get_resolution().get_ms();
 }
 
 void amat_neuron_nestml::recompute_internal_variables(bool exclude_timestep)
@@ -317,8 +270,17 @@ void amat_neuron_nestml::recompute_internal_variables(bool exclude_timestep)
     V_.__P__V_th_alpha_1__V_th_alpha_1 = std::exp((-V_.__h) / P_.tau_1); // as real
     V_.__P__V_th_alpha_2__V_th_alpha_2 = std::exp((-V_.__h) / P_.tau_2); // as real
     V_.__P__V_m__V_m = std::exp((-V_.__h) / P_.tau_m); // as real
-    V_.__P__V_m__I_kernel_exc__X__exc_spikes = P_.tau_m * P_.tau_syn_exc * V_.unit_psc * ((-std::exp(V_.__h / P_.tau_m)) + std::exp(V_.__h / P_.tau_syn_exc)) * std::exp((-V_.__h) * (P_.tau_m + P_.tau_syn_exc) / (P_.tau_m * P_.tau_syn_exc)) / (P_.C_m * (P_.tau_m - P_.tau_syn_exc)); // as real
-    V_.__P__V_m__I_kernel_inh__X__inh_spikes = P_.tau_m * P_.tau_syn_inh * V_.unit_psc * (std::exp(V_.__h / P_.tau_m) - std::exp(V_.__h / P_.tau_syn_inh)) * std::exp((-V_.__h) * (P_.tau_m + P_.tau_syn_inh) / (P_.tau_m * P_.tau_syn_inh)) / (P_.C_m * (P_.tau_m - P_.tau_syn_inh)); // as real
+    V_.__P__V_m__I_kernel_exc__X__exc_spikes = pow(P_.tau_m, 3) * P_.tau_syn_exc * V_.unit_psc / (P_.C_m * pow(P_.tau_m, 3) * std::exp(V_.__h / P_.tau_m) - P_.C_m * pow(P_.tau_m, 2) * P_.tau_syn_exc * std::exp(V_.__h / P_.tau_m) - 2 * P_.C_m * pow(P_.tau_m, 2) * P_.tau_v * std::exp(V_.__h / P_.tau_m) + 2 * P_.C_m * P_.tau_m * P_.tau_syn_exc * P_.tau_v * std::exp(V_.__h / P_.tau_m) + P_.C_m * P_.tau_m * pow(P_.tau_v, 2) * std::exp(V_.__h / P_.tau_m) - P_.C_m * P_.tau_syn_exc * pow(P_.tau_v, 2) * std::exp(V_.__h / P_.tau_m)) - 2 * pow(P_.tau_m, 2) * P_.tau_syn_exc * P_.tau_v * V_.unit_psc / (P_.C_m * pow(P_.tau_m, 3) * std::exp(V_.__h / P_.tau_m) - P_.C_m * pow(P_.tau_m, 2) * P_.tau_syn_exc * std::exp(V_.__h / P_.tau_m) - 2 * P_.C_m * pow(P_.tau_m, 2) * P_.tau_v * std::exp(V_.__h / P_.tau_m) + 2 * P_.C_m * P_.tau_m * P_.tau_syn_exc * P_.tau_v * std::exp(V_.__h / P_.tau_m) + P_.C_m * P_.tau_m * pow(P_.tau_v, 2) * std::exp(V_.__h / P_.tau_m) - P_.C_m * P_.tau_syn_exc * pow(P_.tau_v, 2) * std::exp(V_.__h / P_.tau_m)) + P_.tau_m * P_.tau_syn_exc * pow(P_.tau_v, 2) * V_.unit_psc / (P_.C_m * pow(P_.tau_m, 3) * std::exp(V_.__h / P_.tau_m) - P_.C_m * pow(P_.tau_m, 2) * P_.tau_syn_exc * std::exp(V_.__h / P_.tau_m) - 2 * P_.C_m * pow(P_.tau_m, 2) * P_.tau_v * std::exp(V_.__h / P_.tau_m) + 2 * P_.C_m * P_.tau_m * P_.tau_syn_exc * P_.tau_v * std::exp(V_.__h / P_.tau_m) + P_.C_m * P_.tau_m * pow(P_.tau_v, 2) * std::exp(V_.__h / P_.tau_m) - P_.C_m * P_.tau_syn_exc * pow(P_.tau_v, 2) * std::exp(V_.__h / P_.tau_m)) - P_.tau_m * P_.tau_syn_exc * V_.unit_psc / (P_.C_m * P_.tau_m * std::exp(V_.__h / P_.tau_syn_exc) - P_.C_m * P_.tau_syn_exc * std::exp(V_.__h / P_.tau_syn_exc)); // as real
+    V_.__P__V_m__I_kernel_inh__X__inh_spikes = (-pow(P_.tau_m, 3)) * P_.tau_syn_inh * V_.unit_psc / (P_.C_m * pow(P_.tau_m, 3) * std::exp(V_.__h / P_.tau_m) - P_.C_m * pow(P_.tau_m, 2) * P_.tau_syn_inh * std::exp(V_.__h / P_.tau_m) - 2 * P_.C_m * pow(P_.tau_m, 2) * P_.tau_v * std::exp(V_.__h / P_.tau_m) + 2 * P_.C_m * P_.tau_m * P_.tau_syn_inh * P_.tau_v * std::exp(V_.__h / P_.tau_m) + P_.C_m * P_.tau_m * pow(P_.tau_v, 2) * std::exp(V_.__h / P_.tau_m) - P_.C_m * P_.tau_syn_inh * pow(P_.tau_v, 2) * std::exp(V_.__h / P_.tau_m)) + 2 * pow(P_.tau_m, 2) * P_.tau_syn_inh * P_.tau_v * V_.unit_psc / (P_.C_m * pow(P_.tau_m, 3) * std::exp(V_.__h / P_.tau_m) - P_.C_m * pow(P_.tau_m, 2) * P_.tau_syn_inh * std::exp(V_.__h / P_.tau_m) - 2 * P_.C_m * pow(P_.tau_m, 2) * P_.tau_v * std::exp(V_.__h / P_.tau_m) + 2 * P_.C_m * P_.tau_m * P_.tau_syn_inh * P_.tau_v * std::exp(V_.__h / P_.tau_m) + P_.C_m * P_.tau_m * pow(P_.tau_v, 2) * std::exp(V_.__h / P_.tau_m) - P_.C_m * P_.tau_syn_inh * pow(P_.tau_v, 2) * std::exp(V_.__h / P_.tau_m)) - P_.tau_m * P_.tau_syn_inh * pow(P_.tau_v, 2) * V_.unit_psc / (P_.C_m * pow(P_.tau_m, 3) * std::exp(V_.__h / P_.tau_m) - P_.C_m * pow(P_.tau_m, 2) * P_.tau_syn_inh * std::exp(V_.__h / P_.tau_m) - 2 * P_.C_m * pow(P_.tau_m, 2) * P_.tau_v * std::exp(V_.__h / P_.tau_m) + 2 * P_.C_m * P_.tau_m * P_.tau_syn_inh * P_.tau_v * std::exp(V_.__h / P_.tau_m) + P_.C_m * P_.tau_m * pow(P_.tau_v, 2) * std::exp(V_.__h / P_.tau_m) - P_.C_m * P_.tau_syn_inh * pow(P_.tau_v, 2) * std::exp(V_.__h / P_.tau_m)) + P_.tau_m * P_.tau_syn_inh * V_.unit_psc / (P_.C_m * P_.tau_m * std::exp(V_.__h / P_.tau_syn_inh) - P_.C_m * P_.tau_syn_inh * std::exp(V_.__h / P_.tau_syn_inh)); // as real
+    V_.__P__V_th_v_aux__V_m = (-P_.beta) * P_.tau_m * P_.tau_v / (pow(P_.tau_m, 2) * std::exp(V_.__h / P_.tau_m) - 2 * P_.tau_m * P_.tau_v * std::exp(V_.__h / P_.tau_m) + pow(P_.tau_v, 2) * std::exp(V_.__h / P_.tau_m)) + P_.beta * pow(P_.tau_v, 2) / (pow(P_.tau_m, 2) * std::exp(V_.__h / P_.tau_m) - 2 * P_.tau_m * P_.tau_v * std::exp(V_.__h / P_.tau_m) + pow(P_.tau_v, 2) * std::exp(V_.__h / P_.tau_m)) + P_.beta * P_.tau_v / (P_.tau_m * std::exp(V_.__h / P_.tau_v) - P_.tau_v * std::exp(V_.__h / P_.tau_v)); // as real
+    V_.__P__V_th_v_aux__V_th_v_aux = std::exp((-V_.__h) / P_.tau_v); // as real
+    V_.__P__V_th_v_aux__I_kernel_exc__X__exc_spikes = (-P_.beta) * pow(P_.tau_m, 2) * P_.tau_syn_exc * P_.tau_v * V_.unit_psc / (P_.C_m * pow(P_.tau_m, 3) * std::exp(V_.__h / P_.tau_m) - P_.C_m * pow(P_.tau_m, 2) * P_.tau_syn_exc * std::exp(V_.__h / P_.tau_m) - 2 * P_.C_m * pow(P_.tau_m, 2) * P_.tau_v * std::exp(V_.__h / P_.tau_m) + 2 * P_.C_m * P_.tau_m * P_.tau_syn_exc * P_.tau_v * std::exp(V_.__h / P_.tau_m) + P_.C_m * P_.tau_m * pow(P_.tau_v, 2) * std::exp(V_.__h / P_.tau_m) - P_.C_m * P_.tau_syn_exc * pow(P_.tau_v, 2) * std::exp(V_.__h / P_.tau_m)) + P_.beta * P_.tau_m * P_.tau_syn_exc * pow(P_.tau_v, 2) * V_.unit_psc / (P_.C_m * pow(P_.tau_m, 3) * std::exp(V_.__h / P_.tau_m) - P_.C_m * pow(P_.tau_m, 2) * P_.tau_syn_exc * std::exp(V_.__h / P_.tau_m) - 2 * P_.C_m * pow(P_.tau_m, 2) * P_.tau_v * std::exp(V_.__h / P_.tau_m) + 2 * P_.C_m * P_.tau_m * P_.tau_syn_exc * P_.tau_v * std::exp(V_.__h / P_.tau_m) + P_.C_m * P_.tau_m * pow(P_.tau_v, 2) * std::exp(V_.__h / P_.tau_m) - P_.C_m * P_.tau_syn_exc * pow(P_.tau_v, 2) * std::exp(V_.__h / P_.tau_m)) - P_.beta * P_.tau_m * P_.tau_syn_exc * P_.tau_v * V_.unit_psc / (P_.C_m * P_.tau_m * P_.tau_syn_exc * std::exp(V_.__h / P_.tau_v) - P_.C_m * P_.tau_m * P_.tau_v * std::exp(V_.__h / P_.tau_v) - P_.C_m * P_.tau_syn_exc * P_.tau_v * std::exp(V_.__h / P_.tau_v) + P_.C_m * pow(P_.tau_v, 2) * std::exp(V_.__h / P_.tau_v)) + P_.beta * P_.tau_m * P_.tau_syn_exc * P_.tau_v * V_.unit_psc / (P_.C_m * P_.tau_m * P_.tau_syn_exc * std::exp(V_.__h / P_.tau_syn_exc) - P_.C_m * P_.tau_m * P_.tau_v * std::exp(V_.__h / P_.tau_syn_exc) - P_.C_m * pow(P_.tau_syn_exc, 2) * std::exp(V_.__h / P_.tau_syn_exc) + P_.C_m * P_.tau_syn_exc * P_.tau_v * std::exp(V_.__h / P_.tau_syn_exc)); // as real
+    V_.__P__V_th_v_aux__I_kernel_inh__X__inh_spikes = P_.beta * pow(P_.tau_m, 2) * P_.tau_syn_inh * P_.tau_v * V_.unit_psc / (P_.C_m * pow(P_.tau_m, 3) * std::exp(V_.__h / P_.tau_m) - P_.C_m * pow(P_.tau_m, 2) * P_.tau_syn_inh * std::exp(V_.__h / P_.tau_m) - 2 * P_.C_m * pow(P_.tau_m, 2) * P_.tau_v * std::exp(V_.__h / P_.tau_m) + 2 * P_.C_m * P_.tau_m * P_.tau_syn_inh * P_.tau_v * std::exp(V_.__h / P_.tau_m) + P_.C_m * P_.tau_m * pow(P_.tau_v, 2) * std::exp(V_.__h / P_.tau_m) - P_.C_m * P_.tau_syn_inh * pow(P_.tau_v, 2) * std::exp(V_.__h / P_.tau_m)) - P_.beta * P_.tau_m * P_.tau_syn_inh * pow(P_.tau_v, 2) * V_.unit_psc / (P_.C_m * pow(P_.tau_m, 3) * std::exp(V_.__h / P_.tau_m) - P_.C_m * pow(P_.tau_m, 2) * P_.tau_syn_inh * std::exp(V_.__h / P_.tau_m) - 2 * P_.C_m * pow(P_.tau_m, 2) * P_.tau_v * std::exp(V_.__h / P_.tau_m) + 2 * P_.C_m * P_.tau_m * P_.tau_syn_inh * P_.tau_v * std::exp(V_.__h / P_.tau_m) + P_.C_m * P_.tau_m * pow(P_.tau_v, 2) * std::exp(V_.__h / P_.tau_m) - P_.C_m * P_.tau_syn_inh * pow(P_.tau_v, 2) * std::exp(V_.__h / P_.tau_m)) + P_.beta * P_.tau_m * P_.tau_syn_inh * P_.tau_v * V_.unit_psc / (P_.C_m * P_.tau_m * P_.tau_syn_inh * std::exp(V_.__h / P_.tau_v) - P_.C_m * P_.tau_m * P_.tau_v * std::exp(V_.__h / P_.tau_v) - P_.C_m * P_.tau_syn_inh * P_.tau_v * std::exp(V_.__h / P_.tau_v) + P_.C_m * pow(P_.tau_v, 2) * std::exp(V_.__h / P_.tau_v)) - P_.beta * P_.tau_m * P_.tau_syn_inh * P_.tau_v * V_.unit_psc / (P_.C_m * P_.tau_m * P_.tau_syn_inh * std::exp(V_.__h / P_.tau_syn_inh) - P_.C_m * P_.tau_m * P_.tau_v * std::exp(V_.__h / P_.tau_syn_inh) - P_.C_m * pow(P_.tau_syn_inh, 2) * std::exp(V_.__h / P_.tau_syn_inh) + P_.C_m * P_.tau_syn_inh * P_.tau_v * std::exp(V_.__h / P_.tau_syn_inh)); // as real
+    V_.__P__V_th_v__V_m = V_.__h * P_.beta * P_.tau_m * pow(P_.tau_v, 2) / (V_.__h * pow(P_.tau_m, 2) * std::exp(V_.__h / P_.tau_v) - 2 * V_.__h * P_.tau_m * P_.tau_v * std::exp(V_.__h / P_.tau_v) + V_.__h * pow(P_.tau_v, 2) * std::exp(V_.__h / P_.tau_v)) + V_.__h * P_.beta * P_.tau_v / (P_.tau_m * std::exp(V_.__h / P_.tau_v) - P_.tau_v * std::exp(V_.__h / P_.tau_v)) - P_.beta * P_.tau_m * pow(P_.tau_v, 2) / (pow(P_.tau_m, 2) * std::exp(V_.__h / P_.tau_m) - 2 * P_.tau_m * P_.tau_v * std::exp(V_.__h / P_.tau_m) + pow(P_.tau_v, 2) * std::exp(V_.__h / P_.tau_m)); // as real
+    V_.__P__V_th_v__V_th_v_aux = V_.__h * std::exp((-V_.__h) / P_.tau_v); // as real
+    V_.__P__V_th_v__V_th_v = std::exp((-V_.__h) / P_.tau_v); // as real
+    V_.__P__V_th_v__I_kernel_exc__X__exc_spikes = (-V_.__h) * P_.beta * pow(P_.tau_m, 2) * pow(P_.tau_syn_exc, 2) * pow(P_.tau_v, 2) * V_.unit_psc / (P_.C_m * V_.__h * pow(P_.tau_m, 2) * pow(P_.tau_syn_exc, 2) * std::exp(V_.__h / P_.tau_v) - 2 * P_.C_m * V_.__h * pow(P_.tau_m, 2) * P_.tau_syn_exc * P_.tau_v * std::exp(V_.__h / P_.tau_v) + P_.C_m * V_.__h * pow(P_.tau_m, 2) * pow(P_.tau_v, 2) * std::exp(V_.__h / P_.tau_v) - 2 * P_.C_m * V_.__h * P_.tau_m * pow(P_.tau_syn_exc, 2) * P_.tau_v * std::exp(V_.__h / P_.tau_v) + 4 * P_.C_m * V_.__h * P_.tau_m * P_.tau_syn_exc * pow(P_.tau_v, 2) * std::exp(V_.__h / P_.tau_v) - 2 * P_.C_m * V_.__h * P_.tau_m * pow(P_.tau_v, 3) * std::exp(V_.__h / P_.tau_v) + P_.C_m * V_.__h * pow(P_.tau_syn_exc, 2) * pow(P_.tau_v, 2) * std::exp(V_.__h / P_.tau_v) - 2 * P_.C_m * V_.__h * P_.tau_syn_exc * pow(P_.tau_v, 3) * std::exp(V_.__h / P_.tau_v) + P_.C_m * V_.__h * pow(P_.tau_v, 4) * std::exp(V_.__h / P_.tau_v)) + V_.__h * P_.beta * P_.tau_m * P_.tau_syn_exc * pow(P_.tau_v, 4) * V_.unit_psc / (P_.C_m * V_.__h * pow(P_.tau_m, 2) * pow(P_.tau_syn_exc, 2) * std::exp(V_.__h / P_.tau_v) - 2 * P_.C_m * V_.__h * pow(P_.tau_m, 2) * P_.tau_syn_exc * P_.tau_v * std::exp(V_.__h / P_.tau_v) + P_.C_m * V_.__h * pow(P_.tau_m, 2) * pow(P_.tau_v, 2) * std::exp(V_.__h / P_.tau_v) - 2 * P_.C_m * V_.__h * P_.tau_m * pow(P_.tau_syn_exc, 2) * P_.tau_v * std::exp(V_.__h / P_.tau_v) + 4 * P_.C_m * V_.__h * P_.tau_m * P_.tau_syn_exc * pow(P_.tau_v, 2) * std::exp(V_.__h / P_.tau_v) - 2 * P_.C_m * V_.__h * P_.tau_m * pow(P_.tau_v, 3) * std::exp(V_.__h / P_.tau_v) + P_.C_m * V_.__h * pow(P_.tau_syn_exc, 2) * pow(P_.tau_v, 2) * std::exp(V_.__h / P_.tau_v) - 2 * P_.C_m * V_.__h * P_.tau_syn_exc * pow(P_.tau_v, 3) * std::exp(V_.__h / P_.tau_v) + P_.C_m * V_.__h * pow(P_.tau_v, 4) * std::exp(V_.__h / P_.tau_v)) - V_.__h * P_.beta * P_.tau_m * P_.tau_syn_exc * P_.tau_v * V_.unit_psc / (P_.C_m * P_.tau_m * P_.tau_syn_exc * std::exp(V_.__h / P_.tau_v) - P_.C_m * P_.tau_m * P_.tau_v * std::exp(V_.__h / P_.tau_v) - P_.C_m * P_.tau_syn_exc * P_.tau_v * std::exp(V_.__h / P_.tau_v) + P_.C_m * pow(P_.tau_v, 2) * std::exp(V_.__h / P_.tau_v)) - P_.beta * pow(P_.tau_m, 2) * P_.tau_syn_exc * pow(P_.tau_v, 2) * V_.unit_psc / (P_.C_m * pow(P_.tau_m, 3) * std::exp(V_.__h / P_.tau_m) - P_.C_m * pow(P_.tau_m, 2) * P_.tau_syn_exc * std::exp(V_.__h / P_.tau_m) - 2 * P_.C_m * pow(P_.tau_m, 2) * P_.tau_v * std::exp(V_.__h / P_.tau_m) + 2 * P_.C_m * P_.tau_m * P_.tau_syn_exc * P_.tau_v * std::exp(V_.__h / P_.tau_m) + P_.C_m * P_.tau_m * pow(P_.tau_v, 2) * std::exp(V_.__h / P_.tau_m) - P_.C_m * P_.tau_syn_exc * pow(P_.tau_v, 2) * std::exp(V_.__h / P_.tau_m)) + P_.beta * P_.tau_m * pow(P_.tau_syn_exc, 2) * pow(P_.tau_v, 2) * V_.unit_psc / (P_.C_m * P_.tau_m * pow(P_.tau_syn_exc, 2) * std::exp(V_.__h / P_.tau_syn_exc) - 2 * P_.C_m * P_.tau_m * P_.tau_syn_exc * P_.tau_v * std::exp(V_.__h / P_.tau_syn_exc) + P_.C_m * P_.tau_m * pow(P_.tau_v, 2) * std::exp(V_.__h / P_.tau_syn_exc) - P_.C_m * pow(P_.tau_syn_exc, 3) * std::exp(V_.__h / P_.tau_syn_exc) + 2 * P_.C_m * pow(P_.tau_syn_exc, 2) * P_.tau_v * std::exp(V_.__h / P_.tau_syn_exc) - P_.C_m * P_.tau_syn_exc * pow(P_.tau_v, 2) * std::exp(V_.__h / P_.tau_syn_exc)); // as real
+    V_.__P__V_th_v__I_kernel_inh__X__inh_spikes = V_.__h * P_.beta * pow(P_.tau_m, 2) * pow(P_.tau_syn_inh, 2) * pow(P_.tau_v, 2) * V_.unit_psc / (P_.C_m * V_.__h * pow(P_.tau_m, 2) * pow(P_.tau_syn_inh, 2) * std::exp(V_.__h / P_.tau_v) - 2 * P_.C_m * V_.__h * pow(P_.tau_m, 2) * P_.tau_syn_inh * P_.tau_v * std::exp(V_.__h / P_.tau_v) + P_.C_m * V_.__h * pow(P_.tau_m, 2) * pow(P_.tau_v, 2) * std::exp(V_.__h / P_.tau_v) - 2 * P_.C_m * V_.__h * P_.tau_m * pow(P_.tau_syn_inh, 2) * P_.tau_v * std::exp(V_.__h / P_.tau_v) + 4 * P_.C_m * V_.__h * P_.tau_m * P_.tau_syn_inh * pow(P_.tau_v, 2) * std::exp(V_.__h / P_.tau_v) - 2 * P_.C_m * V_.__h * P_.tau_m * pow(P_.tau_v, 3) * std::exp(V_.__h / P_.tau_v) + P_.C_m * V_.__h * pow(P_.tau_syn_inh, 2) * pow(P_.tau_v, 2) * std::exp(V_.__h / P_.tau_v) - 2 * P_.C_m * V_.__h * P_.tau_syn_inh * pow(P_.tau_v, 3) * std::exp(V_.__h / P_.tau_v) + P_.C_m * V_.__h * pow(P_.tau_v, 4) * std::exp(V_.__h / P_.tau_v)) - V_.__h * P_.beta * P_.tau_m * P_.tau_syn_inh * pow(P_.tau_v, 4) * V_.unit_psc / (P_.C_m * V_.__h * pow(P_.tau_m, 2) * pow(P_.tau_syn_inh, 2) * std::exp(V_.__h / P_.tau_v) - 2 * P_.C_m * V_.__h * pow(P_.tau_m, 2) * P_.tau_syn_inh * P_.tau_v * std::exp(V_.__h / P_.tau_v) + P_.C_m * V_.__h * pow(P_.tau_m, 2) * pow(P_.tau_v, 2) * std::exp(V_.__h / P_.tau_v) - 2 * P_.C_m * V_.__h * P_.tau_m * pow(P_.tau_syn_inh, 2) * P_.tau_v * std::exp(V_.__h / P_.tau_v) + 4 * P_.C_m * V_.__h * P_.tau_m * P_.tau_syn_inh * pow(P_.tau_v, 2) * std::exp(V_.__h / P_.tau_v) - 2 * P_.C_m * V_.__h * P_.tau_m * pow(P_.tau_v, 3) * std::exp(V_.__h / P_.tau_v) + P_.C_m * V_.__h * pow(P_.tau_syn_inh, 2) * pow(P_.tau_v, 2) * std::exp(V_.__h / P_.tau_v) - 2 * P_.C_m * V_.__h * P_.tau_syn_inh * pow(P_.tau_v, 3) * std::exp(V_.__h / P_.tau_v) + P_.C_m * V_.__h * pow(P_.tau_v, 4) * std::exp(V_.__h / P_.tau_v)) + V_.__h * P_.beta * P_.tau_m * P_.tau_syn_inh * P_.tau_v * V_.unit_psc / (P_.C_m * P_.tau_m * P_.tau_syn_inh * std::exp(V_.__h / P_.tau_v) - P_.C_m * P_.tau_m * P_.tau_v * std::exp(V_.__h / P_.tau_v) - P_.C_m * P_.tau_syn_inh * P_.tau_v * std::exp(V_.__h / P_.tau_v) + P_.C_m * pow(P_.tau_v, 2) * std::exp(V_.__h / P_.tau_v)) + P_.beta * pow(P_.tau_m, 2) * P_.tau_syn_inh * pow(P_.tau_v, 2) * V_.unit_psc / (P_.C_m * pow(P_.tau_m, 3) * std::exp(V_.__h / P_.tau_m) - P_.C_m * pow(P_.tau_m, 2) * P_.tau_syn_inh * std::exp(V_.__h / P_.tau_m) - 2 * P_.C_m * pow(P_.tau_m, 2) * P_.tau_v * std::exp(V_.__h / P_.tau_m) + 2 * P_.C_m * P_.tau_m * P_.tau_syn_inh * P_.tau_v * std::exp(V_.__h / P_.tau_m) + P_.C_m * P_.tau_m * pow(P_.tau_v, 2) * std::exp(V_.__h / P_.tau_m) - P_.C_m * P_.tau_syn_inh * pow(P_.tau_v, 2) * std::exp(V_.__h / P_.tau_m)) - P_.beta * P_.tau_m * pow(P_.tau_syn_inh, 2) * pow(P_.tau_v, 2) * V_.unit_psc / (P_.C_m * P_.tau_m * pow(P_.tau_syn_inh, 2) * std::exp(V_.__h / P_.tau_syn_inh) - 2 * P_.C_m * P_.tau_m * P_.tau_syn_inh * P_.tau_v * std::exp(V_.__h / P_.tau_syn_inh) + P_.C_m * P_.tau_m * pow(P_.tau_v, 2) * std::exp(V_.__h / P_.tau_syn_inh) - P_.C_m * pow(P_.tau_syn_inh, 3) * std::exp(V_.__h / P_.tau_syn_inh) + 2 * P_.C_m * pow(P_.tau_syn_inh, 2) * P_.tau_v * std::exp(V_.__h / P_.tau_syn_inh) - P_.C_m * P_.tau_syn_inh * pow(P_.tau_v, 2) * std::exp(V_.__h / P_.tau_syn_inh)); // as real
     V_.__P__refr_t__refr_t = 1; // as real
     V_.__P__I_kernel_exc__X__exc_spikes__I_kernel_exc__X__exc_spikes = std::exp((-V_.__h) / P_.tau_syn_exc); // as real
     V_.__P__I_kernel_inh__X__inh_spikes__I_kernel_inh__X__inh_spikes = std::exp((-V_.__h) / P_.tau_syn_inh); // as real
@@ -329,8 +291,17 @@ void amat_neuron_nestml::recompute_internal_variables(bool exclude_timestep)
     V_.__P__V_th_alpha_1__V_th_alpha_1 = std::exp((-V_.__h) / P_.tau_1); // as real
     V_.__P__V_th_alpha_2__V_th_alpha_2 = std::exp((-V_.__h) / P_.tau_2); // as real
     V_.__P__V_m__V_m = std::exp((-V_.__h) / P_.tau_m); // as real
-    V_.__P__V_m__I_kernel_exc__X__exc_spikes = P_.tau_m * P_.tau_syn_exc * V_.unit_psc * ((-std::exp(V_.__h / P_.tau_m)) + std::exp(V_.__h / P_.tau_syn_exc)) * std::exp((-V_.__h) * (P_.tau_m + P_.tau_syn_exc) / (P_.tau_m * P_.tau_syn_exc)) / (P_.C_m * (P_.tau_m - P_.tau_syn_exc)); // as real
-    V_.__P__V_m__I_kernel_inh__X__inh_spikes = P_.tau_m * P_.tau_syn_inh * V_.unit_psc * (std::exp(V_.__h / P_.tau_m) - std::exp(V_.__h / P_.tau_syn_inh)) * std::exp((-V_.__h) * (P_.tau_m + P_.tau_syn_inh) / (P_.tau_m * P_.tau_syn_inh)) / (P_.C_m * (P_.tau_m - P_.tau_syn_inh)); // as real
+    V_.__P__V_m__I_kernel_exc__X__exc_spikes = pow(P_.tau_m, 3) * P_.tau_syn_exc * V_.unit_psc / (P_.C_m * pow(P_.tau_m, 3) * std::exp(V_.__h / P_.tau_m) - P_.C_m * pow(P_.tau_m, 2) * P_.tau_syn_exc * std::exp(V_.__h / P_.tau_m) - 2 * P_.C_m * pow(P_.tau_m, 2) * P_.tau_v * std::exp(V_.__h / P_.tau_m) + 2 * P_.C_m * P_.tau_m * P_.tau_syn_exc * P_.tau_v * std::exp(V_.__h / P_.tau_m) + P_.C_m * P_.tau_m * pow(P_.tau_v, 2) * std::exp(V_.__h / P_.tau_m) - P_.C_m * P_.tau_syn_exc * pow(P_.tau_v, 2) * std::exp(V_.__h / P_.tau_m)) - 2 * pow(P_.tau_m, 2) * P_.tau_syn_exc * P_.tau_v * V_.unit_psc / (P_.C_m * pow(P_.tau_m, 3) * std::exp(V_.__h / P_.tau_m) - P_.C_m * pow(P_.tau_m, 2) * P_.tau_syn_exc * std::exp(V_.__h / P_.tau_m) - 2 * P_.C_m * pow(P_.tau_m, 2) * P_.tau_v * std::exp(V_.__h / P_.tau_m) + 2 * P_.C_m * P_.tau_m * P_.tau_syn_exc * P_.tau_v * std::exp(V_.__h / P_.tau_m) + P_.C_m * P_.tau_m * pow(P_.tau_v, 2) * std::exp(V_.__h / P_.tau_m) - P_.C_m * P_.tau_syn_exc * pow(P_.tau_v, 2) * std::exp(V_.__h / P_.tau_m)) + P_.tau_m * P_.tau_syn_exc * pow(P_.tau_v, 2) * V_.unit_psc / (P_.C_m * pow(P_.tau_m, 3) * std::exp(V_.__h / P_.tau_m) - P_.C_m * pow(P_.tau_m, 2) * P_.tau_syn_exc * std::exp(V_.__h / P_.tau_m) - 2 * P_.C_m * pow(P_.tau_m, 2) * P_.tau_v * std::exp(V_.__h / P_.tau_m) + 2 * P_.C_m * P_.tau_m * P_.tau_syn_exc * P_.tau_v * std::exp(V_.__h / P_.tau_m) + P_.C_m * P_.tau_m * pow(P_.tau_v, 2) * std::exp(V_.__h / P_.tau_m) - P_.C_m * P_.tau_syn_exc * pow(P_.tau_v, 2) * std::exp(V_.__h / P_.tau_m)) - P_.tau_m * P_.tau_syn_exc * V_.unit_psc / (P_.C_m * P_.tau_m * std::exp(V_.__h / P_.tau_syn_exc) - P_.C_m * P_.tau_syn_exc * std::exp(V_.__h / P_.tau_syn_exc)); // as real
+    V_.__P__V_m__I_kernel_inh__X__inh_spikes = (-pow(P_.tau_m, 3)) * P_.tau_syn_inh * V_.unit_psc / (P_.C_m * pow(P_.tau_m, 3) * std::exp(V_.__h / P_.tau_m) - P_.C_m * pow(P_.tau_m, 2) * P_.tau_syn_inh * std::exp(V_.__h / P_.tau_m) - 2 * P_.C_m * pow(P_.tau_m, 2) * P_.tau_v * std::exp(V_.__h / P_.tau_m) + 2 * P_.C_m * P_.tau_m * P_.tau_syn_inh * P_.tau_v * std::exp(V_.__h / P_.tau_m) + P_.C_m * P_.tau_m * pow(P_.tau_v, 2) * std::exp(V_.__h / P_.tau_m) - P_.C_m * P_.tau_syn_inh * pow(P_.tau_v, 2) * std::exp(V_.__h / P_.tau_m)) + 2 * pow(P_.tau_m, 2) * P_.tau_syn_inh * P_.tau_v * V_.unit_psc / (P_.C_m * pow(P_.tau_m, 3) * std::exp(V_.__h / P_.tau_m) - P_.C_m * pow(P_.tau_m, 2) * P_.tau_syn_inh * std::exp(V_.__h / P_.tau_m) - 2 * P_.C_m * pow(P_.tau_m, 2) * P_.tau_v * std::exp(V_.__h / P_.tau_m) + 2 * P_.C_m * P_.tau_m * P_.tau_syn_inh * P_.tau_v * std::exp(V_.__h / P_.tau_m) + P_.C_m * P_.tau_m * pow(P_.tau_v, 2) * std::exp(V_.__h / P_.tau_m) - P_.C_m * P_.tau_syn_inh * pow(P_.tau_v, 2) * std::exp(V_.__h / P_.tau_m)) - P_.tau_m * P_.tau_syn_inh * pow(P_.tau_v, 2) * V_.unit_psc / (P_.C_m * pow(P_.tau_m, 3) * std::exp(V_.__h / P_.tau_m) - P_.C_m * pow(P_.tau_m, 2) * P_.tau_syn_inh * std::exp(V_.__h / P_.tau_m) - 2 * P_.C_m * pow(P_.tau_m, 2) * P_.tau_v * std::exp(V_.__h / P_.tau_m) + 2 * P_.C_m * P_.tau_m * P_.tau_syn_inh * P_.tau_v * std::exp(V_.__h / P_.tau_m) + P_.C_m * P_.tau_m * pow(P_.tau_v, 2) * std::exp(V_.__h / P_.tau_m) - P_.C_m * P_.tau_syn_inh * pow(P_.tau_v, 2) * std::exp(V_.__h / P_.tau_m)) + P_.tau_m * P_.tau_syn_inh * V_.unit_psc / (P_.C_m * P_.tau_m * std::exp(V_.__h / P_.tau_syn_inh) - P_.C_m * P_.tau_syn_inh * std::exp(V_.__h / P_.tau_syn_inh)); // as real
+    V_.__P__V_th_v_aux__V_m = (-P_.beta) * P_.tau_m * P_.tau_v / (pow(P_.tau_m, 2) * std::exp(V_.__h / P_.tau_m) - 2 * P_.tau_m * P_.tau_v * std::exp(V_.__h / P_.tau_m) + pow(P_.tau_v, 2) * std::exp(V_.__h / P_.tau_m)) + P_.beta * pow(P_.tau_v, 2) / (pow(P_.tau_m, 2) * std::exp(V_.__h / P_.tau_m) - 2 * P_.tau_m * P_.tau_v * std::exp(V_.__h / P_.tau_m) + pow(P_.tau_v, 2) * std::exp(V_.__h / P_.tau_m)) + P_.beta * P_.tau_v / (P_.tau_m * std::exp(V_.__h / P_.tau_v) - P_.tau_v * std::exp(V_.__h / P_.tau_v)); // as real
+    V_.__P__V_th_v_aux__V_th_v_aux = std::exp((-V_.__h) / P_.tau_v); // as real
+    V_.__P__V_th_v_aux__I_kernel_exc__X__exc_spikes = (-P_.beta) * pow(P_.tau_m, 2) * P_.tau_syn_exc * P_.tau_v * V_.unit_psc / (P_.C_m * pow(P_.tau_m, 3) * std::exp(V_.__h / P_.tau_m) - P_.C_m * pow(P_.tau_m, 2) * P_.tau_syn_exc * std::exp(V_.__h / P_.tau_m) - 2 * P_.C_m * pow(P_.tau_m, 2) * P_.tau_v * std::exp(V_.__h / P_.tau_m) + 2 * P_.C_m * P_.tau_m * P_.tau_syn_exc * P_.tau_v * std::exp(V_.__h / P_.tau_m) + P_.C_m * P_.tau_m * pow(P_.tau_v, 2) * std::exp(V_.__h / P_.tau_m) - P_.C_m * P_.tau_syn_exc * pow(P_.tau_v, 2) * std::exp(V_.__h / P_.tau_m)) + P_.beta * P_.tau_m * P_.tau_syn_exc * pow(P_.tau_v, 2) * V_.unit_psc / (P_.C_m * pow(P_.tau_m, 3) * std::exp(V_.__h / P_.tau_m) - P_.C_m * pow(P_.tau_m, 2) * P_.tau_syn_exc * std::exp(V_.__h / P_.tau_m) - 2 * P_.C_m * pow(P_.tau_m, 2) * P_.tau_v * std::exp(V_.__h / P_.tau_m) + 2 * P_.C_m * P_.tau_m * P_.tau_syn_exc * P_.tau_v * std::exp(V_.__h / P_.tau_m) + P_.C_m * P_.tau_m * pow(P_.tau_v, 2) * std::exp(V_.__h / P_.tau_m) - P_.C_m * P_.tau_syn_exc * pow(P_.tau_v, 2) * std::exp(V_.__h / P_.tau_m)) - P_.beta * P_.tau_m * P_.tau_syn_exc * P_.tau_v * V_.unit_psc / (P_.C_m * P_.tau_m * P_.tau_syn_exc * std::exp(V_.__h / P_.tau_v) - P_.C_m * P_.tau_m * P_.tau_v * std::exp(V_.__h / P_.tau_v) - P_.C_m * P_.tau_syn_exc * P_.tau_v * std::exp(V_.__h / P_.tau_v) + P_.C_m * pow(P_.tau_v, 2) * std::exp(V_.__h / P_.tau_v)) + P_.beta * P_.tau_m * P_.tau_syn_exc * P_.tau_v * V_.unit_psc / (P_.C_m * P_.tau_m * P_.tau_syn_exc * std::exp(V_.__h / P_.tau_syn_exc) - P_.C_m * P_.tau_m * P_.tau_v * std::exp(V_.__h / P_.tau_syn_exc) - P_.C_m * pow(P_.tau_syn_exc, 2) * std::exp(V_.__h / P_.tau_syn_exc) + P_.C_m * P_.tau_syn_exc * P_.tau_v * std::exp(V_.__h / P_.tau_syn_exc)); // as real
+    V_.__P__V_th_v_aux__I_kernel_inh__X__inh_spikes = P_.beta * pow(P_.tau_m, 2) * P_.tau_syn_inh * P_.tau_v * V_.unit_psc / (P_.C_m * pow(P_.tau_m, 3) * std::exp(V_.__h / P_.tau_m) - P_.C_m * pow(P_.tau_m, 2) * P_.tau_syn_inh * std::exp(V_.__h / P_.tau_m) - 2 * P_.C_m * pow(P_.tau_m, 2) * P_.tau_v * std::exp(V_.__h / P_.tau_m) + 2 * P_.C_m * P_.tau_m * P_.tau_syn_inh * P_.tau_v * std::exp(V_.__h / P_.tau_m) + P_.C_m * P_.tau_m * pow(P_.tau_v, 2) * std::exp(V_.__h / P_.tau_m) - P_.C_m * P_.tau_syn_inh * pow(P_.tau_v, 2) * std::exp(V_.__h / P_.tau_m)) - P_.beta * P_.tau_m * P_.tau_syn_inh * pow(P_.tau_v, 2) * V_.unit_psc / (P_.C_m * pow(P_.tau_m, 3) * std::exp(V_.__h / P_.tau_m) - P_.C_m * pow(P_.tau_m, 2) * P_.tau_syn_inh * std::exp(V_.__h / P_.tau_m) - 2 * P_.C_m * pow(P_.tau_m, 2) * P_.tau_v * std::exp(V_.__h / P_.tau_m) + 2 * P_.C_m * P_.tau_m * P_.tau_syn_inh * P_.tau_v * std::exp(V_.__h / P_.tau_m) + P_.C_m * P_.tau_m * pow(P_.tau_v, 2) * std::exp(V_.__h / P_.tau_m) - P_.C_m * P_.tau_syn_inh * pow(P_.tau_v, 2) * std::exp(V_.__h / P_.tau_m)) + P_.beta * P_.tau_m * P_.tau_syn_inh * P_.tau_v * V_.unit_psc / (P_.C_m * P_.tau_m * P_.tau_syn_inh * std::exp(V_.__h / P_.tau_v) - P_.C_m * P_.tau_m * P_.tau_v * std::exp(V_.__h / P_.tau_v) - P_.C_m * P_.tau_syn_inh * P_.tau_v * std::exp(V_.__h / P_.tau_v) + P_.C_m * pow(P_.tau_v, 2) * std::exp(V_.__h / P_.tau_v)) - P_.beta * P_.tau_m * P_.tau_syn_inh * P_.tau_v * V_.unit_psc / (P_.C_m * P_.tau_m * P_.tau_syn_inh * std::exp(V_.__h / P_.tau_syn_inh) - P_.C_m * P_.tau_m * P_.tau_v * std::exp(V_.__h / P_.tau_syn_inh) - P_.C_m * pow(P_.tau_syn_inh, 2) * std::exp(V_.__h / P_.tau_syn_inh) + P_.C_m * P_.tau_syn_inh * P_.tau_v * std::exp(V_.__h / P_.tau_syn_inh)); // as real
+    V_.__P__V_th_v__V_m = V_.__h * P_.beta * P_.tau_m * pow(P_.tau_v, 2) / (V_.__h * pow(P_.tau_m, 2) * std::exp(V_.__h / P_.tau_v) - 2 * V_.__h * P_.tau_m * P_.tau_v * std::exp(V_.__h / P_.tau_v) + V_.__h * pow(P_.tau_v, 2) * std::exp(V_.__h / P_.tau_v)) + V_.__h * P_.beta * P_.tau_v / (P_.tau_m * std::exp(V_.__h / P_.tau_v) - P_.tau_v * std::exp(V_.__h / P_.tau_v)) - P_.beta * P_.tau_m * pow(P_.tau_v, 2) / (pow(P_.tau_m, 2) * std::exp(V_.__h / P_.tau_m) - 2 * P_.tau_m * P_.tau_v * std::exp(V_.__h / P_.tau_m) + pow(P_.tau_v, 2) * std::exp(V_.__h / P_.tau_m)); // as real
+    V_.__P__V_th_v__V_th_v_aux = V_.__h * std::exp((-V_.__h) / P_.tau_v); // as real
+    V_.__P__V_th_v__V_th_v = std::exp((-V_.__h) / P_.tau_v); // as real
+    V_.__P__V_th_v__I_kernel_exc__X__exc_spikes = (-V_.__h) * P_.beta * pow(P_.tau_m, 2) * pow(P_.tau_syn_exc, 2) * pow(P_.tau_v, 2) * V_.unit_psc / (P_.C_m * V_.__h * pow(P_.tau_m, 2) * pow(P_.tau_syn_exc, 2) * std::exp(V_.__h / P_.tau_v) - 2 * P_.C_m * V_.__h * pow(P_.tau_m, 2) * P_.tau_syn_exc * P_.tau_v * std::exp(V_.__h / P_.tau_v) + P_.C_m * V_.__h * pow(P_.tau_m, 2) * pow(P_.tau_v, 2) * std::exp(V_.__h / P_.tau_v) - 2 * P_.C_m * V_.__h * P_.tau_m * pow(P_.tau_syn_exc, 2) * P_.tau_v * std::exp(V_.__h / P_.tau_v) + 4 * P_.C_m * V_.__h * P_.tau_m * P_.tau_syn_exc * pow(P_.tau_v, 2) * std::exp(V_.__h / P_.tau_v) - 2 * P_.C_m * V_.__h * P_.tau_m * pow(P_.tau_v, 3) * std::exp(V_.__h / P_.tau_v) + P_.C_m * V_.__h * pow(P_.tau_syn_exc, 2) * pow(P_.tau_v, 2) * std::exp(V_.__h / P_.tau_v) - 2 * P_.C_m * V_.__h * P_.tau_syn_exc * pow(P_.tau_v, 3) * std::exp(V_.__h / P_.tau_v) + P_.C_m * V_.__h * pow(P_.tau_v, 4) * std::exp(V_.__h / P_.tau_v)) + V_.__h * P_.beta * P_.tau_m * P_.tau_syn_exc * pow(P_.tau_v, 4) * V_.unit_psc / (P_.C_m * V_.__h * pow(P_.tau_m, 2) * pow(P_.tau_syn_exc, 2) * std::exp(V_.__h / P_.tau_v) - 2 * P_.C_m * V_.__h * pow(P_.tau_m, 2) * P_.tau_syn_exc * P_.tau_v * std::exp(V_.__h / P_.tau_v) + P_.C_m * V_.__h * pow(P_.tau_m, 2) * pow(P_.tau_v, 2) * std::exp(V_.__h / P_.tau_v) - 2 * P_.C_m * V_.__h * P_.tau_m * pow(P_.tau_syn_exc, 2) * P_.tau_v * std::exp(V_.__h / P_.tau_v) + 4 * P_.C_m * V_.__h * P_.tau_m * P_.tau_syn_exc * pow(P_.tau_v, 2) * std::exp(V_.__h / P_.tau_v) - 2 * P_.C_m * V_.__h * P_.tau_m * pow(P_.tau_v, 3) * std::exp(V_.__h / P_.tau_v) + P_.C_m * V_.__h * pow(P_.tau_syn_exc, 2) * pow(P_.tau_v, 2) * std::exp(V_.__h / P_.tau_v) - 2 * P_.C_m * V_.__h * P_.tau_syn_exc * pow(P_.tau_v, 3) * std::exp(V_.__h / P_.tau_v) + P_.C_m * V_.__h * pow(P_.tau_v, 4) * std::exp(V_.__h / P_.tau_v)) - V_.__h * P_.beta * P_.tau_m * P_.tau_syn_exc * P_.tau_v * V_.unit_psc / (P_.C_m * P_.tau_m * P_.tau_syn_exc * std::exp(V_.__h / P_.tau_v) - P_.C_m * P_.tau_m * P_.tau_v * std::exp(V_.__h / P_.tau_v) - P_.C_m * P_.tau_syn_exc * P_.tau_v * std::exp(V_.__h / P_.tau_v) + P_.C_m * pow(P_.tau_v, 2) * std::exp(V_.__h / P_.tau_v)) - P_.beta * pow(P_.tau_m, 2) * P_.tau_syn_exc * pow(P_.tau_v, 2) * V_.unit_psc / (P_.C_m * pow(P_.tau_m, 3) * std::exp(V_.__h / P_.tau_m) - P_.C_m * pow(P_.tau_m, 2) * P_.tau_syn_exc * std::exp(V_.__h / P_.tau_m) - 2 * P_.C_m * pow(P_.tau_m, 2) * P_.tau_v * std::exp(V_.__h / P_.tau_m) + 2 * P_.C_m * P_.tau_m * P_.tau_syn_exc * P_.tau_v * std::exp(V_.__h / P_.tau_m) + P_.C_m * P_.tau_m * pow(P_.tau_v, 2) * std::exp(V_.__h / P_.tau_m) - P_.C_m * P_.tau_syn_exc * pow(P_.tau_v, 2) * std::exp(V_.__h / P_.tau_m)) + P_.beta * P_.tau_m * pow(P_.tau_syn_exc, 2) * pow(P_.tau_v, 2) * V_.unit_psc / (P_.C_m * P_.tau_m * pow(P_.tau_syn_exc, 2) * std::exp(V_.__h / P_.tau_syn_exc) - 2 * P_.C_m * P_.tau_m * P_.tau_syn_exc * P_.tau_v * std::exp(V_.__h / P_.tau_syn_exc) + P_.C_m * P_.tau_m * pow(P_.tau_v, 2) * std::exp(V_.__h / P_.tau_syn_exc) - P_.C_m * pow(P_.tau_syn_exc, 3) * std::exp(V_.__h / P_.tau_syn_exc) + 2 * P_.C_m * pow(P_.tau_syn_exc, 2) * P_.tau_v * std::exp(V_.__h / P_.tau_syn_exc) - P_.C_m * P_.tau_syn_exc * pow(P_.tau_v, 2) * std::exp(V_.__h / P_.tau_syn_exc)); // as real
+    V_.__P__V_th_v__I_kernel_inh__X__inh_spikes = V_.__h * P_.beta * pow(P_.tau_m, 2) * pow(P_.tau_syn_inh, 2) * pow(P_.tau_v, 2) * V_.unit_psc / (P_.C_m * V_.__h * pow(P_.tau_m, 2) * pow(P_.tau_syn_inh, 2) * std::exp(V_.__h / P_.tau_v) - 2 * P_.C_m * V_.__h * pow(P_.tau_m, 2) * P_.tau_syn_inh * P_.tau_v * std::exp(V_.__h / P_.tau_v) + P_.C_m * V_.__h * pow(P_.tau_m, 2) * pow(P_.tau_v, 2) * std::exp(V_.__h / P_.tau_v) - 2 * P_.C_m * V_.__h * P_.tau_m * pow(P_.tau_syn_inh, 2) * P_.tau_v * std::exp(V_.__h / P_.tau_v) + 4 * P_.C_m * V_.__h * P_.tau_m * P_.tau_syn_inh * pow(P_.tau_v, 2) * std::exp(V_.__h / P_.tau_v) - 2 * P_.C_m * V_.__h * P_.tau_m * pow(P_.tau_v, 3) * std::exp(V_.__h / P_.tau_v) + P_.C_m * V_.__h * pow(P_.tau_syn_inh, 2) * pow(P_.tau_v, 2) * std::exp(V_.__h / P_.tau_v) - 2 * P_.C_m * V_.__h * P_.tau_syn_inh * pow(P_.tau_v, 3) * std::exp(V_.__h / P_.tau_v) + P_.C_m * V_.__h * pow(P_.tau_v, 4) * std::exp(V_.__h / P_.tau_v)) - V_.__h * P_.beta * P_.tau_m * P_.tau_syn_inh * pow(P_.tau_v, 4) * V_.unit_psc / (P_.C_m * V_.__h * pow(P_.tau_m, 2) * pow(P_.tau_syn_inh, 2) * std::exp(V_.__h / P_.tau_v) - 2 * P_.C_m * V_.__h * pow(P_.tau_m, 2) * P_.tau_syn_inh * P_.tau_v * std::exp(V_.__h / P_.tau_v) + P_.C_m * V_.__h * pow(P_.tau_m, 2) * pow(P_.tau_v, 2) * std::exp(V_.__h / P_.tau_v) - 2 * P_.C_m * V_.__h * P_.tau_m * pow(P_.tau_syn_inh, 2) * P_.tau_v * std::exp(V_.__h / P_.tau_v) + 4 * P_.C_m * V_.__h * P_.tau_m * P_.tau_syn_inh * pow(P_.tau_v, 2) * std::exp(V_.__h / P_.tau_v) - 2 * P_.C_m * V_.__h * P_.tau_m * pow(P_.tau_v, 3) * std::exp(V_.__h / P_.tau_v) + P_.C_m * V_.__h * pow(P_.tau_syn_inh, 2) * pow(P_.tau_v, 2) * std::exp(V_.__h / P_.tau_v) - 2 * P_.C_m * V_.__h * P_.tau_syn_inh * pow(P_.tau_v, 3) * std::exp(V_.__h / P_.tau_v) + P_.C_m * V_.__h * pow(P_.tau_v, 4) * std::exp(V_.__h / P_.tau_v)) + V_.__h * P_.beta * P_.tau_m * P_.tau_syn_inh * P_.tau_v * V_.unit_psc / (P_.C_m * P_.tau_m * P_.tau_syn_inh * std::exp(V_.__h / P_.tau_v) - P_.C_m * P_.tau_m * P_.tau_v * std::exp(V_.__h / P_.tau_v) - P_.C_m * P_.tau_syn_inh * P_.tau_v * std::exp(V_.__h / P_.tau_v) + P_.C_m * pow(P_.tau_v, 2) * std::exp(V_.__h / P_.tau_v)) + P_.beta * pow(P_.tau_m, 2) * P_.tau_syn_inh * pow(P_.tau_v, 2) * V_.unit_psc / (P_.C_m * pow(P_.tau_m, 3) * std::exp(V_.__h / P_.tau_m) - P_.C_m * pow(P_.tau_m, 2) * P_.tau_syn_inh * std::exp(V_.__h / P_.tau_m) - 2 * P_.C_m * pow(P_.tau_m, 2) * P_.tau_v * std::exp(V_.__h / P_.tau_m) + 2 * P_.C_m * P_.tau_m * P_.tau_syn_inh * P_.tau_v * std::exp(V_.__h / P_.tau_m) + P_.C_m * P_.tau_m * pow(P_.tau_v, 2) * std::exp(V_.__h / P_.tau_m) - P_.C_m * P_.tau_syn_inh * pow(P_.tau_v, 2) * std::exp(V_.__h / P_.tau_m)) - P_.beta * P_.tau_m * pow(P_.tau_syn_inh, 2) * pow(P_.tau_v, 2) * V_.unit_psc / (P_.C_m * P_.tau_m * pow(P_.tau_syn_inh, 2) * std::exp(V_.__h / P_.tau_syn_inh) - 2 * P_.C_m * P_.tau_m * P_.tau_syn_inh * P_.tau_v * std::exp(V_.__h / P_.tau_syn_inh) + P_.C_m * P_.tau_m * pow(P_.tau_v, 2) * std::exp(V_.__h / P_.tau_syn_inh) - P_.C_m * pow(P_.tau_syn_inh, 3) * std::exp(V_.__h / P_.tau_syn_inh) + 2 * P_.C_m * pow(P_.tau_syn_inh, 2) * P_.tau_v * std::exp(V_.__h / P_.tau_syn_inh) - P_.C_m * P_.tau_syn_inh * pow(P_.tau_v, 2) * std::exp(V_.__h / P_.tau_syn_inh)); // as real
     V_.__P__refr_t__refr_t = 1; // as real
     V_.__P__I_kernel_exc__X__exc_spikes__I_kernel_exc__X__exc_spikes = std::exp((-V_.__h) / P_.tau_syn_exc); // as real
     V_.__P__I_kernel_inh__X__inh_spikes__I_kernel_inh__X__inh_spikes = std::exp((-V_.__h) / P_.tau_syn_inh); // as real
@@ -362,52 +333,6 @@ void amat_neuron_nestml::pre_run_hook()
 //   Update and spike handling functions
 // ---------------------------------------------------------------------------
 
-extern "C" inline int amat_neuron_nestml_dynamics_V_m_V_th_alpha_1_V_th_alpha_2_V_th_v_V_th_v_aux_refr_t(double __time, const double ode_state[], double f[], void* pnode)
-{
-  typedef amat_neuron_nestml::State_ State_;
-   // get access to node so we can almost work as in a member function
-  assert( pnode );
-  const amat_neuron_nestml& node = *( reinterpret_cast< amat_neuron_nestml* >( pnode ) );
-  constexpr int I_STIM = amat_neuron_nestml::I_STIM;
-  // ode_state[] here is---and must be---the state vector supplied by the integrator,
-  // not the state vector in the node, node.S_.ode_state[].
-
-
-  f[State_::V_th_alpha_1] = (-ode_state[State_::V_th_alpha_1]) / node.P_.tau_1;
-  f[State_::V_th_alpha_2] = (-ode_state[State_::V_th_alpha_2]) / node.P_.tau_2;
-  f[State_::V_m] = (node.P_.E_L - ode_state[State_::V_m]) / node.P_.tau_m + (node.P_.I_e + ode_state[State_::I_kernel_exc__X__exc_spikes] * node.V_.unit_psc - ode_state[State_::I_kernel_inh__X__inh_spikes] * node.V_.unit_psc + node.B_.continuous_inputs_grid_sum_[I_STIM]) / node.P_.C_m;
-  f[State_::V_th_v_aux] = (-ode_state[State_::V_th_v_aux]) / node.P_.tau_v + node.P_.beta * ((node.P_.E_L - ode_state[State_::V_m]) / node.P_.tau_m + (node.P_.I_e + ode_state[State_::I_kernel_exc__X__exc_spikes] * node.V_.unit_psc - ode_state[State_::I_kernel_inh__X__inh_spikes] * node.V_.unit_psc + node.B_.continuous_inputs_grid_sum_[I_STIM]) / node.P_.C_m);
-  f[State_::V_th_v] = (-ode_state[State_::V_th_v]) / node.P_.tau_v + ode_state[State_::V_th_v_aux];
-  f[State_::refr_t] = (-1.);
-  f[State_::I_kernel_exc__X__exc_spikes] = (-ode_state[State_::I_kernel_exc__X__exc_spikes]) / node.P_.tau_syn_exc;
-  f[State_::I_kernel_inh__X__inh_spikes] = (-ode_state[State_::I_kernel_inh__X__inh_spikes]) / node.P_.tau_syn_inh;
-  return GSL_SUCCESS;
-}
-
-extern "C" inline int amat_neuron_nestml_dynamics_V_m_V_th_alpha_1_V_th_alpha_2_V_th_v_V_th_v_aux(double __time, const double ode_state[], double f[], void* pnode)
-{
-  typedef amat_neuron_nestml::State_ State_;
-   // get access to node so we can almost work as in a member function
-  assert( pnode );
-  const amat_neuron_nestml& node = *( reinterpret_cast< amat_neuron_nestml* >( pnode ) );
-  constexpr int I_STIM = amat_neuron_nestml::I_STIM;
-  // ode_state[] here is---and must be---the state vector supplied by the integrator,
-  // not the state vector in the node, node.S_.ode_state[].
-
-
-  f[State_::V_th_alpha_1] = (-ode_state[State_::V_th_alpha_1]) / node.P_.tau_1;
-  f[State_::V_th_alpha_2] = (-ode_state[State_::V_th_alpha_2]) / node.P_.tau_2;
-  f[State_::V_m] = (node.P_.E_L - ode_state[State_::V_m]) / node.P_.tau_m + (node.P_.I_e + ode_state[State_::I_kernel_exc__X__exc_spikes] * node.V_.unit_psc - ode_state[State_::I_kernel_inh__X__inh_spikes] * node.V_.unit_psc + node.B_.continuous_inputs_grid_sum_[I_STIM]) / node.P_.C_m;
-  f[State_::V_th_v_aux] = (-ode_state[State_::V_th_v_aux]) / node.P_.tau_v + node.P_.beta * ((node.P_.E_L - ode_state[State_::V_m]) / node.P_.tau_m + (node.P_.I_e + ode_state[State_::I_kernel_exc__X__exc_spikes] * node.V_.unit_psc - ode_state[State_::I_kernel_inh__X__inh_spikes] * node.V_.unit_psc + node.B_.continuous_inputs_grid_sum_[I_STIM]) / node.P_.C_m);
-  f[State_::V_th_v] = (-ode_state[State_::V_th_v]) / node.P_.tau_v + ode_state[State_::V_th_v_aux];
-  f[State_::refr_t] = 0;
-  f[State_::I_kernel_exc__X__exc_spikes] = (-ode_state[State_::I_kernel_exc__X__exc_spikes]) / node.P_.tau_syn_exc;
-  f[State_::I_kernel_inh__X__inh_spikes] = (-ode_state[State_::I_kernel_inh__X__inh_spikes]) / node.P_.tau_syn_inh;
-  return GSL_SUCCESS;
-}
-
-
-
 void amat_neuron_nestml::update(nest::Time const & origin, const long from, const long to)
 {
   const double __timestep = nest::Time::get_resolution().get_ms();  // do not remove, this is necessary for the timestep() function
@@ -437,106 +362,50 @@ void amat_neuron_nestml::update(nest::Time const & origin, const long from, cons
      * step 1: regardless of whether and how integrate_odes() will be called, update variables due to convolutions
     **/
 
-    const double I_kernel_exc__X__exc_spikes__tmp_ = S_.ode_state[State_::I_kernel_exc__X__exc_spikes] * V_.__P__I_kernel_exc__X__exc_spikes__I_kernel_exc__X__exc_spikes;
-    const double I_kernel_inh__X__inh_spikes__tmp_ = S_.ode_state[State_::I_kernel_inh__X__inh_spikes] * V_.__P__I_kernel_inh__X__inh_spikes__I_kernel_inh__X__inh_spikes;
+    const double I_kernel_exc__X__exc_spikes__tmp_ = S_.I_kernel_exc__X__exc_spikes * V_.__P__I_kernel_exc__X__exc_spikes__I_kernel_exc__X__exc_spikes;
+    const double I_kernel_inh__X__inh_spikes__tmp_ = S_.I_kernel_inh__X__inh_spikes * V_.__P__I_kernel_inh__X__inh_spikes__I_kernel_inh__X__inh_spikes;
 
 
     /**
      * Begin NESTML generated code for the update block(s)
     **/
 
-  if (S_.ode_state[State_::refr_t] > 0)
-  {  
-    // start rendered code for integrate_odes(V_m, V_th_alpha_1, V_th_alpha_2, V_th_v, V_th_v_aux, refr_t)
-    // analytic solver: integrating state variables V_th_alpha_1, V_th_alpha_2, V_m, refr_t (first step: compute new values)
-    const double V_th_alpha_1__tmp = S_.ode_state[State_::V_th_alpha_1] * V_.__P__V_th_alpha_1__V_th_alpha_1;
-    const double V_th_alpha_2__tmp = S_.ode_state[State_::V_th_alpha_2] * V_.__P__V_th_alpha_2__V_th_alpha_2;
-    const double V_m__tmp = (-P_.E_L) * V_.__P__V_m__V_m + P_.E_L + S_.ode_state[State_::I_kernel_exc__X__exc_spikes] * V_.__P__V_m__I_kernel_exc__X__exc_spikes + S_.ode_state[State_::I_kernel_inh__X__inh_spikes] * V_.__P__V_m__I_kernel_inh__X__inh_spikes + S_.ode_state[State_::V_m] * V_.__P__V_m__V_m - P_.I_e * V_.__P__V_m__V_m * P_.tau_m / P_.C_m + P_.I_e * P_.tau_m / P_.C_m - B_.continuous_inputs_grid_sum_[I_STIM] * V_.__P__V_m__V_m * P_.tau_m / P_.C_m + B_.continuous_inputs_grid_sum_[I_STIM] * P_.tau_m / P_.C_m;
-    const double refr_t__tmp = V_.__P__refr_t__refr_t * S_.ode_state[State_::refr_t] - 1. * V_.__h;
-    // numeric solver: integrating state variables: V_th_alpha_1, V_th_alpha_2, V_m, V_th_v_aux, V_th_v, refr_t
-    double __t = 0;
-    B_.__sys.function = amat_neuron_nestml_dynamics_V_m_V_th_alpha_1_V_th_alpha_2_V_th_v_V_th_v_aux_refr_t;
-    // numerical integration with adaptive step size control:
-    // ------------------------------------------------------
-    // gsl_odeiv_evolve_apply performs only a single numerical
-    // integration step, starting from t and bounded by step;
-    // the while-loop ensures integration over the whole simulation
-    // step (0, step] if more than one integration step is needed due
-    // to a small integration step size;
-    // note that (t+IntegrationStep > step) leads to integration over
-    // (t, step] and afterwards setting t to step, but it does not
-    // enforce setting IntegrationStep to step-t; this is of advantage
-    // for a consistent and efficient integration across subsequent
-    // simulation intervals
-    while ( __t < B_.__step )
-    {
-
-      const int status = gsl_odeiv_evolve_apply(B_.__e,
-                                                B_.__c,
-                                                B_.__s,
-                                                &B_.__sys,              // system of ODE
-                                                &__t,                   // from t
-                                                B_.__step,              // to t <= step
-                                                &B_.__integration_step, // integration step size
-                                                S_.ode_state);          // neuronal state
-
-      if ( status != GSL_SUCCESS )
-      {
-        throw nest::GSLSolverFailure( get_name(), status );
-      }
+    if (S_.refr_t > 0)
+    {  
+      // start rendered code for integrate_odes(V_m, V_th_alpha_1, V_th_alpha_2, V_th_v, V_th_v_aux, refr_t)
+      // analytic solver: integrating state variables V_th_alpha_1, V_th_alpha_2, V_m, V_th_v_aux, V_th_v, refr_t (first step: compute new values)
+      const double V_th_alpha_1__tmp = S_.V_th_alpha_1 * V_.__P__V_th_alpha_1__V_th_alpha_1;
+      const double V_th_alpha_2__tmp = S_.V_th_alpha_2 * V_.__P__V_th_alpha_2__V_th_alpha_2;
+      const double V_m__tmp = (-P_.E_L) * V_.__P__V_m__V_m + P_.E_L + S_.I_kernel_exc__X__exc_spikes * V_.__P__V_m__I_kernel_exc__X__exc_spikes + S_.I_kernel_inh__X__inh_spikes * V_.__P__V_m__I_kernel_inh__X__inh_spikes + S_.V_m * V_.__P__V_m__V_m - P_.I_e * V_.__P__V_m__V_m * P_.tau_m / P_.C_m + P_.I_e * P_.tau_m / P_.C_m - B_.continuous_inputs_grid_sum_[I_STIM] * V_.__P__V_m__V_m * P_.tau_m / P_.C_m + B_.continuous_inputs_grid_sum_[I_STIM] * P_.tau_m / P_.C_m;
+      const double V_th_v_aux__tmp = (-P_.E_L) * V_.__P__V_th_v_aux__V_th_v_aux * P_.beta * P_.tau_v / P_.tau_m + P_.E_L * P_.beta * P_.tau_v / P_.tau_m + S_.I_kernel_exc__X__exc_spikes * V_.__P__V_th_v_aux__I_kernel_exc__X__exc_spikes + S_.I_kernel_inh__X__inh_spikes * V_.__P__V_th_v_aux__I_kernel_inh__X__inh_spikes + S_.V_m * V_.__P__V_th_v_aux__V_m + S_.V_th_v_aux * V_.__P__V_th_v_aux__V_th_v_aux - P_.I_e * V_.__P__V_th_v_aux__V_th_v_aux * P_.beta * P_.tau_v / P_.C_m + P_.I_e * P_.beta * P_.tau_v / P_.C_m - B_.continuous_inputs_grid_sum_[I_STIM] * V_.__P__V_th_v_aux__V_th_v_aux * P_.beta * P_.tau_v / P_.C_m + B_.continuous_inputs_grid_sum_[I_STIM] * P_.beta * P_.tau_v / P_.C_m;
+      const double V_th_v__tmp = S_.I_kernel_exc__X__exc_spikes * V_.__P__V_th_v__I_kernel_exc__X__exc_spikes + S_.I_kernel_inh__X__inh_spikes * V_.__P__V_th_v__I_kernel_inh__X__inh_spikes + S_.V_m * V_.__P__V_th_v__V_m + S_.V_th_v * V_.__P__V_th_v__V_th_v + S_.V_th_v_aux * V_.__P__V_th_v__V_th_v_aux;
+      const double refr_t__tmp = V_.__P__refr_t__refr_t * S_.refr_t - 1. * V_.__h;
+      // analytic solver: integrating state variables V_th_alpha_1, V_th_alpha_2, V_m, V_th_v_aux, V_th_v, refr_t (second step: replace analytically solvable variables with precisely integrated values)
+      S_.V_th_alpha_1 = V_th_alpha_1__tmp;
+      S_.V_th_alpha_2 = V_th_alpha_2__tmp;
+      S_.V_m = V_m__tmp;
+      S_.V_th_v_aux = V_th_v_aux__tmp;
+      S_.V_th_v = V_th_v__tmp;
+      S_.refr_t = refr_t__tmp;
+      // end rendered code for integrate_odes(V_m, V_th_alpha_1, V_th_alpha_2, V_th_v, V_th_v_aux, refr_t)
     }
-    // analytic solver: integrating state variables V_th_alpha_1, V_th_alpha_2, V_m, refr_t (second step: replace analytically solvable variables with precisely integrated values)
-    S_.ode_state[State_::V_th_alpha_1] = V_th_alpha_1__tmp;
-    S_.ode_state[State_::V_th_alpha_2] = V_th_alpha_2__tmp;
-    S_.ode_state[State_::V_m] = V_m__tmp;
-    S_.ode_state[State_::refr_t] = refr_t__tmp;
-    // end rendered code for integrate_odes(V_m, V_th_alpha_1, V_th_alpha_2, V_th_v, V_th_v_aux, refr_t)
-  }
-  else
-  {  
-    // start rendered code for integrate_odes(V_m, V_th_alpha_1, V_th_alpha_2, V_th_v, V_th_v_aux)
-    // analytic solver: integrating state variables V_th_alpha_1, V_th_alpha_2, V_m (first step: compute new values)
-    const double V_th_alpha_1__tmp = S_.ode_state[State_::V_th_alpha_1] * V_.__P__V_th_alpha_1__V_th_alpha_1;
-    const double V_th_alpha_2__tmp = S_.ode_state[State_::V_th_alpha_2] * V_.__P__V_th_alpha_2__V_th_alpha_2;
-    const double V_m__tmp = (-P_.E_L) * V_.__P__V_m__V_m + P_.E_L + S_.ode_state[State_::I_kernel_exc__X__exc_spikes] * V_.__P__V_m__I_kernel_exc__X__exc_spikes + S_.ode_state[State_::I_kernel_inh__X__inh_spikes] * V_.__P__V_m__I_kernel_inh__X__inh_spikes + S_.ode_state[State_::V_m] * V_.__P__V_m__V_m - P_.I_e * V_.__P__V_m__V_m * P_.tau_m / P_.C_m + P_.I_e * P_.tau_m / P_.C_m - B_.continuous_inputs_grid_sum_[I_STIM] * V_.__P__V_m__V_m * P_.tau_m / P_.C_m + B_.continuous_inputs_grid_sum_[I_STIM] * P_.tau_m / P_.C_m;
-    // numeric solver: integrating state variables: V_th_alpha_1, V_th_alpha_2, V_m, V_th_v_aux, V_th_v
-    double __t = 0;
-    B_.__sys.function = amat_neuron_nestml_dynamics_V_m_V_th_alpha_1_V_th_alpha_2_V_th_v_V_th_v_aux;
-    // numerical integration with adaptive step size control:
-    // ------------------------------------------------------
-    // gsl_odeiv_evolve_apply performs only a single numerical
-    // integration step, starting from t and bounded by step;
-    // the while-loop ensures integration over the whole simulation
-    // step (0, step] if more than one integration step is needed due
-    // to a small integration step size;
-    // note that (t+IntegrationStep > step) leads to integration over
-    // (t, step] and afterwards setting t to step, but it does not
-    // enforce setting IntegrationStep to step-t; this is of advantage
-    // for a consistent and efficient integration across subsequent
-    // simulation intervals
-    while ( __t < B_.__step )
-    {
-
-      const int status = gsl_odeiv_evolve_apply(B_.__e,
-                                                B_.__c,
-                                                B_.__s,
-                                                &B_.__sys,              // system of ODE
-                                                &__t,                   // from t
-                                                B_.__step,              // to t <= step
-                                                &B_.__integration_step, // integration step size
-                                                S_.ode_state);          // neuronal state
-
-      if ( status != GSL_SUCCESS )
-      {
-        throw nest::GSLSolverFailure( get_name(), status );
-      }
+    else
+    {  
+      // start rendered code for integrate_odes(V_m, V_th_alpha_1, V_th_alpha_2, V_th_v, V_th_v_aux)
+      // analytic solver: integrating state variables V_th_alpha_1, V_th_alpha_2, V_m, V_th_v_aux, V_th_v (first step: compute new values)
+      const double V_th_alpha_1__tmp = S_.V_th_alpha_1 * V_.__P__V_th_alpha_1__V_th_alpha_1;
+      const double V_th_alpha_2__tmp = S_.V_th_alpha_2 * V_.__P__V_th_alpha_2__V_th_alpha_2;
+      const double V_m__tmp = (-P_.E_L) * V_.__P__V_m__V_m + P_.E_L + S_.I_kernel_exc__X__exc_spikes * V_.__P__V_m__I_kernel_exc__X__exc_spikes + S_.I_kernel_inh__X__inh_spikes * V_.__P__V_m__I_kernel_inh__X__inh_spikes + S_.V_m * V_.__P__V_m__V_m - P_.I_e * V_.__P__V_m__V_m * P_.tau_m / P_.C_m + P_.I_e * P_.tau_m / P_.C_m - B_.continuous_inputs_grid_sum_[I_STIM] * V_.__P__V_m__V_m * P_.tau_m / P_.C_m + B_.continuous_inputs_grid_sum_[I_STIM] * P_.tau_m / P_.C_m;
+      const double V_th_v_aux__tmp = (-P_.E_L) * V_.__P__V_th_v_aux__V_th_v_aux * P_.beta * P_.tau_v / P_.tau_m + P_.E_L * P_.beta * P_.tau_v / P_.tau_m + S_.I_kernel_exc__X__exc_spikes * V_.__P__V_th_v_aux__I_kernel_exc__X__exc_spikes + S_.I_kernel_inh__X__inh_spikes * V_.__P__V_th_v_aux__I_kernel_inh__X__inh_spikes + S_.V_m * V_.__P__V_th_v_aux__V_m + S_.V_th_v_aux * V_.__P__V_th_v_aux__V_th_v_aux - P_.I_e * V_.__P__V_th_v_aux__V_th_v_aux * P_.beta * P_.tau_v / P_.C_m + P_.I_e * P_.beta * P_.tau_v / P_.C_m - B_.continuous_inputs_grid_sum_[I_STIM] * V_.__P__V_th_v_aux__V_th_v_aux * P_.beta * P_.tau_v / P_.C_m + B_.continuous_inputs_grid_sum_[I_STIM] * P_.beta * P_.tau_v / P_.C_m;
+      const double V_th_v__tmp = S_.I_kernel_exc__X__exc_spikes * V_.__P__V_th_v__I_kernel_exc__X__exc_spikes + S_.I_kernel_inh__X__inh_spikes * V_.__P__V_th_v__I_kernel_inh__X__inh_spikes + S_.V_m * V_.__P__V_th_v__V_m + S_.V_th_v * V_.__P__V_th_v__V_th_v + S_.V_th_v_aux * V_.__P__V_th_v__V_th_v_aux;
+      // analytic solver: integrating state variables V_th_alpha_1, V_th_alpha_2, V_m, V_th_v_aux, V_th_v (second step: replace analytically solvable variables with precisely integrated values)
+      S_.V_th_alpha_1 = V_th_alpha_1__tmp;
+      S_.V_th_alpha_2 = V_th_alpha_2__tmp;
+      S_.V_m = V_m__tmp;
+      S_.V_th_v_aux = V_th_v_aux__tmp;
+      S_.V_th_v = V_th_v__tmp;
+      // end rendered code for integrate_odes(V_m, V_th_alpha_1, V_th_alpha_2, V_th_v, V_th_v_aux)
     }
-    // analytic solver: integrating state variables V_th_alpha_1, V_th_alpha_2, V_m (second step: replace analytically solvable variables with precisely integrated values)
-    S_.ode_state[State_::V_th_alpha_1] = V_th_alpha_1__tmp;
-    S_.ode_state[State_::V_th_alpha_2] = V_th_alpha_2__tmp;
-    S_.ode_state[State_::V_m] = V_m__tmp;
-    // end rendered code for integrate_odes(V_m, V_th_alpha_1, V_th_alpha_2, V_th_v, V_th_v_aux)
-  }
 
     /**
      * Begin NESTML generated code for the onReceive block(s)
@@ -549,8 +418,8 @@ void amat_neuron_nestml::update(nest::Time const & origin, const long from, cons
      * step 2: regardless of whether and how integrate_odes() was called, update variables due to convolutions. Set to the updated values at the end of the timestep.
     **/
 
-    S_.ode_state[State_::I_kernel_exc__X__exc_spikes] = I_kernel_exc__X__exc_spikes__tmp_;
-    S_.ode_state[State_::I_kernel_inh__X__inh_spikes] = I_kernel_inh__X__inh_spikes__tmp_;
+    S_.I_kernel_exc__X__exc_spikes = I_kernel_exc__X__exc_spikes__tmp_;
+    S_.I_kernel_inh__X__inh_spikes = I_kernel_inh__X__inh_spikes__tmp_;
 
 
 
@@ -558,18 +427,18 @@ void amat_neuron_nestml::update(nest::Time const & origin, const long from, cons
      * spike updates due to convolutions
     **/
 
-    S_.ode_state[State_::I_kernel_exc__X__exc_spikes] += ((0.001 * B_.spike_inputs_grid_sum_[EXC_SPIKES - MIN_SPIKE_RECEPTOR])) / (1 / 1000.0);
-    S_.ode_state[State_::I_kernel_inh__X__inh_spikes] += ((0.001 * B_.spike_inputs_grid_sum_[INH_SPIKES - MIN_SPIKE_RECEPTOR])) / (1 / 1000.0);
+    S_.I_kernel_exc__X__exc_spikes += ((0.001 * B_.spike_inputs_grid_sum_[EXC_SPIKES - MIN_SPIKE_RECEPTOR])) / (1 / 1000.0);
+    S_.I_kernel_inh__X__inh_spikes += ((0.001 * B_.spike_inputs_grid_sum_[INH_SPIKES - MIN_SPIKE_RECEPTOR])) / (1 / 1000.0);
 
     /**
      * Begin NESTML generated code for the onCondition block(s)
     **/
 
-    if (S_.ode_state[State_::refr_t] <= 0 && S_.ode_state[State_::V_m] >= get_V_th())
+    if (S_.refr_t <= 0 && S_.V_m >= get_V_th())
     {
-      S_.ode_state[State_::refr_t] = P_.refr_T;
-      S_.ode_state[State_::V_th_alpha_1] += P_.alpha_1;
-      S_.ode_state[State_::V_th_alpha_2] += P_.alpha_2;
+      S_.refr_t = P_.refr_T;
+      S_.V_th_alpha_1 += P_.alpha_1;
+      S_.V_th_alpha_2 += P_.alpha_2;
 
       // begin generated code for emit_spike() function
 
@@ -591,7 +460,7 @@ void amat_neuron_nestml::update(nest::Time const & origin, const long from, cons
     }
     // voltage logging
     B_.logger_.record_data(origin.get_steps() + lag);
-}
+  }
 }
 
 // Do not move this function as inline to h-file. It depends on ``universal_data_logger_impl.h`` being included here.

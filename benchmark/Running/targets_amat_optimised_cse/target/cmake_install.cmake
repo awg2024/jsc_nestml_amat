@@ -2,7 +2,7 @@
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "/tmp/nestml_target_kk1zbj3r")
+  set(CMAKE_INSTALL_PREFIX "/tmp/nestml_target_9g9a96ci")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -43,25 +43,25 @@ if(NOT DEFINED CMAKE_OBJDUMP)
 endif()
 
 if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
-  if(EXISTS "$ENV{DESTDIR}/tmp/nestml_target_kk1zbj3r/nestml_amat_cse_module.so" AND
-     NOT IS_SYMLINK "$ENV{DESTDIR}/tmp/nestml_target_kk1zbj3r/nestml_amat_cse_module.so")
+  if(EXISTS "$ENV{DESTDIR}/tmp/nestml_target_9g9a96ci/nestml_amat_cse_module.so" AND
+     NOT IS_SYMLINK "$ENV{DESTDIR}/tmp/nestml_target_9g9a96ci/nestml_amat_cse_module.so")
     file(RPATH_CHECK
-         FILE "$ENV{DESTDIR}/tmp/nestml_target_kk1zbj3r/nestml_amat_cse_module.so"
+         FILE "$ENV{DESTDIR}/tmp/nestml_target_9g9a96ci/nestml_amat_cse_module.so"
          RPATH "")
   endif()
   list(APPEND CMAKE_ABSOLUTE_DESTINATION_FILES
-   "/tmp/nestml_target_kk1zbj3r/nestml_amat_cse_module.so")
+   "/tmp/nestml_target_9g9a96ci/nestml_amat_cse_module.so")
   if(CMAKE_WARN_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(WARNING "ABSOLUTE path INSTALL DESTINATION : ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
   if(CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
-  file(INSTALL DESTINATION "/tmp/nestml_target_kk1zbj3r" TYPE MODULE FILES "/p/project1/paj2623/gray2/benchmark/Running/targets_amat_optimised_cse/target/nestml_amat_cse_module.so")
-  if(EXISTS "$ENV{DESTDIR}/tmp/nestml_target_kk1zbj3r/nestml_amat_cse_module.so" AND
-     NOT IS_SYMLINK "$ENV{DESTDIR}/tmp/nestml_target_kk1zbj3r/nestml_amat_cse_module.so")
+  file(INSTALL DESTINATION "/tmp/nestml_target_9g9a96ci" TYPE MODULE FILES "/p/project1/paj2623/gray2/benchmark/Running/targets_amat_optimised_cse/target/nestml_amat_cse_module.so")
+  if(EXISTS "$ENV{DESTDIR}/tmp/nestml_target_9g9a96ci/nestml_amat_cse_module.so" AND
+     NOT IS_SYMLINK "$ENV{DESTDIR}/tmp/nestml_target_9g9a96ci/nestml_amat_cse_module.so")
     if(CMAKE_INSTALL_DO_STRIP)
-      execute_process(COMMAND "/p/software/default/stages/2026/software/binutils/2.44-GCCcore-14.3.0/bin/strip" "$ENV{DESTDIR}/tmp/nestml_target_kk1zbj3r/nestml_amat_cse_module.so")
+      execute_process(COMMAND "/p/software/default/stages/2026/software/binutils/2.44-GCCcore-14.3.0/bin/strip" "$ENV{DESTDIR}/tmp/nestml_target_9g9a96ci/nestml_amat_cse_module.so")
     endif()
   endif()
 endif()

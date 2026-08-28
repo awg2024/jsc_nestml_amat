@@ -68,7 +68,7 @@ include CMakeFiles/dist.dir/progress.make
 
 CMakeFiles/dist:
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --blue --bold --progress-dir=/p/project1/paj2623/gray2/benchmark/Running/targets_amat_optimised_cse/target/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Creating a source distribution from nestml_amat_cse_module..."
-	/bin/gmake package_source
+	/p/software/default/stages/2026/software/make/4.4.1-GCCcore-14.3.0/bin/gmake package_source
 
 CMakeFiles/dist.dir/codegen:
 .PHONY : CMakeFiles/dist.dir/codegen
