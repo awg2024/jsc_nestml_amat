@@ -309,7 +309,6 @@ parser.add_argument("--smoke_test",action="store_true",help="Use small-network c
 
 parser.add_argument("--simtime",type=float,default=999.0,help="Biological simulation time in ms",)
 
-
 args = parser.parse_args() # processes arguments and flags passed by user 
 
 MODEL_VARIANTS = {

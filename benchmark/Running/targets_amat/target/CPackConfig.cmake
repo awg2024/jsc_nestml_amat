@@ -20,7 +20,7 @@ set(CPACK_DEFAULT_PACKAGE_DESCRIPTION_SUMMARY "nestml_amat_module built using CM
 set(CPACK_GENERATOR "TGZ")
 set(CPACK_INNOSETUP_ARCHITECTURE "x64")
 set(CPACK_INSTALL_CMAKE_PROJECTS "/p/project1/paj2623/gray2/benchmark/Running/targets_amat/target;nestml_amat_module;ALL;/")
-set(CPACK_INSTALL_PREFIX "/tmp/nestml_target_0joxh8t6")
+set(CPACK_INSTALL_PREFIX "/tmp/nestml_target_mnd18r04")
 set(CPACK_MODULE_PATH "")
 set(CPACK_NSIS_DISPLAY_NAME "nestml_amat_module 1.0")
 set(CPACK_NSIS_INSTALLER_ICON_CODE "")

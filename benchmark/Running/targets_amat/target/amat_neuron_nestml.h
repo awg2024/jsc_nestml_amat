@@ -19,7 +19,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with NEST.  If not, see <http://www.gnu.org/licenses/>.
  *
- *  Generated from NESTML 8.3.0-rc3-post-dev at time: 2026-08-28 06:55:01.412118
+ *  Generated from NESTML 8.3.0-rc3-post-dev at time: 2026-08-31 11:33:51.706591
 **/
 #ifndef AMAT_NEURON_NESTML
 #define AMAT_NEURON_NESTML
@@ -58,8 +58,8 @@ namespace amat_neuron_nestml_names
     const Name _V_th_v_aux( "V_th_v_aux" );
     const Name _V_m( "V_m" );
     const Name _refr_t( "refr_t" );
-    const Name _I_kernel_exc__X__exc_spikes( "I_kernel_exc__X__exc_spikes" );
     const Name _I_kernel_inh__X__inh_spikes( "I_kernel_inh__X__inh_spikes" );
+    const Name _I_kernel_exc__X__exc_spikes( "I_kernel_exc__X__exc_spikes" );
     // inline expressions
     const Name _I_syn_ex( "I_syn_ex" );
     const Name _I_syn_in( "I_syn_in" );
@@ -86,20 +86,20 @@ namespace amat_neuron_nestml_names
     const Name ___P__V_th_alpha_1__V_th_alpha_1( "__P__V_th_alpha_1__V_th_alpha_1" );
     const Name ___P__V_th_alpha_2__V_th_alpha_2( "__P__V_th_alpha_2__V_th_alpha_2" );
     const Name ___P__V_m__V_m( "__P__V_m__V_m" );
-    const Name ___P__V_m__I_kernel_exc__X__exc_spikes( "__P__V_m__I_kernel_exc__X__exc_spikes" );
     const Name ___P__V_m__I_kernel_inh__X__inh_spikes( "__P__V_m__I_kernel_inh__X__inh_spikes" );
+    const Name ___P__V_m__I_kernel_exc__X__exc_spikes( "__P__V_m__I_kernel_exc__X__exc_spikes" );
     const Name ___P__V_th_v_aux__V_m( "__P__V_th_v_aux__V_m" );
     const Name ___P__V_th_v_aux__V_th_v_aux( "__P__V_th_v_aux__V_th_v_aux" );
-    const Name ___P__V_th_v_aux__I_kernel_exc__X__exc_spikes( "__P__V_th_v_aux__I_kernel_exc__X__exc_spikes" );
     const Name ___P__V_th_v_aux__I_kernel_inh__X__inh_spikes( "__P__V_th_v_aux__I_kernel_inh__X__inh_spikes" );
+    const Name ___P__V_th_v_aux__I_kernel_exc__X__exc_spikes( "__P__V_th_v_aux__I_kernel_exc__X__exc_spikes" );
     const Name ___P__V_th_v__V_m( "__P__V_th_v__V_m" );
     const Name ___P__V_th_v__V_th_v_aux( "__P__V_th_v__V_th_v_aux" );
     const Name ___P__V_th_v__V_th_v( "__P__V_th_v__V_th_v" );
-    const Name ___P__V_th_v__I_kernel_exc__X__exc_spikes( "__P__V_th_v__I_kernel_exc__X__exc_spikes" );
     const Name ___P__V_th_v__I_kernel_inh__X__inh_spikes( "__P__V_th_v__I_kernel_inh__X__inh_spikes" );
+    const Name ___P__V_th_v__I_kernel_exc__X__exc_spikes( "__P__V_th_v__I_kernel_exc__X__exc_spikes" );
     const Name ___P__refr_t__refr_t( "__P__refr_t__refr_t" );
-    const Name ___P__I_kernel_exc__X__exc_spikes__I_kernel_exc__X__exc_spikes( "__P__I_kernel_exc__X__exc_spikes__I_kernel_exc__X__exc_spikes" );
     const Name ___P__I_kernel_inh__X__inh_spikes__I_kernel_inh__X__inh_spikes( "__P__I_kernel_inh__X__inh_spikes__I_kernel_inh__X__inh_spikes" );
+    const Name ___P__I_kernel_exc__X__exc_spikes__I_kernel_exc__X__exc_spikes( "__P__I_kernel_exc__X__exc_spikes__I_kernel_exc__X__exc_spikes" );
 
     const Name gsl_abs_error_tol("gsl_abs_error_tol");
     const Name gsl_rel_error_tol("gsl_rel_error_tol");
@@ -397,20 +397,20 @@ public:
     S_.refr_t = __v;
   }
 
-  inline double get_I_kernel_exc__X__exc_spikes() const
-  {
-    return S_.I_kernel_exc__X__exc_spikes;
-  }inline void set_I_kernel_exc__X__exc_spikes(const double __v)
-  {
-    S_.I_kernel_exc__X__exc_spikes = __v;
-  }
-
   inline double get_I_kernel_inh__X__inh_spikes() const
   {
     return S_.I_kernel_inh__X__inh_spikes;
   }inline void set_I_kernel_inh__X__inh_spikes(const double __v)
   {
     S_.I_kernel_inh__X__inh_spikes = __v;
+  }
+
+  inline double get_I_kernel_exc__X__exc_spikes() const
+  {
+    return S_.I_kernel_exc__X__exc_spikes;
+  }inline void set_I_kernel_exc__X__exc_spikes(const double __v)
+  {
+    S_.I_kernel_exc__X__exc_spikes = __v;
   }
 
 
@@ -570,19 +570,19 @@ public:
   {
     V_.__P__V_m__V_m = __v;
   }
-  inline double get___P__V_m__I_kernel_exc__X__exc_spikes() const
-  {
-    return V_.__P__V_m__I_kernel_exc__X__exc_spikes;
-  }inline void set___P__V_m__I_kernel_exc__X__exc_spikes(const double __v)
-  {
-    V_.__P__V_m__I_kernel_exc__X__exc_spikes = __v;
-  }
   inline double get___P__V_m__I_kernel_inh__X__inh_spikes() const
   {
     return V_.__P__V_m__I_kernel_inh__X__inh_spikes;
   }inline void set___P__V_m__I_kernel_inh__X__inh_spikes(const double __v)
   {
     V_.__P__V_m__I_kernel_inh__X__inh_spikes = __v;
+  }
+  inline double get___P__V_m__I_kernel_exc__X__exc_spikes() const
+  {
+    return V_.__P__V_m__I_kernel_exc__X__exc_spikes;
+  }inline void set___P__V_m__I_kernel_exc__X__exc_spikes(const double __v)
+  {
+    V_.__P__V_m__I_kernel_exc__X__exc_spikes = __v;
   }
   inline double get___P__V_th_v_aux__V_m() const
   {
@@ -598,19 +598,19 @@ public:
   {
     V_.__P__V_th_v_aux__V_th_v_aux = __v;
   }
-  inline double get___P__V_th_v_aux__I_kernel_exc__X__exc_spikes() const
-  {
-    return V_.__P__V_th_v_aux__I_kernel_exc__X__exc_spikes;
-  }inline void set___P__V_th_v_aux__I_kernel_exc__X__exc_spikes(const double __v)
-  {
-    V_.__P__V_th_v_aux__I_kernel_exc__X__exc_spikes = __v;
-  }
   inline double get___P__V_th_v_aux__I_kernel_inh__X__inh_spikes() const
   {
     return V_.__P__V_th_v_aux__I_kernel_inh__X__inh_spikes;
   }inline void set___P__V_th_v_aux__I_kernel_inh__X__inh_spikes(const double __v)
   {
     V_.__P__V_th_v_aux__I_kernel_inh__X__inh_spikes = __v;
+  }
+  inline double get___P__V_th_v_aux__I_kernel_exc__X__exc_spikes() const
+  {
+    return V_.__P__V_th_v_aux__I_kernel_exc__X__exc_spikes;
+  }inline void set___P__V_th_v_aux__I_kernel_exc__X__exc_spikes(const double __v)
+  {
+    V_.__P__V_th_v_aux__I_kernel_exc__X__exc_spikes = __v;
   }
   inline double get___P__V_th_v__V_m() const
   {
@@ -633,19 +633,19 @@ public:
   {
     V_.__P__V_th_v__V_th_v = __v;
   }
-  inline double get___P__V_th_v__I_kernel_exc__X__exc_spikes() const
-  {
-    return V_.__P__V_th_v__I_kernel_exc__X__exc_spikes;
-  }inline void set___P__V_th_v__I_kernel_exc__X__exc_spikes(const double __v)
-  {
-    V_.__P__V_th_v__I_kernel_exc__X__exc_spikes = __v;
-  }
   inline double get___P__V_th_v__I_kernel_inh__X__inh_spikes() const
   {
     return V_.__P__V_th_v__I_kernel_inh__X__inh_spikes;
   }inline void set___P__V_th_v__I_kernel_inh__X__inh_spikes(const double __v)
   {
     V_.__P__V_th_v__I_kernel_inh__X__inh_spikes = __v;
+  }
+  inline double get___P__V_th_v__I_kernel_exc__X__exc_spikes() const
+  {
+    return V_.__P__V_th_v__I_kernel_exc__X__exc_spikes;
+  }inline void set___P__V_th_v__I_kernel_exc__X__exc_spikes(const double __v)
+  {
+    V_.__P__V_th_v__I_kernel_exc__X__exc_spikes = __v;
   }
   inline double get___P__refr_t__refr_t() const
   {
@@ -654,19 +654,19 @@ public:
   {
     V_.__P__refr_t__refr_t = __v;
   }
-  inline double get___P__I_kernel_exc__X__exc_spikes__I_kernel_exc__X__exc_spikes() const
-  {
-    return V_.__P__I_kernel_exc__X__exc_spikes__I_kernel_exc__X__exc_spikes;
-  }inline void set___P__I_kernel_exc__X__exc_spikes__I_kernel_exc__X__exc_spikes(const double __v)
-  {
-    V_.__P__I_kernel_exc__X__exc_spikes__I_kernel_exc__X__exc_spikes = __v;
-  }
   inline double get___P__I_kernel_inh__X__inh_spikes__I_kernel_inh__X__inh_spikes() const
   {
     return V_.__P__I_kernel_inh__X__inh_spikes__I_kernel_inh__X__inh_spikes;
   }inline void set___P__I_kernel_inh__X__inh_spikes__I_kernel_inh__X__inh_spikes(const double __v)
   {
     V_.__P__I_kernel_inh__X__inh_spikes__I_kernel_inh__X__inh_spikes = __v;
+  }
+  inline double get___P__I_kernel_exc__X__exc_spikes__I_kernel_exc__X__exc_spikes() const
+  {
+    return V_.__P__I_kernel_exc__X__exc_spikes__I_kernel_exc__X__exc_spikes;
+  }inline void set___P__I_kernel_exc__X__exc_spikes__I_kernel_exc__X__exc_spikes(const double __v)
+  {
+    V_.__P__I_kernel_exc__X__exc_spikes__I_kernel_exc__X__exc_spikes = __v;
   }
 
 
@@ -831,8 +831,8 @@ static std::vector< std::tuple< int, int > > rport_to_nestml_buffer_idx;
     double V_m;
     //!  Refractory period timer; counts down to 0 after a spike
     double refr_t;
-    double I_kernel_exc__X__exc_spikes;
     double I_kernel_inh__X__inh_spikes;
+    double I_kernel_exc__X__exc_spikes;
 
     State_();
   };
@@ -860,20 +860,20 @@ static std::vector< std::tuple< int, int > > rport_to_nestml_buffer_idx;
     double __P__V_th_alpha_1__V_th_alpha_1;
     double __P__V_th_alpha_2__V_th_alpha_2;
     double __P__V_m__V_m;
-    double __P__V_m__I_kernel_exc__X__exc_spikes;
     double __P__V_m__I_kernel_inh__X__inh_spikes;
+    double __P__V_m__I_kernel_exc__X__exc_spikes;
     double __P__V_th_v_aux__V_m;
     double __P__V_th_v_aux__V_th_v_aux;
-    double __P__V_th_v_aux__I_kernel_exc__X__exc_spikes;
     double __P__V_th_v_aux__I_kernel_inh__X__inh_spikes;
+    double __P__V_th_v_aux__I_kernel_exc__X__exc_spikes;
     double __P__V_th_v__V_m;
     double __P__V_th_v__V_th_v_aux;
     double __P__V_th_v__V_th_v;
-    double __P__V_th_v__I_kernel_exc__X__exc_spikes;
     double __P__V_th_v__I_kernel_inh__X__inh_spikes;
+    double __P__V_th_v__I_kernel_exc__X__exc_spikes;
     double __P__refr_t__refr_t;
-    double __P__I_kernel_exc__X__exc_spikes__I_kernel_exc__X__exc_spikes;
     double __P__I_kernel_inh__X__inh_spikes__I_kernel_inh__X__inh_spikes;
+    double __P__I_kernel_exc__X__exc_spikes__I_kernel_exc__X__exc_spikes;
   };
 
   /**
@@ -1172,17 +1172,17 @@ inline void amat_neuron_nestml::get_status(DictionaryDatum&__d) const
 
   def< double >(__d, nest::amat_neuron_nestml_names::___P__V_m__V_m, get___P__V_m__V_m());
 
-  def< double >(__d, nest::amat_neuron_nestml_names::___P__V_m__I_kernel_exc__X__exc_spikes, get___P__V_m__I_kernel_exc__X__exc_spikes());
-
   def< double >(__d, nest::amat_neuron_nestml_names::___P__V_m__I_kernel_inh__X__inh_spikes, get___P__V_m__I_kernel_inh__X__inh_spikes());
+
+  def< double >(__d, nest::amat_neuron_nestml_names::___P__V_m__I_kernel_exc__X__exc_spikes, get___P__V_m__I_kernel_exc__X__exc_spikes());
 
   def< double >(__d, nest::amat_neuron_nestml_names::___P__V_th_v_aux__V_m, get___P__V_th_v_aux__V_m());
 
   def< double >(__d, nest::amat_neuron_nestml_names::___P__V_th_v_aux__V_th_v_aux, get___P__V_th_v_aux__V_th_v_aux());
 
-  def< double >(__d, nest::amat_neuron_nestml_names::___P__V_th_v_aux__I_kernel_exc__X__exc_spikes, get___P__V_th_v_aux__I_kernel_exc__X__exc_spikes());
-
   def< double >(__d, nest::amat_neuron_nestml_names::___P__V_th_v_aux__I_kernel_inh__X__inh_spikes, get___P__V_th_v_aux__I_kernel_inh__X__inh_spikes());
+
+  def< double >(__d, nest::amat_neuron_nestml_names::___P__V_th_v_aux__I_kernel_exc__X__exc_spikes, get___P__V_th_v_aux__I_kernel_exc__X__exc_spikes());
 
   def< double >(__d, nest::amat_neuron_nestml_names::___P__V_th_v__V_m, get___P__V_th_v__V_m());
 
@@ -1190,15 +1190,15 @@ inline void amat_neuron_nestml::get_status(DictionaryDatum&__d) const
 
   def< double >(__d, nest::amat_neuron_nestml_names::___P__V_th_v__V_th_v, get___P__V_th_v__V_th_v());
 
-  def< double >(__d, nest::amat_neuron_nestml_names::___P__V_th_v__I_kernel_exc__X__exc_spikes, get___P__V_th_v__I_kernel_exc__X__exc_spikes());
-
   def< double >(__d, nest::amat_neuron_nestml_names::___P__V_th_v__I_kernel_inh__X__inh_spikes, get___P__V_th_v__I_kernel_inh__X__inh_spikes());
+
+  def< double >(__d, nest::amat_neuron_nestml_names::___P__V_th_v__I_kernel_exc__X__exc_spikes, get___P__V_th_v__I_kernel_exc__X__exc_spikes());
 
   def< double >(__d, nest::amat_neuron_nestml_names::___P__refr_t__refr_t, get___P__refr_t__refr_t());
 
-  def< double >(__d, nest::amat_neuron_nestml_names::___P__I_kernel_exc__X__exc_spikes__I_kernel_exc__X__exc_spikes, get___P__I_kernel_exc__X__exc_spikes__I_kernel_exc__X__exc_spikes());
-
   def< double >(__d, nest::amat_neuron_nestml_names::___P__I_kernel_inh__X__inh_spikes__I_kernel_inh__X__inh_spikes, get___P__I_kernel_inh__X__inh_spikes__I_kernel_inh__X__inh_spikes());
+
+  def< double >(__d, nest::amat_neuron_nestml_names::___P__I_kernel_exc__X__exc_spikes__I_kernel_exc__X__exc_spikes, get___P__I_kernel_exc__X__exc_spikes__I_kernel_exc__X__exc_spikes());
 
   // initial values for state variables in ODE or kernel
 
@@ -1214,9 +1214,9 @@ inline void amat_neuron_nestml::get_status(DictionaryDatum&__d) const
 
   def< double >(__d, nest::amat_neuron_nestml_names::_refr_t, get_refr_t());
 
-  def< double >(__d, nest::amat_neuron_nestml_names::_I_kernel_exc__X__exc_spikes, get_I_kernel_exc__X__exc_spikes());
-
   def< double >(__d, nest::amat_neuron_nestml_names::_I_kernel_inh__X__inh_spikes, get_I_kernel_inh__X__inh_spikes());
+
+  def< double >(__d, nest::amat_neuron_nestml_names::_I_kernel_exc__X__exc_spikes, get_I_kernel_exc__X__exc_spikes());
 
   StructuralPlasticityNode::get_status( __d );
 
@@ -1269,10 +1269,10 @@ inline void amat_neuron_nestml::set_status(const DictionaryDatum&__d)
   nest::updateValueParam<double>(__d, nest::amat_neuron_nestml_names::_V_m, tmp_V_m, this);
   double tmp_refr_t = get_refr_t();
   nest::updateValueParam<double>(__d, nest::amat_neuron_nestml_names::_refr_t, tmp_refr_t, this);
-  double tmp_I_kernel_exc__X__exc_spikes = get_I_kernel_exc__X__exc_spikes();
-  nest::updateValueParam<double>(__d, nest::amat_neuron_nestml_names::_I_kernel_exc__X__exc_spikes, tmp_I_kernel_exc__X__exc_spikes, this);
   double tmp_I_kernel_inh__X__inh_spikes = get_I_kernel_inh__X__inh_spikes();
   nest::updateValueParam<double>(__d, nest::amat_neuron_nestml_names::_I_kernel_inh__X__inh_spikes, tmp_I_kernel_inh__X__inh_spikes, this);
+  double tmp_I_kernel_exc__X__exc_spikes = get_I_kernel_exc__X__exc_spikes();
+  nest::updateValueParam<double>(__d, nest::amat_neuron_nestml_names::_I_kernel_exc__X__exc_spikes, tmp_I_kernel_exc__X__exc_spikes, this);
 
   // We now know that (ptmp, stmp) are consistent. We do not
   // write them back to (P_, S_) before we are also sure that
@@ -1301,8 +1301,8 @@ inline void amat_neuron_nestml::set_status(const DictionaryDatum&__d)
   set_V_th_v_aux(tmp_V_th_v_aux);
   set_V_m(tmp_V_m);
   set_refr_t(tmp_refr_t);
-  set_I_kernel_exc__X__exc_spikes(tmp_I_kernel_exc__X__exc_spikes);
   set_I_kernel_inh__X__inh_spikes(tmp_I_kernel_inh__X__inh_spikes);
+  set_I_kernel_exc__X__exc_spikes(tmp_I_kernel_exc__X__exc_spikes);
 
 
 

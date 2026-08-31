@@ -19,7 +19,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with NEST.  If not, see <http://www.gnu.org/licenses/>.
  *
- *  Generated from NESTML 8.3.0-rc3-post-dev at time: 2026-08-28 06:47:53.028176
+ *  Generated from NESTML 8.3.0-rc3-post-dev at time: 2026-08-31 12:57:56.299357
 **/
 #ifndef AMAT_NEURON_NESTML
 #define AMAT_NEURON_NESTML
@@ -58,8 +58,9 @@ namespace amat_neuron_nestml_names
     const Name _V_th_v_aux( "V_th_v_aux" );
     const Name _V_m( "V_m" );
     const Name _refr_t( "refr_t" );
-    const Name _I_kernel_exc__X__exc_spikes( "I_kernel_exc__X__exc_spikes" );
+    const Name _I_drive( "I_drive" );
     const Name _I_kernel_inh__X__inh_spikes( "I_kernel_inh__X__inh_spikes" );
+    const Name _I_kernel_exc__X__exc_spikes( "I_kernel_exc__X__exc_spikes" );
     // inline expressions
     const Name _I_syn_ex( "I_syn_ex" );
     const Name _I_syn_in( "I_syn_in" );
@@ -83,110 +84,27 @@ namespace amat_neuron_nestml_names
     // internals
     const Name _unit_psc( "unit_psc" );
     const Name ___h( "__h" );
-    const Name ___ode_cse_update_0( "__ode_cse_update_0" );
-    const Name ___ode_cse_update_1( "__ode_cse_update_1" );
-    const Name ___ode_cse_update_2( "__ode_cse_update_2" );
-    const Name ___ode_cse_update_3( "__ode_cse_update_3" );
-    const Name ___ode_cse_update_4( "__ode_cse_update_4" );
-    const Name ___ode_cse_update_5( "__ode_cse_update_5" );
-    const Name ___ode_cse_update_6( "__ode_cse_update_6" );
-    const Name ___ode_cse_update_7( "__ode_cse_update_7" );
-    const Name ___ode_cse_update_8( "__ode_cse_update_8" );
-    const Name ___ode_cse_prop_0( "__ode_cse_prop_0" );
-    const Name ___ode_cse_prop_1( "__ode_cse_prop_1" );
-    const Name ___ode_cse_prop_2( "__ode_cse_prop_2" );
-    const Name ___ode_cse_prop_3( "__ode_cse_prop_3" );
-    const Name ___ode_cse_prop_4( "__ode_cse_prop_4" );
-    const Name ___ode_cse_prop_5( "__ode_cse_prop_5" );
-    const Name ___ode_cse_prop_6( "__ode_cse_prop_6" );
-    const Name ___ode_cse_prop_7( "__ode_cse_prop_7" );
-    const Name ___ode_cse_prop_8( "__ode_cse_prop_8" );
-    const Name ___ode_cse_prop_9( "__ode_cse_prop_9" );
-    const Name ___ode_cse_prop_10( "__ode_cse_prop_10" );
-    const Name ___ode_cse_prop_11( "__ode_cse_prop_11" );
-    const Name ___ode_cse_prop_12( "__ode_cse_prop_12" );
-    const Name ___ode_cse_prop_13( "__ode_cse_prop_13" );
-    const Name ___ode_cse_prop_14( "__ode_cse_prop_14" );
-    const Name ___ode_cse_prop_15( "__ode_cse_prop_15" );
-    const Name ___ode_cse_prop_16( "__ode_cse_prop_16" );
-    const Name ___ode_cse_prop_17( "__ode_cse_prop_17" );
-    const Name ___ode_cse_prop_18( "__ode_cse_prop_18" );
-    const Name ___ode_cse_prop_19( "__ode_cse_prop_19" );
-    const Name ___ode_cse_prop_20( "__ode_cse_prop_20" );
-    const Name ___ode_cse_prop_21( "__ode_cse_prop_21" );
-    const Name ___ode_cse_prop_22( "__ode_cse_prop_22" );
-    const Name ___ode_cse_prop_23( "__ode_cse_prop_23" );
-    const Name ___ode_cse_prop_24( "__ode_cse_prop_24" );
-    const Name ___ode_cse_prop_25( "__ode_cse_prop_25" );
-    const Name ___ode_cse_prop_26( "__ode_cse_prop_26" );
-    const Name ___ode_cse_prop_27( "__ode_cse_prop_27" );
-    const Name ___ode_cse_prop_28( "__ode_cse_prop_28" );
-    const Name ___ode_cse_prop_29( "__ode_cse_prop_29" );
-    const Name ___ode_cse_prop_30( "__ode_cse_prop_30" );
-    const Name ___ode_cse_prop_31( "__ode_cse_prop_31" );
-    const Name ___ode_cse_prop_32( "__ode_cse_prop_32" );
-    const Name ___ode_cse_prop_33( "__ode_cse_prop_33" );
-    const Name ___ode_cse_prop_34( "__ode_cse_prop_34" );
-    const Name ___ode_cse_prop_35( "__ode_cse_prop_35" );
-    const Name ___ode_cse_prop_36( "__ode_cse_prop_36" );
-    const Name ___ode_cse_prop_37( "__ode_cse_prop_37" );
-    const Name ___ode_cse_prop_38( "__ode_cse_prop_38" );
-    const Name ___ode_cse_prop_39( "__ode_cse_prop_39" );
-    const Name ___ode_cse_prop_40( "__ode_cse_prop_40" );
-    const Name ___ode_cse_prop_41( "__ode_cse_prop_41" );
-    const Name ___ode_cse_prop_42( "__ode_cse_prop_42" );
-    const Name ___ode_cse_prop_43( "__ode_cse_prop_43" );
-    const Name ___ode_cse_prop_44( "__ode_cse_prop_44" );
-    const Name ___ode_cse_prop_45( "__ode_cse_prop_45" );
-    const Name ___ode_cse_prop_46( "__ode_cse_prop_46" );
-    const Name ___ode_cse_prop_47( "__ode_cse_prop_47" );
-    const Name ___ode_cse_prop_48( "__ode_cse_prop_48" );
-    const Name ___ode_cse_prop_49( "__ode_cse_prop_49" );
-    const Name ___ode_cse_prop_50( "__ode_cse_prop_50" );
-    const Name ___ode_cse_prop_51( "__ode_cse_prop_51" );
-    const Name ___ode_cse_prop_52( "__ode_cse_prop_52" );
-    const Name ___ode_cse_prop_53( "__ode_cse_prop_53" );
-    const Name ___ode_cse_prop_54( "__ode_cse_prop_54" );
-    const Name ___ode_cse_prop_55( "__ode_cse_prop_55" );
-    const Name ___ode_cse_prop_56( "__ode_cse_prop_56" );
-    const Name ___ode_cse_prop_57( "__ode_cse_prop_57" );
-    const Name ___ode_cse_prop_58( "__ode_cse_prop_58" );
-    const Name ___ode_cse_prop_59( "__ode_cse_prop_59" );
-    const Name ___ode_cse_prop_60( "__ode_cse_prop_60" );
-    const Name ___ode_cse_prop_61( "__ode_cse_prop_61" );
-    const Name ___ode_cse_prop_62( "__ode_cse_prop_62" );
-    const Name ___ode_cse_prop_63( "__ode_cse_prop_63" );
-    const Name ___ode_cse_prop_64( "__ode_cse_prop_64" );
-    const Name ___ode_cse_prop_65( "__ode_cse_prop_65" );
-    const Name ___ode_cse_prop_66( "__ode_cse_prop_66" );
-    const Name ___ode_cse_prop_67( "__ode_cse_prop_67" );
-    const Name ___ode_cse_prop_68( "__ode_cse_prop_68" );
-    const Name ___ode_cse_prop_69( "__ode_cse_prop_69" );
-    const Name ___ode_cse_prop_70( "__ode_cse_prop_70" );
-    const Name ___ode_cse_prop_71( "__ode_cse_prop_71" );
-    const Name ___ode_cse_prop_72( "__ode_cse_prop_72" );
-    const Name ___ode_cse_prop_73( "__ode_cse_prop_73" );
-    const Name ___ode_cse_prop_74( "__ode_cse_prop_74" );
-    const Name ___ode_cse_prop_75( "__ode_cse_prop_75" );
-    const Name ___ode_cse_prop_76( "__ode_cse_prop_76" );
-    const Name ___ode_cse_prop_77( "__ode_cse_prop_77" );
+    const Name ___P__I_drive__I_drive( "__P__I_drive__I_drive" );
     const Name ___P__V_th_alpha_1__V_th_alpha_1( "__P__V_th_alpha_1__V_th_alpha_1" );
     const Name ___P__V_th_alpha_2__V_th_alpha_2( "__P__V_th_alpha_2__V_th_alpha_2" );
+    const Name ___P__V_m__I_drive( "__P__V_m__I_drive" );
     const Name ___P__V_m__V_m( "__P__V_m__V_m" );
-    const Name ___P__V_m__I_kernel_exc__X__exc_spikes( "__P__V_m__I_kernel_exc__X__exc_spikes" );
     const Name ___P__V_m__I_kernel_inh__X__inh_spikes( "__P__V_m__I_kernel_inh__X__inh_spikes" );
+    const Name ___P__V_m__I_kernel_exc__X__exc_spikes( "__P__V_m__I_kernel_exc__X__exc_spikes" );
+    const Name ___P__V_th_v_aux__I_drive( "__P__V_th_v_aux__I_drive" );
     const Name ___P__V_th_v_aux__V_m( "__P__V_th_v_aux__V_m" );
     const Name ___P__V_th_v_aux__V_th_v_aux( "__P__V_th_v_aux__V_th_v_aux" );
-    const Name ___P__V_th_v_aux__I_kernel_exc__X__exc_spikes( "__P__V_th_v_aux__I_kernel_exc__X__exc_spikes" );
     const Name ___P__V_th_v_aux__I_kernel_inh__X__inh_spikes( "__P__V_th_v_aux__I_kernel_inh__X__inh_spikes" );
+    const Name ___P__V_th_v_aux__I_kernel_exc__X__exc_spikes( "__P__V_th_v_aux__I_kernel_exc__X__exc_spikes" );
+    const Name ___P__V_th_v__I_drive( "__P__V_th_v__I_drive" );
     const Name ___P__V_th_v__V_m( "__P__V_th_v__V_m" );
     const Name ___P__V_th_v__V_th_v_aux( "__P__V_th_v__V_th_v_aux" );
     const Name ___P__V_th_v__V_th_v( "__P__V_th_v__V_th_v" );
-    const Name ___P__V_th_v__I_kernel_exc__X__exc_spikes( "__P__V_th_v__I_kernel_exc__X__exc_spikes" );
     const Name ___P__V_th_v__I_kernel_inh__X__inh_spikes( "__P__V_th_v__I_kernel_inh__X__inh_spikes" );
+    const Name ___P__V_th_v__I_kernel_exc__X__exc_spikes( "__P__V_th_v__I_kernel_exc__X__exc_spikes" );
     const Name ___P__refr_t__refr_t( "__P__refr_t__refr_t" );
-    const Name ___P__I_kernel_exc__X__exc_spikes__I_kernel_exc__X__exc_spikes( "__P__I_kernel_exc__X__exc_spikes__I_kernel_exc__X__exc_spikes" );
     const Name ___P__I_kernel_inh__X__inh_spikes__I_kernel_inh__X__inh_spikes( "__P__I_kernel_inh__X__inh_spikes__I_kernel_inh__X__inh_spikes" );
+    const Name ___P__I_kernel_exc__X__exc_spikes__I_kernel_exc__X__exc_spikes( "__P__I_kernel_exc__X__exc_spikes__I_kernel_exc__X__exc_spikes" );
 
     const Name gsl_abs_error_tol("gsl_abs_error_tol");
     const Name gsl_rel_error_tol("gsl_rel_error_tol");
@@ -363,6 +281,7 @@ coupled first-order ODEs instead of one 2nd-order ODE.
 membrane potential and refractory timer 
  Absolute membrane potential; never reset on spike
 refr_t [ms]  Refractory period timer; counts down to 0 after a spike
+I_drive [pA]  Piecewise-constant current used during integration step 
 
 
   Sends: nest::SpikeEvent
@@ -484,12 +403,12 @@ public:
     S_.refr_t = __v;
   }
 
-  inline double get_I_kernel_exc__X__exc_spikes() const
+  inline double get_I_drive() const
   {
-    return S_.I_kernel_exc__X__exc_spikes;
-  }inline void set_I_kernel_exc__X__exc_spikes(const double __v)
+    return S_.I_drive;
+  }inline void set_I_drive(const double __v)
   {
-    S_.I_kernel_exc__X__exc_spikes = __v;
+    S_.I_drive = __v;
   }
 
   inline double get_I_kernel_inh__X__inh_spikes() const
@@ -498,6 +417,14 @@ public:
   }inline void set_I_kernel_inh__X__inh_spikes(const double __v)
   {
     S_.I_kernel_inh__X__inh_spikes = __v;
+  }
+
+  inline double get_I_kernel_exc__X__exc_spikes() const
+  {
+    return S_.I_kernel_exc__X__exc_spikes;
+  }inline void set_I_kernel_exc__X__exc_spikes(const double __v)
+  {
+    S_.I_kernel_exc__X__exc_spikes = __v;
   }
 
 
@@ -636,614 +563,12 @@ public:
   {
     V_.__h = __v;
   }
-  inline double get___ode_cse_update_0() const
+  inline double get___P__I_drive__I_drive() const
   {
-    return V_.__ode_cse_update_0;
-  }inline void set___ode_cse_update_0(const double __v)
+    return V_.__P__I_drive__I_drive;
+  }inline void set___P__I_drive__I_drive(const double __v)
   {
-    V_.__ode_cse_update_0 = __v;
-  }
-  inline double get___ode_cse_update_1() const
-  {
-    return V_.__ode_cse_update_1;
-  }inline void set___ode_cse_update_1(const double __v)
-  {
-    V_.__ode_cse_update_1 = __v;
-  }
-  inline double get___ode_cse_update_2() const
-  {
-    return V_.__ode_cse_update_2;
-  }inline void set___ode_cse_update_2(const double __v)
-  {
-    V_.__ode_cse_update_2 = __v;
-  }
-  inline double get___ode_cse_update_3() const
-  {
-    return V_.__ode_cse_update_3;
-  }inline void set___ode_cse_update_3(const double __v)
-  {
-    V_.__ode_cse_update_3 = __v;
-  }
-  inline double get___ode_cse_update_4() const
-  {
-    return V_.__ode_cse_update_4;
-  }inline void set___ode_cse_update_4(const double __v)
-  {
-    V_.__ode_cse_update_4 = __v;
-  }
-  inline double get___ode_cse_update_5() const
-  {
-    return V_.__ode_cse_update_5;
-  }inline void set___ode_cse_update_5(const double __v)
-  {
-    V_.__ode_cse_update_5 = __v;
-  }
-  inline double get___ode_cse_update_6() const
-  {
-    return V_.__ode_cse_update_6;
-  }inline void set___ode_cse_update_6(const double __v)
-  {
-    V_.__ode_cse_update_6 = __v;
-  }
-  inline double get___ode_cse_update_7() const
-  {
-    return V_.__ode_cse_update_7;
-  }inline void set___ode_cse_update_7(const double __v)
-  {
-    V_.__ode_cse_update_7 = __v;
-  }
-  inline double get___ode_cse_update_8() const
-  {
-    return V_.__ode_cse_update_8;
-  }inline void set___ode_cse_update_8(const double __v)
-  {
-    V_.__ode_cse_update_8 = __v;
-  }
-  inline double get___ode_cse_prop_0() const
-  {
-    return V_.__ode_cse_prop_0;
-  }inline void set___ode_cse_prop_0(const double __v)
-  {
-    V_.__ode_cse_prop_0 = __v;
-  }
-  inline double get___ode_cse_prop_1() const
-  {
-    return V_.__ode_cse_prop_1;
-  }inline void set___ode_cse_prop_1(const double __v)
-  {
-    V_.__ode_cse_prop_1 = __v;
-  }
-  inline double get___ode_cse_prop_2() const
-  {
-    return V_.__ode_cse_prop_2;
-  }inline void set___ode_cse_prop_2(const double __v)
-  {
-    V_.__ode_cse_prop_2 = __v;
-  }
-  inline double get___ode_cse_prop_3() const
-  {
-    return V_.__ode_cse_prop_3;
-  }inline void set___ode_cse_prop_3(const double __v)
-  {
-    V_.__ode_cse_prop_3 = __v;
-  }
-  inline double get___ode_cse_prop_4() const
-  {
-    return V_.__ode_cse_prop_4;
-  }inline void set___ode_cse_prop_4(const double __v)
-  {
-    V_.__ode_cse_prop_4 = __v;
-  }
-  inline double get___ode_cse_prop_5() const
-  {
-    return V_.__ode_cse_prop_5;
-  }inline void set___ode_cse_prop_5(const double __v)
-  {
-    V_.__ode_cse_prop_5 = __v;
-  }
-  inline double get___ode_cse_prop_6() const
-  {
-    return V_.__ode_cse_prop_6;
-  }inline void set___ode_cse_prop_6(const double __v)
-  {
-    V_.__ode_cse_prop_6 = __v;
-  }
-  inline double get___ode_cse_prop_7() const
-  {
-    return V_.__ode_cse_prop_7;
-  }inline void set___ode_cse_prop_7(const double __v)
-  {
-    V_.__ode_cse_prop_7 = __v;
-  }
-  inline double get___ode_cse_prop_8() const
-  {
-    return V_.__ode_cse_prop_8;
-  }inline void set___ode_cse_prop_8(const double __v)
-  {
-    V_.__ode_cse_prop_8 = __v;
-  }
-  inline double get___ode_cse_prop_9() const
-  {
-    return V_.__ode_cse_prop_9;
-  }inline void set___ode_cse_prop_9(const double __v)
-  {
-    V_.__ode_cse_prop_9 = __v;
-  }
-  inline double get___ode_cse_prop_10() const
-  {
-    return V_.__ode_cse_prop_10;
-  }inline void set___ode_cse_prop_10(const double __v)
-  {
-    V_.__ode_cse_prop_10 = __v;
-  }
-  inline double get___ode_cse_prop_11() const
-  {
-    return V_.__ode_cse_prop_11;
-  }inline void set___ode_cse_prop_11(const double __v)
-  {
-    V_.__ode_cse_prop_11 = __v;
-  }
-  inline double get___ode_cse_prop_12() const
-  {
-    return V_.__ode_cse_prop_12;
-  }inline void set___ode_cse_prop_12(const double __v)
-  {
-    V_.__ode_cse_prop_12 = __v;
-  }
-  inline double get___ode_cse_prop_13() const
-  {
-    return V_.__ode_cse_prop_13;
-  }inline void set___ode_cse_prop_13(const double __v)
-  {
-    V_.__ode_cse_prop_13 = __v;
-  }
-  inline double get___ode_cse_prop_14() const
-  {
-    return V_.__ode_cse_prop_14;
-  }inline void set___ode_cse_prop_14(const double __v)
-  {
-    V_.__ode_cse_prop_14 = __v;
-  }
-  inline double get___ode_cse_prop_15() const
-  {
-    return V_.__ode_cse_prop_15;
-  }inline void set___ode_cse_prop_15(const double __v)
-  {
-    V_.__ode_cse_prop_15 = __v;
-  }
-  inline double get___ode_cse_prop_16() const
-  {
-    return V_.__ode_cse_prop_16;
-  }inline void set___ode_cse_prop_16(const double __v)
-  {
-    V_.__ode_cse_prop_16 = __v;
-  }
-  inline double get___ode_cse_prop_17() const
-  {
-    return V_.__ode_cse_prop_17;
-  }inline void set___ode_cse_prop_17(const double __v)
-  {
-    V_.__ode_cse_prop_17 = __v;
-  }
-  inline double get___ode_cse_prop_18() const
-  {
-    return V_.__ode_cse_prop_18;
-  }inline void set___ode_cse_prop_18(const double __v)
-  {
-    V_.__ode_cse_prop_18 = __v;
-  }
-  inline double get___ode_cse_prop_19() const
-  {
-    return V_.__ode_cse_prop_19;
-  }inline void set___ode_cse_prop_19(const double __v)
-  {
-    V_.__ode_cse_prop_19 = __v;
-  }
-  inline double get___ode_cse_prop_20() const
-  {
-    return V_.__ode_cse_prop_20;
-  }inline void set___ode_cse_prop_20(const double __v)
-  {
-    V_.__ode_cse_prop_20 = __v;
-  }
-  inline double get___ode_cse_prop_21() const
-  {
-    return V_.__ode_cse_prop_21;
-  }inline void set___ode_cse_prop_21(const double __v)
-  {
-    V_.__ode_cse_prop_21 = __v;
-  }
-  inline double get___ode_cse_prop_22() const
-  {
-    return V_.__ode_cse_prop_22;
-  }inline void set___ode_cse_prop_22(const double __v)
-  {
-    V_.__ode_cse_prop_22 = __v;
-  }
-  inline double get___ode_cse_prop_23() const
-  {
-    return V_.__ode_cse_prop_23;
-  }inline void set___ode_cse_prop_23(const double __v)
-  {
-    V_.__ode_cse_prop_23 = __v;
-  }
-  inline double get___ode_cse_prop_24() const
-  {
-    return V_.__ode_cse_prop_24;
-  }inline void set___ode_cse_prop_24(const double __v)
-  {
-    V_.__ode_cse_prop_24 = __v;
-  }
-  inline double get___ode_cse_prop_25() const
-  {
-    return V_.__ode_cse_prop_25;
-  }inline void set___ode_cse_prop_25(const double __v)
-  {
-    V_.__ode_cse_prop_25 = __v;
-  }
-  inline double get___ode_cse_prop_26() const
-  {
-    return V_.__ode_cse_prop_26;
-  }inline void set___ode_cse_prop_26(const double __v)
-  {
-    V_.__ode_cse_prop_26 = __v;
-  }
-  inline double get___ode_cse_prop_27() const
-  {
-    return V_.__ode_cse_prop_27;
-  }inline void set___ode_cse_prop_27(const double __v)
-  {
-    V_.__ode_cse_prop_27 = __v;
-  }
-  inline double get___ode_cse_prop_28() const
-  {
-    return V_.__ode_cse_prop_28;
-  }inline void set___ode_cse_prop_28(const double __v)
-  {
-    V_.__ode_cse_prop_28 = __v;
-  }
-  inline double get___ode_cse_prop_29() const
-  {
-    return V_.__ode_cse_prop_29;
-  }inline void set___ode_cse_prop_29(const double __v)
-  {
-    V_.__ode_cse_prop_29 = __v;
-  }
-  inline double get___ode_cse_prop_30() const
-  {
-    return V_.__ode_cse_prop_30;
-  }inline void set___ode_cse_prop_30(const double __v)
-  {
-    V_.__ode_cse_prop_30 = __v;
-  }
-  inline double get___ode_cse_prop_31() const
-  {
-    return V_.__ode_cse_prop_31;
-  }inline void set___ode_cse_prop_31(const double __v)
-  {
-    V_.__ode_cse_prop_31 = __v;
-  }
-  inline double get___ode_cse_prop_32() const
-  {
-    return V_.__ode_cse_prop_32;
-  }inline void set___ode_cse_prop_32(const double __v)
-  {
-    V_.__ode_cse_prop_32 = __v;
-  }
-  inline double get___ode_cse_prop_33() const
-  {
-    return V_.__ode_cse_prop_33;
-  }inline void set___ode_cse_prop_33(const double __v)
-  {
-    V_.__ode_cse_prop_33 = __v;
-  }
-  inline double get___ode_cse_prop_34() const
-  {
-    return V_.__ode_cse_prop_34;
-  }inline void set___ode_cse_prop_34(const double __v)
-  {
-    V_.__ode_cse_prop_34 = __v;
-  }
-  inline double get___ode_cse_prop_35() const
-  {
-    return V_.__ode_cse_prop_35;
-  }inline void set___ode_cse_prop_35(const double __v)
-  {
-    V_.__ode_cse_prop_35 = __v;
-  }
-  inline double get___ode_cse_prop_36() const
-  {
-    return V_.__ode_cse_prop_36;
-  }inline void set___ode_cse_prop_36(const double __v)
-  {
-    V_.__ode_cse_prop_36 = __v;
-  }
-  inline double get___ode_cse_prop_37() const
-  {
-    return V_.__ode_cse_prop_37;
-  }inline void set___ode_cse_prop_37(const double __v)
-  {
-    V_.__ode_cse_prop_37 = __v;
-  }
-  inline double get___ode_cse_prop_38() const
-  {
-    return V_.__ode_cse_prop_38;
-  }inline void set___ode_cse_prop_38(const double __v)
-  {
-    V_.__ode_cse_prop_38 = __v;
-  }
-  inline double get___ode_cse_prop_39() const
-  {
-    return V_.__ode_cse_prop_39;
-  }inline void set___ode_cse_prop_39(const double __v)
-  {
-    V_.__ode_cse_prop_39 = __v;
-  }
-  inline double get___ode_cse_prop_40() const
-  {
-    return V_.__ode_cse_prop_40;
-  }inline void set___ode_cse_prop_40(const double __v)
-  {
-    V_.__ode_cse_prop_40 = __v;
-  }
-  inline double get___ode_cse_prop_41() const
-  {
-    return V_.__ode_cse_prop_41;
-  }inline void set___ode_cse_prop_41(const double __v)
-  {
-    V_.__ode_cse_prop_41 = __v;
-  }
-  inline double get___ode_cse_prop_42() const
-  {
-    return V_.__ode_cse_prop_42;
-  }inline void set___ode_cse_prop_42(const double __v)
-  {
-    V_.__ode_cse_prop_42 = __v;
-  }
-  inline double get___ode_cse_prop_43() const
-  {
-    return V_.__ode_cse_prop_43;
-  }inline void set___ode_cse_prop_43(const double __v)
-  {
-    V_.__ode_cse_prop_43 = __v;
-  }
-  inline double get___ode_cse_prop_44() const
-  {
-    return V_.__ode_cse_prop_44;
-  }inline void set___ode_cse_prop_44(const double __v)
-  {
-    V_.__ode_cse_prop_44 = __v;
-  }
-  inline double get___ode_cse_prop_45() const
-  {
-    return V_.__ode_cse_prop_45;
-  }inline void set___ode_cse_prop_45(const double __v)
-  {
-    V_.__ode_cse_prop_45 = __v;
-  }
-  inline double get___ode_cse_prop_46() const
-  {
-    return V_.__ode_cse_prop_46;
-  }inline void set___ode_cse_prop_46(const double __v)
-  {
-    V_.__ode_cse_prop_46 = __v;
-  }
-  inline double get___ode_cse_prop_47() const
-  {
-    return V_.__ode_cse_prop_47;
-  }inline void set___ode_cse_prop_47(const double __v)
-  {
-    V_.__ode_cse_prop_47 = __v;
-  }
-  inline double get___ode_cse_prop_48() const
-  {
-    return V_.__ode_cse_prop_48;
-  }inline void set___ode_cse_prop_48(const double __v)
-  {
-    V_.__ode_cse_prop_48 = __v;
-  }
-  inline double get___ode_cse_prop_49() const
-  {
-    return V_.__ode_cse_prop_49;
-  }inline void set___ode_cse_prop_49(const double __v)
-  {
-    V_.__ode_cse_prop_49 = __v;
-  }
-  inline double get___ode_cse_prop_50() const
-  {
-    return V_.__ode_cse_prop_50;
-  }inline void set___ode_cse_prop_50(const double __v)
-  {
-    V_.__ode_cse_prop_50 = __v;
-  }
-  inline double get___ode_cse_prop_51() const
-  {
-    return V_.__ode_cse_prop_51;
-  }inline void set___ode_cse_prop_51(const double __v)
-  {
-    V_.__ode_cse_prop_51 = __v;
-  }
-  inline double get___ode_cse_prop_52() const
-  {
-    return V_.__ode_cse_prop_52;
-  }inline void set___ode_cse_prop_52(const double __v)
-  {
-    V_.__ode_cse_prop_52 = __v;
-  }
-  inline double get___ode_cse_prop_53() const
-  {
-    return V_.__ode_cse_prop_53;
-  }inline void set___ode_cse_prop_53(const double __v)
-  {
-    V_.__ode_cse_prop_53 = __v;
-  }
-  inline double get___ode_cse_prop_54() const
-  {
-    return V_.__ode_cse_prop_54;
-  }inline void set___ode_cse_prop_54(const double __v)
-  {
-    V_.__ode_cse_prop_54 = __v;
-  }
-  inline double get___ode_cse_prop_55() const
-  {
-    return V_.__ode_cse_prop_55;
-  }inline void set___ode_cse_prop_55(const double __v)
-  {
-    V_.__ode_cse_prop_55 = __v;
-  }
-  inline double get___ode_cse_prop_56() const
-  {
-    return V_.__ode_cse_prop_56;
-  }inline void set___ode_cse_prop_56(const double __v)
-  {
-    V_.__ode_cse_prop_56 = __v;
-  }
-  inline double get___ode_cse_prop_57() const
-  {
-    return V_.__ode_cse_prop_57;
-  }inline void set___ode_cse_prop_57(const double __v)
-  {
-    V_.__ode_cse_prop_57 = __v;
-  }
-  inline double get___ode_cse_prop_58() const
-  {
-    return V_.__ode_cse_prop_58;
-  }inline void set___ode_cse_prop_58(const double __v)
-  {
-    V_.__ode_cse_prop_58 = __v;
-  }
-  inline double get___ode_cse_prop_59() const
-  {
-    return V_.__ode_cse_prop_59;
-  }inline void set___ode_cse_prop_59(const double __v)
-  {
-    V_.__ode_cse_prop_59 = __v;
-  }
-  inline double get___ode_cse_prop_60() const
-  {
-    return V_.__ode_cse_prop_60;
-  }inline void set___ode_cse_prop_60(const double __v)
-  {
-    V_.__ode_cse_prop_60 = __v;
-  }
-  inline double get___ode_cse_prop_61() const
-  {
-    return V_.__ode_cse_prop_61;
-  }inline void set___ode_cse_prop_61(const double __v)
-  {
-    V_.__ode_cse_prop_61 = __v;
-  }
-  inline double get___ode_cse_prop_62() const
-  {
-    return V_.__ode_cse_prop_62;
-  }inline void set___ode_cse_prop_62(const double __v)
-  {
-    V_.__ode_cse_prop_62 = __v;
-  }
-  inline double get___ode_cse_prop_63() const
-  {
-    return V_.__ode_cse_prop_63;
-  }inline void set___ode_cse_prop_63(const double __v)
-  {
-    V_.__ode_cse_prop_63 = __v;
-  }
-  inline double get___ode_cse_prop_64() const
-  {
-    return V_.__ode_cse_prop_64;
-  }inline void set___ode_cse_prop_64(const double __v)
-  {
-    V_.__ode_cse_prop_64 = __v;
-  }
-  inline double get___ode_cse_prop_65() const
-  {
-    return V_.__ode_cse_prop_65;
-  }inline void set___ode_cse_prop_65(const double __v)
-  {
-    V_.__ode_cse_prop_65 = __v;
-  }
-  inline double get___ode_cse_prop_66() const
-  {
-    return V_.__ode_cse_prop_66;
-  }inline void set___ode_cse_prop_66(const double __v)
-  {
-    V_.__ode_cse_prop_66 = __v;
-  }
-  inline double get___ode_cse_prop_67() const
-  {
-    return V_.__ode_cse_prop_67;
-  }inline void set___ode_cse_prop_67(const double __v)
-  {
-    V_.__ode_cse_prop_67 = __v;
-  }
-  inline double get___ode_cse_prop_68() const
-  {
-    return V_.__ode_cse_prop_68;
-  }inline void set___ode_cse_prop_68(const double __v)
-  {
-    V_.__ode_cse_prop_68 = __v;
-  }
-  inline double get___ode_cse_prop_69() const
-  {
-    return V_.__ode_cse_prop_69;
-  }inline void set___ode_cse_prop_69(const double __v)
-  {
-    V_.__ode_cse_prop_69 = __v;
-  }
-  inline double get___ode_cse_prop_70() const
-  {
-    return V_.__ode_cse_prop_70;
-  }inline void set___ode_cse_prop_70(const double __v)
-  {
-    V_.__ode_cse_prop_70 = __v;
-  }
-  inline double get___ode_cse_prop_71() const
-  {
-    return V_.__ode_cse_prop_71;
-  }inline void set___ode_cse_prop_71(const double __v)
-  {
-    V_.__ode_cse_prop_71 = __v;
-  }
-  inline double get___ode_cse_prop_72() const
-  {
-    return V_.__ode_cse_prop_72;
-  }inline void set___ode_cse_prop_72(const double __v)
-  {
-    V_.__ode_cse_prop_72 = __v;
-  }
-  inline double get___ode_cse_prop_73() const
-  {
-    return V_.__ode_cse_prop_73;
-  }inline void set___ode_cse_prop_73(const double __v)
-  {
-    V_.__ode_cse_prop_73 = __v;
-  }
-  inline double get___ode_cse_prop_74() const
-  {
-    return V_.__ode_cse_prop_74;
-  }inline void set___ode_cse_prop_74(const double __v)
-  {
-    V_.__ode_cse_prop_74 = __v;
-  }
-  inline double get___ode_cse_prop_75() const
-  {
-    return V_.__ode_cse_prop_75;
-  }inline void set___ode_cse_prop_75(const double __v)
-  {
-    V_.__ode_cse_prop_75 = __v;
-  }
-  inline double get___ode_cse_prop_76() const
-  {
-    return V_.__ode_cse_prop_76;
-  }inline void set___ode_cse_prop_76(const double __v)
-  {
-    V_.__ode_cse_prop_76 = __v;
-  }
-  inline double get___ode_cse_prop_77() const
-  {
-    return V_.__ode_cse_prop_77;
-  }inline void set___ode_cse_prop_77(const double __v)
-  {
-    V_.__ode_cse_prop_77 = __v;
+    V_.__P__I_drive__I_drive = __v;
   }
   inline double get___P__V_th_alpha_1__V_th_alpha_1() const
   {
@@ -1259,12 +584,26 @@ public:
   {
     V_.__P__V_th_alpha_2__V_th_alpha_2 = __v;
   }
+  inline double get___P__V_m__I_drive() const
+  {
+    return V_.__P__V_m__I_drive;
+  }inline void set___P__V_m__I_drive(const double __v)
+  {
+    V_.__P__V_m__I_drive = __v;
+  }
   inline double get___P__V_m__V_m() const
   {
     return V_.__P__V_m__V_m;
   }inline void set___P__V_m__V_m(const double __v)
   {
     V_.__P__V_m__V_m = __v;
+  }
+  inline double get___P__V_m__I_kernel_inh__X__inh_spikes() const
+  {
+    return V_.__P__V_m__I_kernel_inh__X__inh_spikes;
+  }inline void set___P__V_m__I_kernel_inh__X__inh_spikes(const double __v)
+  {
+    V_.__P__V_m__I_kernel_inh__X__inh_spikes = __v;
   }
   inline double get___P__V_m__I_kernel_exc__X__exc_spikes() const
   {
@@ -1273,12 +612,12 @@ public:
   {
     V_.__P__V_m__I_kernel_exc__X__exc_spikes = __v;
   }
-  inline double get___P__V_m__I_kernel_inh__X__inh_spikes() const
+  inline double get___P__V_th_v_aux__I_drive() const
   {
-    return V_.__P__V_m__I_kernel_inh__X__inh_spikes;
-  }inline void set___P__V_m__I_kernel_inh__X__inh_spikes(const double __v)
+    return V_.__P__V_th_v_aux__I_drive;
+  }inline void set___P__V_th_v_aux__I_drive(const double __v)
   {
-    V_.__P__V_m__I_kernel_inh__X__inh_spikes = __v;
+    V_.__P__V_th_v_aux__I_drive = __v;
   }
   inline double get___P__V_th_v_aux__V_m() const
   {
@@ -1294,6 +633,13 @@ public:
   {
     V_.__P__V_th_v_aux__V_th_v_aux = __v;
   }
+  inline double get___P__V_th_v_aux__I_kernel_inh__X__inh_spikes() const
+  {
+    return V_.__P__V_th_v_aux__I_kernel_inh__X__inh_spikes;
+  }inline void set___P__V_th_v_aux__I_kernel_inh__X__inh_spikes(const double __v)
+  {
+    V_.__P__V_th_v_aux__I_kernel_inh__X__inh_spikes = __v;
+  }
   inline double get___P__V_th_v_aux__I_kernel_exc__X__exc_spikes() const
   {
     return V_.__P__V_th_v_aux__I_kernel_exc__X__exc_spikes;
@@ -1301,12 +647,12 @@ public:
   {
     V_.__P__V_th_v_aux__I_kernel_exc__X__exc_spikes = __v;
   }
-  inline double get___P__V_th_v_aux__I_kernel_inh__X__inh_spikes() const
+  inline double get___P__V_th_v__I_drive() const
   {
-    return V_.__P__V_th_v_aux__I_kernel_inh__X__inh_spikes;
-  }inline void set___P__V_th_v_aux__I_kernel_inh__X__inh_spikes(const double __v)
+    return V_.__P__V_th_v__I_drive;
+  }inline void set___P__V_th_v__I_drive(const double __v)
   {
-    V_.__P__V_th_v_aux__I_kernel_inh__X__inh_spikes = __v;
+    V_.__P__V_th_v__I_drive = __v;
   }
   inline double get___P__V_th_v__V_m() const
   {
@@ -1329,19 +675,19 @@ public:
   {
     V_.__P__V_th_v__V_th_v = __v;
   }
-  inline double get___P__V_th_v__I_kernel_exc__X__exc_spikes() const
-  {
-    return V_.__P__V_th_v__I_kernel_exc__X__exc_spikes;
-  }inline void set___P__V_th_v__I_kernel_exc__X__exc_spikes(const double __v)
-  {
-    V_.__P__V_th_v__I_kernel_exc__X__exc_spikes = __v;
-  }
   inline double get___P__V_th_v__I_kernel_inh__X__inh_spikes() const
   {
     return V_.__P__V_th_v__I_kernel_inh__X__inh_spikes;
   }inline void set___P__V_th_v__I_kernel_inh__X__inh_spikes(const double __v)
   {
     V_.__P__V_th_v__I_kernel_inh__X__inh_spikes = __v;
+  }
+  inline double get___P__V_th_v__I_kernel_exc__X__exc_spikes() const
+  {
+    return V_.__P__V_th_v__I_kernel_exc__X__exc_spikes;
+  }inline void set___P__V_th_v__I_kernel_exc__X__exc_spikes(const double __v)
+  {
+    V_.__P__V_th_v__I_kernel_exc__X__exc_spikes = __v;
   }
   inline double get___P__refr_t__refr_t() const
   {
@@ -1350,19 +696,19 @@ public:
   {
     V_.__P__refr_t__refr_t = __v;
   }
-  inline double get___P__I_kernel_exc__X__exc_spikes__I_kernel_exc__X__exc_spikes() const
-  {
-    return V_.__P__I_kernel_exc__X__exc_spikes__I_kernel_exc__X__exc_spikes;
-  }inline void set___P__I_kernel_exc__X__exc_spikes__I_kernel_exc__X__exc_spikes(const double __v)
-  {
-    V_.__P__I_kernel_exc__X__exc_spikes__I_kernel_exc__X__exc_spikes = __v;
-  }
   inline double get___P__I_kernel_inh__X__inh_spikes__I_kernel_inh__X__inh_spikes() const
   {
     return V_.__P__I_kernel_inh__X__inh_spikes__I_kernel_inh__X__inh_spikes;
   }inline void set___P__I_kernel_inh__X__inh_spikes__I_kernel_inh__X__inh_spikes(const double __v)
   {
     V_.__P__I_kernel_inh__X__inh_spikes__I_kernel_inh__X__inh_spikes = __v;
+  }
+  inline double get___P__I_kernel_exc__X__exc_spikes__I_kernel_exc__X__exc_spikes() const
+  {
+    return V_.__P__I_kernel_exc__X__exc_spikes__I_kernel_exc__X__exc_spikes;
+  }inline void set___P__I_kernel_exc__X__exc_spikes__I_kernel_exc__X__exc_spikes(const double __v)
+  {
+    V_.__P__I_kernel_exc__X__exc_spikes__I_kernel_exc__X__exc_spikes = __v;
   }
 
 
@@ -1527,8 +873,10 @@ static std::vector< std::tuple< int, int > > rport_to_nestml_buffer_idx;
     double V_m;
     //!  Refractory period timer; counts down to 0 after a spike
     double refr_t;
-    double I_kernel_exc__X__exc_spikes;
+    //!  Piecewise-constant current used during integration step 
+    double I_drive;
     double I_kernel_inh__X__inh_spikes;
+    double I_kernel_exc__X__exc_spikes;
 
     State_();
   };
@@ -1553,110 +901,27 @@ static std::vector< std::tuple< int, int > > rport_to_nestml_buffer_idx;
     //!  Unitary postsynaptic current amplitude
     double unit_psc;
     double __h;
-    double __ode_cse_update_0;
-    double __ode_cse_update_1;
-    double __ode_cse_update_2;
-    double __ode_cse_update_3;
-    double __ode_cse_update_4;
-    double __ode_cse_update_5;
-    double __ode_cse_update_6;
-    double __ode_cse_update_7;
-    double __ode_cse_update_8;
-    double __ode_cse_prop_0;
-    double __ode_cse_prop_1;
-    double __ode_cse_prop_2;
-    double __ode_cse_prop_3;
-    double __ode_cse_prop_4;
-    double __ode_cse_prop_5;
-    double __ode_cse_prop_6;
-    double __ode_cse_prop_7;
-    double __ode_cse_prop_8;
-    double __ode_cse_prop_9;
-    double __ode_cse_prop_10;
-    double __ode_cse_prop_11;
-    double __ode_cse_prop_12;
-    double __ode_cse_prop_13;
-    double __ode_cse_prop_14;
-    double __ode_cse_prop_15;
-    double __ode_cse_prop_16;
-    double __ode_cse_prop_17;
-    double __ode_cse_prop_18;
-    double __ode_cse_prop_19;
-    double __ode_cse_prop_20;
-    double __ode_cse_prop_21;
-    double __ode_cse_prop_22;
-    double __ode_cse_prop_23;
-    double __ode_cse_prop_24;
-    double __ode_cse_prop_25;
-    double __ode_cse_prop_26;
-    double __ode_cse_prop_27;
-    double __ode_cse_prop_28;
-    double __ode_cse_prop_29;
-    double __ode_cse_prop_30;
-    double __ode_cse_prop_31;
-    double __ode_cse_prop_32;
-    double __ode_cse_prop_33;
-    double __ode_cse_prop_34;
-    double __ode_cse_prop_35;
-    double __ode_cse_prop_36;
-    double __ode_cse_prop_37;
-    double __ode_cse_prop_38;
-    double __ode_cse_prop_39;
-    double __ode_cse_prop_40;
-    double __ode_cse_prop_41;
-    double __ode_cse_prop_42;
-    double __ode_cse_prop_43;
-    double __ode_cse_prop_44;
-    double __ode_cse_prop_45;
-    double __ode_cse_prop_46;
-    double __ode_cse_prop_47;
-    double __ode_cse_prop_48;
-    double __ode_cse_prop_49;
-    double __ode_cse_prop_50;
-    double __ode_cse_prop_51;
-    double __ode_cse_prop_52;
-    double __ode_cse_prop_53;
-    double __ode_cse_prop_54;
-    double __ode_cse_prop_55;
-    double __ode_cse_prop_56;
-    double __ode_cse_prop_57;
-    double __ode_cse_prop_58;
-    double __ode_cse_prop_59;
-    double __ode_cse_prop_60;
-    double __ode_cse_prop_61;
-    double __ode_cse_prop_62;
-    double __ode_cse_prop_63;
-    double __ode_cse_prop_64;
-    double __ode_cse_prop_65;
-    double __ode_cse_prop_66;
-    double __ode_cse_prop_67;
-    double __ode_cse_prop_68;
-    double __ode_cse_prop_69;
-    double __ode_cse_prop_70;
-    double __ode_cse_prop_71;
-    double __ode_cse_prop_72;
-    double __ode_cse_prop_73;
-    double __ode_cse_prop_74;
-    double __ode_cse_prop_75;
-    double __ode_cse_prop_76;
-    double __ode_cse_prop_77;
+    double __P__I_drive__I_drive;
     double __P__V_th_alpha_1__V_th_alpha_1;
     double __P__V_th_alpha_2__V_th_alpha_2;
+    double __P__V_m__I_drive;
     double __P__V_m__V_m;
-    double __P__V_m__I_kernel_exc__X__exc_spikes;
     double __P__V_m__I_kernel_inh__X__inh_spikes;
+    double __P__V_m__I_kernel_exc__X__exc_spikes;
+    double __P__V_th_v_aux__I_drive;
     double __P__V_th_v_aux__V_m;
     double __P__V_th_v_aux__V_th_v_aux;
-    double __P__V_th_v_aux__I_kernel_exc__X__exc_spikes;
     double __P__V_th_v_aux__I_kernel_inh__X__inh_spikes;
+    double __P__V_th_v_aux__I_kernel_exc__X__exc_spikes;
+    double __P__V_th_v__I_drive;
     double __P__V_th_v__V_m;
     double __P__V_th_v__V_th_v_aux;
     double __P__V_th_v__V_th_v;
-    double __P__V_th_v__I_kernel_exc__X__exc_spikes;
     double __P__V_th_v__I_kernel_inh__X__inh_spikes;
+    double __P__V_th_v__I_kernel_exc__X__exc_spikes;
     double __P__refr_t__refr_t;
-    double __P__I_kernel_exc__X__exc_spikes__I_kernel_exc__X__exc_spikes;
     double __P__I_kernel_inh__X__inh_spikes__I_kernel_inh__X__inh_spikes;
+    double __P__I_kernel_exc__X__exc_spikes__I_kernel_exc__X__exc_spikes;
   };
 
   /**
@@ -1770,7 +1035,7 @@ public:
 
   inline double get_dV_dt() const
   {
-    return (-(S_.V_m - P_.E_L)) / P_.tau_m + ((((V_.unit_psc * S_.I_kernel_exc__X__exc_spikes)) + (((-V_.unit_psc) * S_.I_kernel_inh__X__inh_spikes))) + P_.I_e + B_.continuous_inputs_grid_sum_[I_STIM]) / P_.C_m;
+    return (-(S_.V_m - P_.E_L)) / P_.tau_m + ((((V_.unit_psc * S_.I_kernel_exc__X__exc_spikes)) + (((-V_.unit_psc) * S_.I_kernel_inh__X__inh_spikes))) + S_.I_drive) / P_.C_m;
   }
 
   inline double get_V_th() const
@@ -1949,197 +1214,31 @@ inline void amat_neuron_nestml::get_status(DictionaryDatum&__d) const
 
   def< double >(__d, nest::amat_neuron_nestml_names::___h, get___h());
 
-  def< double >(__d, nest::amat_neuron_nestml_names::___ode_cse_update_0, get___ode_cse_update_0());
-
-  def< double >(__d, nest::amat_neuron_nestml_names::___ode_cse_update_1, get___ode_cse_update_1());
-
-  def< double >(__d, nest::amat_neuron_nestml_names::___ode_cse_update_2, get___ode_cse_update_2());
-
-  def< double >(__d, nest::amat_neuron_nestml_names::___ode_cse_update_3, get___ode_cse_update_3());
-
-  def< double >(__d, nest::amat_neuron_nestml_names::___ode_cse_update_4, get___ode_cse_update_4());
-
-  def< double >(__d, nest::amat_neuron_nestml_names::___ode_cse_update_5, get___ode_cse_update_5());
-
-  def< double >(__d, nest::amat_neuron_nestml_names::___ode_cse_update_6, get___ode_cse_update_6());
-
-  def< double >(__d, nest::amat_neuron_nestml_names::___ode_cse_update_7, get___ode_cse_update_7());
-
-  def< double >(__d, nest::amat_neuron_nestml_names::___ode_cse_update_8, get___ode_cse_update_8());
-
-  def< double >(__d, nest::amat_neuron_nestml_names::___ode_cse_prop_0, get___ode_cse_prop_0());
-
-  def< double >(__d, nest::amat_neuron_nestml_names::___ode_cse_prop_1, get___ode_cse_prop_1());
-
-  def< double >(__d, nest::amat_neuron_nestml_names::___ode_cse_prop_2, get___ode_cse_prop_2());
-
-  def< double >(__d, nest::amat_neuron_nestml_names::___ode_cse_prop_3, get___ode_cse_prop_3());
-
-  def< double >(__d, nest::amat_neuron_nestml_names::___ode_cse_prop_4, get___ode_cse_prop_4());
-
-  def< double >(__d, nest::amat_neuron_nestml_names::___ode_cse_prop_5, get___ode_cse_prop_5());
-
-  def< double >(__d, nest::amat_neuron_nestml_names::___ode_cse_prop_6, get___ode_cse_prop_6());
-
-  def< double >(__d, nest::amat_neuron_nestml_names::___ode_cse_prop_7, get___ode_cse_prop_7());
-
-  def< double >(__d, nest::amat_neuron_nestml_names::___ode_cse_prop_8, get___ode_cse_prop_8());
-
-  def< double >(__d, nest::amat_neuron_nestml_names::___ode_cse_prop_9, get___ode_cse_prop_9());
-
-  def< double >(__d, nest::amat_neuron_nestml_names::___ode_cse_prop_10, get___ode_cse_prop_10());
-
-  def< double >(__d, nest::amat_neuron_nestml_names::___ode_cse_prop_11, get___ode_cse_prop_11());
-
-  def< double >(__d, nest::amat_neuron_nestml_names::___ode_cse_prop_12, get___ode_cse_prop_12());
-
-  def< double >(__d, nest::amat_neuron_nestml_names::___ode_cse_prop_13, get___ode_cse_prop_13());
-
-  def< double >(__d, nest::amat_neuron_nestml_names::___ode_cse_prop_14, get___ode_cse_prop_14());
-
-  def< double >(__d, nest::amat_neuron_nestml_names::___ode_cse_prop_15, get___ode_cse_prop_15());
-
-  def< double >(__d, nest::amat_neuron_nestml_names::___ode_cse_prop_16, get___ode_cse_prop_16());
-
-  def< double >(__d, nest::amat_neuron_nestml_names::___ode_cse_prop_17, get___ode_cse_prop_17());
-
-  def< double >(__d, nest::amat_neuron_nestml_names::___ode_cse_prop_18, get___ode_cse_prop_18());
-
-  def< double >(__d, nest::amat_neuron_nestml_names::___ode_cse_prop_19, get___ode_cse_prop_19());
-
-  def< double >(__d, nest::amat_neuron_nestml_names::___ode_cse_prop_20, get___ode_cse_prop_20());
-
-  def< double >(__d, nest::amat_neuron_nestml_names::___ode_cse_prop_21, get___ode_cse_prop_21());
-
-  def< double >(__d, nest::amat_neuron_nestml_names::___ode_cse_prop_22, get___ode_cse_prop_22());
-
-  def< double >(__d, nest::amat_neuron_nestml_names::___ode_cse_prop_23, get___ode_cse_prop_23());
-
-  def< double >(__d, nest::amat_neuron_nestml_names::___ode_cse_prop_24, get___ode_cse_prop_24());
-
-  def< double >(__d, nest::amat_neuron_nestml_names::___ode_cse_prop_25, get___ode_cse_prop_25());
-
-  def< double >(__d, nest::amat_neuron_nestml_names::___ode_cse_prop_26, get___ode_cse_prop_26());
-
-  def< double >(__d, nest::amat_neuron_nestml_names::___ode_cse_prop_27, get___ode_cse_prop_27());
-
-  def< double >(__d, nest::amat_neuron_nestml_names::___ode_cse_prop_28, get___ode_cse_prop_28());
-
-  def< double >(__d, nest::amat_neuron_nestml_names::___ode_cse_prop_29, get___ode_cse_prop_29());
-
-  def< double >(__d, nest::amat_neuron_nestml_names::___ode_cse_prop_30, get___ode_cse_prop_30());
-
-  def< double >(__d, nest::amat_neuron_nestml_names::___ode_cse_prop_31, get___ode_cse_prop_31());
-
-  def< double >(__d, nest::amat_neuron_nestml_names::___ode_cse_prop_32, get___ode_cse_prop_32());
-
-  def< double >(__d, nest::amat_neuron_nestml_names::___ode_cse_prop_33, get___ode_cse_prop_33());
-
-  def< double >(__d, nest::amat_neuron_nestml_names::___ode_cse_prop_34, get___ode_cse_prop_34());
-
-  def< double >(__d, nest::amat_neuron_nestml_names::___ode_cse_prop_35, get___ode_cse_prop_35());
-
-  def< double >(__d, nest::amat_neuron_nestml_names::___ode_cse_prop_36, get___ode_cse_prop_36());
-
-  def< double >(__d, nest::amat_neuron_nestml_names::___ode_cse_prop_37, get___ode_cse_prop_37());
-
-  def< double >(__d, nest::amat_neuron_nestml_names::___ode_cse_prop_38, get___ode_cse_prop_38());
-
-  def< double >(__d, nest::amat_neuron_nestml_names::___ode_cse_prop_39, get___ode_cse_prop_39());
-
-  def< double >(__d, nest::amat_neuron_nestml_names::___ode_cse_prop_40, get___ode_cse_prop_40());
-
-  def< double >(__d, nest::amat_neuron_nestml_names::___ode_cse_prop_41, get___ode_cse_prop_41());
-
-  def< double >(__d, nest::amat_neuron_nestml_names::___ode_cse_prop_42, get___ode_cse_prop_42());
-
-  def< double >(__d, nest::amat_neuron_nestml_names::___ode_cse_prop_43, get___ode_cse_prop_43());
-
-  def< double >(__d, nest::amat_neuron_nestml_names::___ode_cse_prop_44, get___ode_cse_prop_44());
-
-  def< double >(__d, nest::amat_neuron_nestml_names::___ode_cse_prop_45, get___ode_cse_prop_45());
-
-  def< double >(__d, nest::amat_neuron_nestml_names::___ode_cse_prop_46, get___ode_cse_prop_46());
-
-  def< double >(__d, nest::amat_neuron_nestml_names::___ode_cse_prop_47, get___ode_cse_prop_47());
-
-  def< double >(__d, nest::amat_neuron_nestml_names::___ode_cse_prop_48, get___ode_cse_prop_48());
-
-  def< double >(__d, nest::amat_neuron_nestml_names::___ode_cse_prop_49, get___ode_cse_prop_49());
-
-  def< double >(__d, nest::amat_neuron_nestml_names::___ode_cse_prop_50, get___ode_cse_prop_50());
-
-  def< double >(__d, nest::amat_neuron_nestml_names::___ode_cse_prop_51, get___ode_cse_prop_51());
-
-  def< double >(__d, nest::amat_neuron_nestml_names::___ode_cse_prop_52, get___ode_cse_prop_52());
-
-  def< double >(__d, nest::amat_neuron_nestml_names::___ode_cse_prop_53, get___ode_cse_prop_53());
-
-  def< double >(__d, nest::amat_neuron_nestml_names::___ode_cse_prop_54, get___ode_cse_prop_54());
-
-  def< double >(__d, nest::amat_neuron_nestml_names::___ode_cse_prop_55, get___ode_cse_prop_55());
-
-  def< double >(__d, nest::amat_neuron_nestml_names::___ode_cse_prop_56, get___ode_cse_prop_56());
-
-  def< double >(__d, nest::amat_neuron_nestml_names::___ode_cse_prop_57, get___ode_cse_prop_57());
-
-  def< double >(__d, nest::amat_neuron_nestml_names::___ode_cse_prop_58, get___ode_cse_prop_58());
-
-  def< double >(__d, nest::amat_neuron_nestml_names::___ode_cse_prop_59, get___ode_cse_prop_59());
-
-  def< double >(__d, nest::amat_neuron_nestml_names::___ode_cse_prop_60, get___ode_cse_prop_60());
-
-  def< double >(__d, nest::amat_neuron_nestml_names::___ode_cse_prop_61, get___ode_cse_prop_61());
-
-  def< double >(__d, nest::amat_neuron_nestml_names::___ode_cse_prop_62, get___ode_cse_prop_62());
-
-  def< double >(__d, nest::amat_neuron_nestml_names::___ode_cse_prop_63, get___ode_cse_prop_63());
-
-  def< double >(__d, nest::amat_neuron_nestml_names::___ode_cse_prop_64, get___ode_cse_prop_64());
-
-  def< double >(__d, nest::amat_neuron_nestml_names::___ode_cse_prop_65, get___ode_cse_prop_65());
-
-  def< double >(__d, nest::amat_neuron_nestml_names::___ode_cse_prop_66, get___ode_cse_prop_66());
-
-  def< double >(__d, nest::amat_neuron_nestml_names::___ode_cse_prop_67, get___ode_cse_prop_67());
-
-  def< double >(__d, nest::amat_neuron_nestml_names::___ode_cse_prop_68, get___ode_cse_prop_68());
-
-  def< double >(__d, nest::amat_neuron_nestml_names::___ode_cse_prop_69, get___ode_cse_prop_69());
-
-  def< double >(__d, nest::amat_neuron_nestml_names::___ode_cse_prop_70, get___ode_cse_prop_70());
-
-  def< double >(__d, nest::amat_neuron_nestml_names::___ode_cse_prop_71, get___ode_cse_prop_71());
-
-  def< double >(__d, nest::amat_neuron_nestml_names::___ode_cse_prop_72, get___ode_cse_prop_72());
-
-  def< double >(__d, nest::amat_neuron_nestml_names::___ode_cse_prop_73, get___ode_cse_prop_73());
-
-  def< double >(__d, nest::amat_neuron_nestml_names::___ode_cse_prop_74, get___ode_cse_prop_74());
-
-  def< double >(__d, nest::amat_neuron_nestml_names::___ode_cse_prop_75, get___ode_cse_prop_75());
-
-  def< double >(__d, nest::amat_neuron_nestml_names::___ode_cse_prop_76, get___ode_cse_prop_76());
-
-  def< double >(__d, nest::amat_neuron_nestml_names::___ode_cse_prop_77, get___ode_cse_prop_77());
+  def< double >(__d, nest::amat_neuron_nestml_names::___P__I_drive__I_drive, get___P__I_drive__I_drive());
 
   def< double >(__d, nest::amat_neuron_nestml_names::___P__V_th_alpha_1__V_th_alpha_1, get___P__V_th_alpha_1__V_th_alpha_1());
 
   def< double >(__d, nest::amat_neuron_nestml_names::___P__V_th_alpha_2__V_th_alpha_2, get___P__V_th_alpha_2__V_th_alpha_2());
 
+  def< double >(__d, nest::amat_neuron_nestml_names::___P__V_m__I_drive, get___P__V_m__I_drive());
+
   def< double >(__d, nest::amat_neuron_nestml_names::___P__V_m__V_m, get___P__V_m__V_m());
+
+  def< double >(__d, nest::amat_neuron_nestml_names::___P__V_m__I_kernel_inh__X__inh_spikes, get___P__V_m__I_kernel_inh__X__inh_spikes());
 
   def< double >(__d, nest::amat_neuron_nestml_names::___P__V_m__I_kernel_exc__X__exc_spikes, get___P__V_m__I_kernel_exc__X__exc_spikes());
 
-  def< double >(__d, nest::amat_neuron_nestml_names::___P__V_m__I_kernel_inh__X__inh_spikes, get___P__V_m__I_kernel_inh__X__inh_spikes());
+  def< double >(__d, nest::amat_neuron_nestml_names::___P__V_th_v_aux__I_drive, get___P__V_th_v_aux__I_drive());
 
   def< double >(__d, nest::amat_neuron_nestml_names::___P__V_th_v_aux__V_m, get___P__V_th_v_aux__V_m());
 
   def< double >(__d, nest::amat_neuron_nestml_names::___P__V_th_v_aux__V_th_v_aux, get___P__V_th_v_aux__V_th_v_aux());
 
+  def< double >(__d, nest::amat_neuron_nestml_names::___P__V_th_v_aux__I_kernel_inh__X__inh_spikes, get___P__V_th_v_aux__I_kernel_inh__X__inh_spikes());
+
   def< double >(__d, nest::amat_neuron_nestml_names::___P__V_th_v_aux__I_kernel_exc__X__exc_spikes, get___P__V_th_v_aux__I_kernel_exc__X__exc_spikes());
 
-  def< double >(__d, nest::amat_neuron_nestml_names::___P__V_th_v_aux__I_kernel_inh__X__inh_spikes, get___P__V_th_v_aux__I_kernel_inh__X__inh_spikes());
+  def< double >(__d, nest::amat_neuron_nestml_names::___P__V_th_v__I_drive, get___P__V_th_v__I_drive());
 
   def< double >(__d, nest::amat_neuron_nestml_names::___P__V_th_v__V_m, get___P__V_th_v__V_m());
 
@@ -2147,15 +1246,15 @@ inline void amat_neuron_nestml::get_status(DictionaryDatum&__d) const
 
   def< double >(__d, nest::amat_neuron_nestml_names::___P__V_th_v__V_th_v, get___P__V_th_v__V_th_v());
 
-  def< double >(__d, nest::amat_neuron_nestml_names::___P__V_th_v__I_kernel_exc__X__exc_spikes, get___P__V_th_v__I_kernel_exc__X__exc_spikes());
-
   def< double >(__d, nest::amat_neuron_nestml_names::___P__V_th_v__I_kernel_inh__X__inh_spikes, get___P__V_th_v__I_kernel_inh__X__inh_spikes());
+
+  def< double >(__d, nest::amat_neuron_nestml_names::___P__V_th_v__I_kernel_exc__X__exc_spikes, get___P__V_th_v__I_kernel_exc__X__exc_spikes());
 
   def< double >(__d, nest::amat_neuron_nestml_names::___P__refr_t__refr_t, get___P__refr_t__refr_t());
 
-  def< double >(__d, nest::amat_neuron_nestml_names::___P__I_kernel_exc__X__exc_spikes__I_kernel_exc__X__exc_spikes, get___P__I_kernel_exc__X__exc_spikes__I_kernel_exc__X__exc_spikes());
-
   def< double >(__d, nest::amat_neuron_nestml_names::___P__I_kernel_inh__X__inh_spikes__I_kernel_inh__X__inh_spikes, get___P__I_kernel_inh__X__inh_spikes__I_kernel_inh__X__inh_spikes());
+
+  def< double >(__d, nest::amat_neuron_nestml_names::___P__I_kernel_exc__X__exc_spikes__I_kernel_exc__X__exc_spikes, get___P__I_kernel_exc__X__exc_spikes__I_kernel_exc__X__exc_spikes());
 
   // initial values for state variables in ODE or kernel
 
@@ -2171,9 +1270,11 @@ inline void amat_neuron_nestml::get_status(DictionaryDatum&__d) const
 
   def< double >(__d, nest::amat_neuron_nestml_names::_refr_t, get_refr_t());
 
-  def< double >(__d, nest::amat_neuron_nestml_names::_I_kernel_exc__X__exc_spikes, get_I_kernel_exc__X__exc_spikes());
+  def< double >(__d, nest::amat_neuron_nestml_names::_I_drive, get_I_drive());
 
   def< double >(__d, nest::amat_neuron_nestml_names::_I_kernel_inh__X__inh_spikes, get_I_kernel_inh__X__inh_spikes());
+
+  def< double >(__d, nest::amat_neuron_nestml_names::_I_kernel_exc__X__exc_spikes, get_I_kernel_exc__X__exc_spikes());
 
   StructuralPlasticityNode::get_status( __d );
 
@@ -2226,10 +1327,12 @@ inline void amat_neuron_nestml::set_status(const DictionaryDatum&__d)
   nest::updateValueParam<double>(__d, nest::amat_neuron_nestml_names::_V_m, tmp_V_m, this);
   double tmp_refr_t = get_refr_t();
   nest::updateValueParam<double>(__d, nest::amat_neuron_nestml_names::_refr_t, tmp_refr_t, this);
-  double tmp_I_kernel_exc__X__exc_spikes = get_I_kernel_exc__X__exc_spikes();
-  nest::updateValueParam<double>(__d, nest::amat_neuron_nestml_names::_I_kernel_exc__X__exc_spikes, tmp_I_kernel_exc__X__exc_spikes, this);
+  double tmp_I_drive = get_I_drive();
+  nest::updateValueParam<double>(__d, nest::amat_neuron_nestml_names::_I_drive, tmp_I_drive, this);
   double tmp_I_kernel_inh__X__inh_spikes = get_I_kernel_inh__X__inh_spikes();
   nest::updateValueParam<double>(__d, nest::amat_neuron_nestml_names::_I_kernel_inh__X__inh_spikes, tmp_I_kernel_inh__X__inh_spikes, this);
+  double tmp_I_kernel_exc__X__exc_spikes = get_I_kernel_exc__X__exc_spikes();
+  nest::updateValueParam<double>(__d, nest::amat_neuron_nestml_names::_I_kernel_exc__X__exc_spikes, tmp_I_kernel_exc__X__exc_spikes, this);
 
   // We now know that (ptmp, stmp) are consistent. We do not
   // write them back to (P_, S_) before we are also sure that
@@ -2258,8 +1361,9 @@ inline void amat_neuron_nestml::set_status(const DictionaryDatum&__d)
   set_V_th_v_aux(tmp_V_th_v_aux);
   set_V_m(tmp_V_m);
   set_refr_t(tmp_refr_t);
-  set_I_kernel_exc__X__exc_spikes(tmp_I_kernel_exc__X__exc_spikes);
+  set_I_drive(tmp_I_drive);
   set_I_kernel_inh__X__inh_spikes(tmp_I_kernel_inh__X__inh_spikes);
+  set_I_kernel_exc__X__exc_spikes(tmp_I_kernel_exc__X__exc_spikes);
 
 
 
