@@ -19,7 +19,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with NEST.  If not, see <http://www.gnu.org/licenses/>.
  *
- *  Generated from NESTML 8.3.0-rc3-post-dev at time: 2026-08-31 11:33:51.706591
+ *  Generated from NESTML 8.3.0-rc3-post-dev at time: 2026-09-01 08:53:19.862891
 **/
 
 // C++ includes:
@@ -225,7 +225,7 @@ void amat_neuron_nestml::init_state_internal_()
   P_.alpha_2 = 0; // as mV
   P_.omega = (-65); // as mV
   P_.tau_v = 5; // as ms
-  P_.beta = 0 / 1.0; // as 1 / ms
+  P_.beta = 1 / 1.0; // as 1 / ms
   P_.I_e = 0; // as pA
 
   V_.__h = nest::Time::get_resolution().get_ms();
@@ -377,9 +377,9 @@ void amat_neuron_nestml::update(nest::Time const & origin, const long from, cons
       const double V_th_alpha_1__tmp = S_.V_th_alpha_1 * V_.__P__V_th_alpha_1__V_th_alpha_1;
       const double V_th_alpha_2__tmp = S_.V_th_alpha_2 * V_.__P__V_th_alpha_2__V_th_alpha_2;
       const double V_m__tmp = (-P_.E_L) * V_.__P__V_m__V_m + P_.E_L + S_.I_kernel_exc__X__exc_spikes * V_.__P__V_m__I_kernel_exc__X__exc_spikes + S_.I_kernel_inh__X__inh_spikes * V_.__P__V_m__I_kernel_inh__X__inh_spikes + S_.V_m * V_.__P__V_m__V_m - P_.I_e * V_.__P__V_m__V_m * P_.tau_m / P_.C_m + P_.I_e * P_.tau_m / P_.C_m - B_.continuous_inputs_grid_sum_[I_STIM] * V_.__P__V_m__V_m * P_.tau_m / P_.C_m + B_.continuous_inputs_grid_sum_[I_STIM] * P_.tau_m / P_.C_m;
-      const double V_th_v_aux__tmp = (-P_.E_L) * V_.__P__V_th_v_aux__V_th_v_aux * P_.beta * P_.tau_v / P_.tau_m + P_.E_L * P_.beta * P_.tau_v / P_.tau_m + S_.I_kernel_exc__X__exc_spikes * V_.__P__V_th_v_aux__I_kernel_exc__X__exc_spikes + S_.I_kernel_inh__X__inh_spikes * V_.__P__V_th_v_aux__I_kernel_inh__X__inh_spikes + S_.V_m * V_.__P__V_th_v_aux__V_m + S_.V_th_v_aux * V_.__P__V_th_v_aux__V_th_v_aux - P_.I_e * V_.__P__V_th_v_aux__V_th_v_aux * P_.beta * P_.tau_v / P_.C_m + P_.I_e * P_.beta * P_.tau_v / P_.C_m - B_.continuous_inputs_grid_sum_[I_STIM] * V_.__P__V_th_v_aux__V_th_v_aux * P_.beta * P_.tau_v / P_.C_m + B_.continuous_inputs_grid_sum_[I_STIM] * P_.beta * P_.tau_v / P_.C_m;
-      const double V_th_v__tmp = S_.I_kernel_exc__X__exc_spikes * V_.__P__V_th_v__I_kernel_exc__X__exc_spikes + S_.I_kernel_inh__X__inh_spikes * V_.__P__V_th_v__I_kernel_inh__X__inh_spikes + S_.V_m * V_.__P__V_th_v__V_m + S_.V_th_v * V_.__P__V_th_v__V_th_v + S_.V_th_v_aux * V_.__P__V_th_v__V_th_v_aux;
-      const double refr_t__tmp = V_.__P__refr_t__refr_t * S_.refr_t - 1. * V_.__h;
+      const double V_th_v_aux__tmp = (-P_.E_L) * V_.__P__V_th_v_aux__V_m + S_.I_kernel_exc__X__exc_spikes * V_.__P__V_th_v_aux__I_kernel_exc__X__exc_spikes + S_.I_kernel_inh__X__inh_spikes * V_.__P__V_th_v_aux__I_kernel_inh__X__inh_spikes + S_.V_m * V_.__P__V_th_v_aux__V_m + S_.V_th_v_aux * V_.__P__V_th_v_aux__V_th_v_aux - P_.I_e * V_.__P__V_th_v_aux__V_m * P_.tau_m / P_.C_m - B_.continuous_inputs_grid_sum_[I_STIM] * V_.__P__V_th_v_aux__V_m * P_.tau_m / P_.C_m;
+      const double V_th_v__tmp = S_.I_kernel_exc__X__exc_spikes * V_.__P__V_th_v__I_kernel_exc__X__exc_spikes + S_.I_kernel_inh__X__inh_spikes * V_.__P__V_th_v__I_kernel_inh__X__inh_spikes + S_.V_th_v * V_.__P__V_th_v__V_th_v + S_.V_th_v_aux * V_.__P__V_th_v__V_th_v_aux + V_.__P__V_th_v__V_m * ((-P_.E_L) + S_.V_m - P_.I_e * P_.tau_m / P_.C_m - B_.continuous_inputs_grid_sum_[I_STIM] * P_.tau_m / P_.C_m);
+      const double refr_t__tmp = V_.__P__refr_t__refr_t * S_.refr_t;
       // analytic solver: integrating state variables V_th_alpha_1, V_th_alpha_2, V_m, V_th_v_aux, V_th_v, refr_t (second step: replace analytically solvable variables with precisely integrated values)
       S_.V_th_alpha_1 = V_th_alpha_1__tmp;
       S_.V_th_alpha_2 = V_th_alpha_2__tmp;
@@ -396,8 +396,8 @@ void amat_neuron_nestml::update(nest::Time const & origin, const long from, cons
       const double V_th_alpha_1__tmp = S_.V_th_alpha_1 * V_.__P__V_th_alpha_1__V_th_alpha_1;
       const double V_th_alpha_2__tmp = S_.V_th_alpha_2 * V_.__P__V_th_alpha_2__V_th_alpha_2;
       const double V_m__tmp = (-P_.E_L) * V_.__P__V_m__V_m + P_.E_L + S_.I_kernel_exc__X__exc_spikes * V_.__P__V_m__I_kernel_exc__X__exc_spikes + S_.I_kernel_inh__X__inh_spikes * V_.__P__V_m__I_kernel_inh__X__inh_spikes + S_.V_m * V_.__P__V_m__V_m - P_.I_e * V_.__P__V_m__V_m * P_.tau_m / P_.C_m + P_.I_e * P_.tau_m / P_.C_m - B_.continuous_inputs_grid_sum_[I_STIM] * V_.__P__V_m__V_m * P_.tau_m / P_.C_m + B_.continuous_inputs_grid_sum_[I_STIM] * P_.tau_m / P_.C_m;
-      const double V_th_v_aux__tmp = (-P_.E_L) * V_.__P__V_th_v_aux__V_th_v_aux * P_.beta * P_.tau_v / P_.tau_m + P_.E_L * P_.beta * P_.tau_v / P_.tau_m + S_.I_kernel_exc__X__exc_spikes * V_.__P__V_th_v_aux__I_kernel_exc__X__exc_spikes + S_.I_kernel_inh__X__inh_spikes * V_.__P__V_th_v_aux__I_kernel_inh__X__inh_spikes + S_.V_m * V_.__P__V_th_v_aux__V_m + S_.V_th_v_aux * V_.__P__V_th_v_aux__V_th_v_aux - P_.I_e * V_.__P__V_th_v_aux__V_th_v_aux * P_.beta * P_.tau_v / P_.C_m + P_.I_e * P_.beta * P_.tau_v / P_.C_m - B_.continuous_inputs_grid_sum_[I_STIM] * V_.__P__V_th_v_aux__V_th_v_aux * P_.beta * P_.tau_v / P_.C_m + B_.continuous_inputs_grid_sum_[I_STIM] * P_.beta * P_.tau_v / P_.C_m;
-      const double V_th_v__tmp = S_.I_kernel_exc__X__exc_spikes * V_.__P__V_th_v__I_kernel_exc__X__exc_spikes + S_.I_kernel_inh__X__inh_spikes * V_.__P__V_th_v__I_kernel_inh__X__inh_spikes + S_.V_m * V_.__P__V_th_v__V_m + S_.V_th_v * V_.__P__V_th_v__V_th_v + S_.V_th_v_aux * V_.__P__V_th_v__V_th_v_aux;
+      const double V_th_v_aux__tmp = (-P_.E_L) * V_.__P__V_th_v_aux__V_m + S_.I_kernel_exc__X__exc_spikes * V_.__P__V_th_v_aux__I_kernel_exc__X__exc_spikes + S_.I_kernel_inh__X__inh_spikes * V_.__P__V_th_v_aux__I_kernel_inh__X__inh_spikes + S_.V_m * V_.__P__V_th_v_aux__V_m + S_.V_th_v_aux * V_.__P__V_th_v_aux__V_th_v_aux - P_.I_e * V_.__P__V_th_v_aux__V_m * P_.tau_m / P_.C_m - B_.continuous_inputs_grid_sum_[I_STIM] * V_.__P__V_th_v_aux__V_m * P_.tau_m / P_.C_m;
+      const double V_th_v__tmp = S_.I_kernel_exc__X__exc_spikes * V_.__P__V_th_v__I_kernel_exc__X__exc_spikes + S_.I_kernel_inh__X__inh_spikes * V_.__P__V_th_v__I_kernel_inh__X__inh_spikes + S_.V_th_v * V_.__P__V_th_v__V_th_v + S_.V_th_v_aux * V_.__P__V_th_v__V_th_v_aux + V_.__P__V_th_v__V_m * ((-P_.E_L) + S_.V_m - P_.I_e * P_.tau_m / P_.C_m - B_.continuous_inputs_grid_sum_[I_STIM] * P_.tau_m / P_.C_m);
       // analytic solver: integrating state variables V_th_alpha_1, V_th_alpha_2, V_m, V_th_v_aux, V_th_v (second step: replace analytically solvable variables with precisely integrated values)
       S_.V_th_alpha_1 = V_th_alpha_1__tmp;
       S_.V_th_alpha_2 = V_th_alpha_2__tmp;
@@ -436,9 +436,6 @@ void amat_neuron_nestml::update(nest::Time const & origin, const long from, cons
 
     if (S_.refr_t <= 0 && S_.V_m >= get_V_th())
     {
-      S_.refr_t = P_.refr_T;
-      S_.V_th_alpha_1 += P_.alpha_1;
-      S_.V_th_alpha_2 += P_.alpha_2;
 
       // begin generated code for emit_spike() function
 
@@ -449,6 +446,9 @@ void amat_neuron_nestml::update(nest::Time const & origin, const long from, cons
       nest::SpikeEvent se;
       nest::kernel().event_delivery_manager.send(*this, se, lag);
       // end generated code for emit_spike() function
+      S_.refr_t = P_.refr_T;
+      S_.V_th_alpha_1 += P_.alpha_1;
+      S_.V_th_alpha_2 += P_.alpha_2;
     }
 
     /**

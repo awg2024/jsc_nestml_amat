@@ -135,11 +135,9 @@ model amat_neuron:
         # membrane potential and refractory timer 
         V_m mV = E_L        # Absolute membrane potential; never reset on spike
         refr_t ms = 0 ms    # Refractory period timer; counts down to 0 after a spike
-        I_drive pA = I_e # Piecewise-constant current used during integration step 
-
+        
     equations:
 
-        I_drive' = 0 pA/ms 
 
         # Exponential-shaped postsynaptic current kernels (unchanged from mat2_psc_exp)
         kernel I_kernel_inh = exp(-t / tau_syn_inh) # inhibitory kernel # inhibitory PSC waveform
@@ -157,7 +155,7 @@ model amat_neuron:
 
         # dV/dt, written once and reused below so the voltage-dependent threshold
         # is driven by exactly the same rate-of-change that updates V_m itself.
-        inline dV_dt mV/ms = -(V_m - E_L) / tau_m + (I_syn + I_drive) / C_m
+        inline dV_dt mV/ms = -(V_m - E_L) / tau_m + (I_syn + I_e + I_stim) / C_m
 
 
         # Membrane potential ODE: tau_m * dV/dt = -(V-E_L) + R*I  (unchanged from mat2_psc_exp)
@@ -217,15 +215,12 @@ model amat_neuron:
         if refr_t > 0 ms:
             
             # Neuron is absolute refractory. To match the NEST AMAT model behaviour, all dynamical equations continue to be integrated, even while the neuron is refractory
-            integrate_odes(V_m, V_th_v_aux, V_th_v, V_th_alpha_1, V_th_alpha_2, refr_t, I_drive)
+            integrate_odes(V_m, V_th_v_aux, V_th_v, V_th_alpha_1, V_th_alpha_2, refr_t)
         
         else:
             
-            integrate_odes(V_m, V_th_v_aux, V_th_v, V_th_alpha_1, V_th_alpha_2, I_drive)
+            integrate_odes(V_m, V_th_v_aux, V_th_v, V_th_alpha_1, V_th_alpha_2)
     
-        # load the current that will be used during the NEXT integration step 
-        I_drive = I_e + I_stim 
-
     onCondition(refr_t <= 0 ms and V_m >= V_th):
         
         # Firing threshold was crossed: fire a spike instanteously 

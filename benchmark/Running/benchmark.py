@@ -381,23 +381,29 @@ def post_process_data(sim_data: dict):
                 it_data["memory_benchmark"]["vmsize"] = vmsize_sum
                 it_data["memory_benchmark"]["vmpeak"] = vmpeak_sum
 
-def _plot_scaling_data(ax, sim_data: dict, file_prefix: str, abs_or_rel: str):
-    assert abs_or_rel in ["abs", "rel"]
+def _plot_scaling_data(ax, sim_data: dict, file_prefix: str, abs_or_rel: str, scaling_type: str):
+    assert abs_or_rel in ["abs", "rel"] # plotting types this function handles 
 
-    min_y, max_y = np.inf, -np.inf
+    min_y, max_y = np.inf, -np.inf # init y-axis lims 
+    relative_values = {}
+    absolute_values = {} # for terminal outputs 
 
     referenceValues = sim_data[BASELINENEURON]
     for neuron in NEURONMODELS:
         values = sim_data[neuron]
 
         x = sorted(values.keys(), key=lambda k: int(k))
-        # Real Time Factor
+
+        # Calculating real Time Factor
         reference_y = np.array([np.mean(
             [iteration_data["max_time_simulate"] / (iteration_data["biological_time"] / 1000) for iteration_data in
              referenceValues[nodes].values()]) for nodes in x])
         y = np.array([np.mean(
             [iteration_data["max_time_simulate"] / (iteration_data["biological_time"] / 1000) for iteration_data in
              values[nodes].values()]) for nodes in x])
+        
+        absolute_values[neuron] = y.copy()
+        
         y_factor = y / reference_y  # Calculate the factor of y in comparison to the reference value
 
         y_std = np.array([np.std(
@@ -410,15 +416,33 @@ def _plot_scaling_data(ax, sim_data: dict, file_prefix: str, abs_or_rel: str):
         if abs_or_rel == "rel":
             _y_std = y_factor_std
             _y = y_factor
+
+            relative_values[neuron] = _y.copy() # Save relative values for the CSE speedup comparision 
+
         else:
             # convert from seconds to minutes
             _y_std = y_std / 60
             _y = y / 60
 
+        # raw numbers being plotted 
+        # print(f"{legend[neuron]} | {scaling_type} ({abs_or_rel})")
+        # for nodes, value, std in zip(x, _y, _y_std):
+        #     print(f"  nodes={nodes}  value={value:.3f} ± {std:.3f}")
+
         ax.errorbar(x, _y, yerr=_y_std, label=legend[neuron], color=palette(colors[neuron]), linestyle="-",marker="o", markersize=4, ecolor="gray", capsize=2, linewidth=2)
 
         min_y = min(min_y, np.amin(_y))
         max_y = max(max_y, np.amax(_y))
+
+    
+    if ("amat_nestml" in absolute_values and "amat_nestml_cse" and "amat2_psc_exp" in absolute_values):
+        speedup_cse = (absolute_values["amat_nestml"] / absolute_values["amat_nestml_cse"])
+        speedup_nest = (absolute_values["amat_nestml"] / absolute_values["amat2_psc_exp"])
+        print(f"{scaling_type.capitalize()} scaling ({abs_or_rel}) | CSE vs NESTML: "
+              + " ".join(f"{nodes}:{speedup:.2f}x" for nodes, speedup in zip(x, speedup_cse)))
+        print(f"{scaling_type.capitalize()} scaling ({abs_or_rel}) | NEST vs NESTML: "
+              + " ".join(f"{nodes}:{speedup:.2f}x" for nodes, speedup in zip(x, speedup_nest)))
+
 
     return min_y, max_y
 
@@ -438,7 +462,7 @@ def plot_scaling_data(sim_data_weak: dict, sim_data_strong: dict, file_prefix: s
             else:
                 sim_data = sim_data_strong
 
-            _min_y, _max_y = _plot_scaling_data(ax[i, j], sim_data, file_prefix, abs_or_rel=abs_or_rel)
+            _min_y, _max_y = _plot_scaling_data(ax[i, j], sim_data, file_prefix, abs_or_rel=abs_or_rel, scaling_type=which_scaling)
             if abs_or_rel == "rel":
                 min_y = min(_min_y, min_y)
                 max_y = max(_max_y, max_y)
@@ -505,6 +529,8 @@ def plot_scaling_data(sim_data_weak: dict, sim_data_strong: dict, file_prefix: s
     fig.savefig(os.path.join(output_folder, "performance_benchmark" + file_prefix + ".pdf"))
 
     plt.close(fig)
+
+    #import pdb;pdb.set_trace()
 
 
 def plot_memory_scaling_benchmark(sim_data: dict, file_prefix: str):
@@ -624,6 +650,8 @@ def plot_strong_scaling_benchmark():
 
     strong_scaling_data = process_data(STRONGSCALINGFOLDERNAME)
     post_process_data(strong_scaling_data)
+
+    #import pdb;pdb.set_trace()
 
     plot_scaling_data(weak_scaling_data, strong_scaling_data)
 
@@ -796,6 +824,7 @@ def print_isi_distributions_ks_distance(neuron_models, data):
             all_isis1 = [isi for isis in data[neuron_model1]["isis"] for isi in isis]
             all_isis2 = [isi for isis in data[neuron_model2]["isis"] for isi in isis]
             ks_statistic, p_value = scipy.stats.ks_2samp(all_isis1, all_isis2)
+            #import pdb;pdb.set_trace()
 
             print("For neuron model " + str(neuron_model1) + " and neuron model " + str(neuron_model2) + ", Kolmogorov-Smirnov (KS) distance = " + str(ks_distance) + ", KS statistic = " + str(ks_statistic) + ", p-value = " + str(p_value))
 
