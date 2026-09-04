@@ -13,6 +13,9 @@
 #SBATCH --output={{combination["output_file"]}}
 #SBATCH --error={{combination["error_file"]}}
 
+
+set -e
+
 # --ntasks-per-node={{ntasks_per_node}} removed for this medium test. 
 module load Stages/2026
 module load GCC/14.3.0
@@ -30,7 +33,7 @@ export OMP_PROC_BIND=TRUE
 
 export SRUN_CPUS_PER_TASK=${SLURM_CPUS_PER_TASK}
 
-export PROGRAM="python3 Running/brunel_amat_nest.py \
+export PROGRAM="python3 Running/brunel_nest.py \
 --simulated_neuron {{ combination['simulated_neuron'] }} \
 --network_scale {{ combination['network_scale'] }} \
 --nodes {{ combination['nodes'] }} \

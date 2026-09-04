@@ -20,15 +20,16 @@
 # along with NEST.  If not, see <http://www.gnu.org/licenses/>.
 
 """
-This python script runs a benchmark of balanced excitatory and inhibitory network using NESTML-generated vs NEST in-built neuron models.
+This python script runs a benchmark of balanced excitatory and inhibitory network using NESTML-generated vs NEST in-built neuron and synapse models.
 The script uses the jinja templating mechanism to generate sbatch scripts to run the simulations on multiple compute nodes with MPI.
-Separate sbatch scripts are generated for strong and weak scaling, with corresponding graphs measuring the relative performance of simulations 
-with NESTML-generated vs NEST in-built models.
+Separate sbatch scripts are generated for strong and weak scaling, with corresponding graphs measuring the relative performance of simulations with NESTML-generated vs NEST in-built models.
+The neuron model used in the script is ``aeif_psc_alpha_neuron`` and the synapse model is ``stdp_synapse``. The balanced network is constructed and simulated using the python script ``brunel_alpha_nest.py``.
 
 Usage:
 .. code-block:: Python
     python benchmark.py --enable_mpi
 """
+
 
 import argparse
 import datetime
@@ -51,7 +52,7 @@ from plotting_options import * # import everything
 
 # the benchmark script to run
 current_dir = os.path.dirname(os.path.abspath(__file__))
-PATHTOFILE = os.path.join(current_dir, "brunel_amat_nest.py")
+PATHTOFILE = os.path.join(current_dir, "brunel_nest.py")
 
 # RNG options
 seed: int = int(datetime.datetime.now().timestamp() * 1000) % 2**31
@@ -65,53 +66,87 @@ parser.add_argument("--noRunSim", action="store_false", help="Skip running simul
 parser.add_argument("--enable_profiling", action="store_true", help="Run the benchmark with profiling enabled with AMDuProf")
 parser.add_argument("--short_sim", action="store_true", help="Run benchmark with profiling on 2 nodes with 2 iterations")
 parser.add_argument("--enable_mpi", action="store_true", default=False, help="Run benchmark with MPI (default: thread-based benchmarking)")
-parser.add_argument("--simtime", type=float, default=999.0)
+parser.add_argument("--simtime", type=float, default=999.0, help="Specify simulation time")
+parser.add_argument("--scaling_check", action="store_true", help="Run a sanity check to ensure weak scaling and strong scaling experiments initially produce same results")
 
 args = parser.parse_args()
 runSim = args.noRunSim
 enable_profile = args.enable_profiling
 short_sim = args.short_sim
 enable_mpi = args.enable_mpi
+scaling_check = args.scaling_check
 
+
+
+# benchmarking parameters for the HH model
+# https://github.com/nest/nest-simulator/blob/main/models/hh_psc_alpha.cpp (few versions)
+# BASELINENEURON = "hh_psc_alpha"
+
+# NEURONMODELS = [
+#     "hh_nestml_cse_stdp",
+#     "hh_nestml_cse",
+#     "hh_nestml",
+#     BASELINENEURON
+# ]
+
+# legend = {
+#     "hh_nestml_cse_stdp": "NESTML/CSE/STDP"
+#     "hh_nestml": "NESTML",
+#     "hh_nestml_cse": "NESTML/CSE",
+#     BASELINENEURON: "NEST"
+# }
+
+# colors = {
+#     BASELINENEURON: 0,
+#     "hh_nestml": 1,
+#     "hh_nestml_cse": 2,
+#     "hh_nestml_cse_stdp": 3
+# }
+
+
+# benchmarking parameters for the AMAT model 
 BASELINENEURON = "amat2_psc_exp"
 
-# amat nestml benchmark variant identifiers 
+# nestml cse stdp, nestml cse comparision
 NEURONMODELS = [
-    "amat_nestml",
+    "amat_nestml_cse_stdp",
     "amat_nestml_cse",
+    "amat_nestml",
     BASELINENEURON
 ]
 
 legend = {
+    "amat_nestml_cse_stdp" : "NESTML/CSE/STDP",
     "amat_nestml": "NESTML",
-    "amat_nestml_cse": "NESTML_CSE",
+    "amat_nestml_cse": "NESTML/CSE",
     BASELINENEURON: "NEST"
 }
 
 colors = {
     BASELINENEURON: 0,
     "amat_nestml": 1,
-    "amat_nestml_cse": 2
+    "amat_nestml_cse": 2,
+    "amat_nestml_cse_stdp": 3
 }
 
 # MPI scaling
 DEBUG = True
 
 # smoke test settings 
-NUMTHREADS = 1  # Total number of threads per node (128)
+NUMTHREADS = 10  # Total number of threads per node (128)
 
 # MPI Strong scaling  
-MPI_STRONG_SCALE_NEURONS = 2500  # The order of neurons in the Brunel network, scaled dynamically as compute increases (past values: 50, 500, 2500, 5,000, 10,000)
+MPI_STRONG_SCALE_NEURONS = 500  # The order of neurons in the Brunel network, scaled dynamically as compute increases (past values: 50, 500, 2500, 5,000, 10,000)
 
 # MPI Weak scaling
-MPI_WEAK_SCALE_NEURONS = 2500 # The order of neurons in the Brunel network, fixed base scale as compute increases  (past values: 50, 500, 2500, 5,000, 10,000) 
+MPI_WEAK_SCALE_NEURONS = 500 # The order of neurons in the Brunel network, fixed base scale as compute increases  (past values: 50, 500, 2500, 5,000, 10,000) 
 
 STRONGSCALINGFOLDERNAME = "timings_strong_scaling_mpi" # output dir 
 WEAKSCALINGFOLDERNAME = "timings_weak_scaling_mpi" # output dir 
 
 # thread-based benchmarks
-NETWORK_BASE_SCALE = 2500  # thread multiplier for weak-scaling (compute scales with network)
-N_THREADS = np.array([1, 2, 4, 8]) # 1,2,4,16,32,64
+NETWORK_BASE_SCALE = 500 # thread multiplier for weak-scaling (compute scales with network)
+N_THREADS = np.array([1]) # 1,2,4,16,32,64
 
 # if dont add short_sim to iteration clashes 
 ITERATIONS = 1 # init define 
@@ -119,18 +154,18 @@ ITERATIONS = 1 # init define
 # MPI Strong scaling
 if enable_mpi:
     if enable_profile:
-        MPI_SCALES = [2] 
-        ITERATIONS = 1 # keeping iterations to 1 for profiling runs
+        MPI_SCALES = [1] 
+        ITERATIONS = 3 # keeping iterations to 1 for profiling runs
     else:
         if short_sim: 
             MPI_SCALES = [1] # original (MPI_SCALES = [2])
             ITERATIONS = 1 # keeping iterations to 1 for smoke test (original value 3) 
         else:
-            MPI_SCALES = np.array([1,2,4,8])
+            MPI_SCALES = np.array([1])
             ITERATIONS = 3 # 3 iterations for stable production metrics 
 else:
     if short_sim:
-        N_THREADS = np.array([1,2])
+        N_THREADS = np.array([1])
         ITERATIONS = 1 # keeping iterations to 1 for short-sims 
 
 
@@ -153,16 +188,9 @@ def log(message):
 def render_sbatch_template(combination, filename): # render sbatch template for benchmarking 
     template = setup_template_env()
     
-    #namespace = {}  #  usual workflow 
-    #namespace["nodes"] = combination["nodes"]  # number of nodes
-    #namespace["ntasks_per_node"] = 2
-    #namespace["cpus_per_task"] = int(combination["threads"] / 2)  # cpues per task 
-    #namespace["combination"] = combination
-    #namespace["enable_profile"] = enable_profile
-
     namespace = {}
     namespace["nodes"] = combination["nodes"]
-    namespace["ntasks_per_node"] = 1     # Low-cost initial workflow (TEMPORARY) 
+    namespace["ntasks_per_node"] = 1     # Low-cost initial workflow   #namespace["cpus_per_task"] = int(combination["threads"] / 2)  
     namespace["cpus_per_task"] = combination["threads"]
     namespace["combination"] = combination
     namespace["enable_profile"] = enable_profile
@@ -189,12 +217,13 @@ def start_strong_scaling_benchmark_threads(iteration):
                      "name": f"{neuronmodel},threads={n_threads},network_scale={MPI_STRONG_SCALE_NEURONS}",
                      "rng_seed": seeds_per_condition[n_threads],
                      "smoke_test": short_sim,
+                     "scaling_check": scaling_check,
                      "simtime": 250.0 if short_sim else args.simtime,
                      } for neuronmodel in NEURONMODELS for n_threads in N_THREADS]
 
     for combination in combinations:
 
-        command = ["bash", "-c", f'source {PATHTOSTARTFILE} && python3 {PATHTOFILE} --simulated_neuron {combination["neuronmodel"]} --network_scale {MPI_STRONG_SCALE_NEURONS} --threads {combination["n_threads"]} --iteration {iteration} --rng_seed {rng_seed} --benchmarkPath {dirname} --simtime {combination["simtime"]}']
+        command = ["bash", "-c", f'source {PATHTOSTARTFILE} && python3 {PATHTOFILE} --simulated_neuron {combination["neuronmodel"]} --network_scale {MPI_STRONG_SCALE_NEURONS} --threads {combination["n_threads"]} --iteration {iteration} --rng_seed {rng_seed} --benchmarkPath {dirname} --simtime {combination["simtime"]} --scaling_check {combination["scaling_check"]}']
         log(combination["name"])
         combined = combination["name"]
 
@@ -246,6 +275,7 @@ def start_strong_scaling_benchmark_mpi(iteration):
             "benchmarkPath": dirname,
             "rng_seed": seeds_per_condition[compute_nodes],
             "smoke_test": short_sim,
+            "scaling_check": scaling_check,
             "simtime": 250.0 if short_sim else args.simtime,
         } for neuronmodel in NEURONMODELS for compute_nodes in MPI_SCALES]
 
@@ -277,13 +307,14 @@ def start_weak_scaling_benchmark_threads(iteration):
             "networksize": NETWORK_BASE_SCALE * n_threads, # scaling network size for weak scaling 
             "smoke_test": short_sim,
             "rng_seed": seeds_per_condition[n_threads],
+            "scaling_check": scaling_check,
             "simtime": 250.0 if short_sim else args.simtime,
             } for neuronmodel in NEURONMODELS for n_threads in N_THREADS]
     log(f"\033[93mWeak Scaling Benchmark {iteration}\033[0m")
 
     for combination in combinations:
         
-        command = ["bash", "-c", f'source {PATHTOSTARTFILE} && python3 {PATHTOFILE} --simulated_neuron {combination["neuronmodel"]} --network_scale {NETWORK_BASE_SCALE * combination["n_threads"]} --threads {combination["n_threads"]} --rng_seed {rng_seed} --iteration {iteration} --benchmarkPath {dirname} --simtime {combination["simtime"]}']
+        command = ["bash", "-c", f'source {PATHTOSTARTFILE} && python3 {PATHTOFILE} --simulated_neuron {combination["neuronmodel"]} --network_scale {NETWORK_BASE_SCALE * combination["n_threads"]} --threads {combination["n_threads"]} --rng_seed {rng_seed} --iteration {iteration} --benchmarkPath {dirname} --simtime {combination["simtime"]} -scaling_check {combination["scaling_check"]}']
 
         combined = combination["neuronmodel"]+","+str(combination["n_threads"])+","+str(combination["networksize"])
         log(f"\033[93m{combined}\033[0m" if DEBUG else combined)
@@ -332,6 +363,7 @@ def start_weak_scaling_benchmark_mpi(iteration):
             "output_file": f"slurm_outputs/run_simulation_{neuronmodel}_{compute_nodes}_{MPI_WEAK_SCALE_NEURONS * compute_nodes}_{iteration}_%j.out",
             "error_file": f"slurm_outputs/run_simulation_{neuronmodel}_{compute_nodes}_{MPI_WEAK_SCALE_NEURONS * compute_nodes}_{iteration}_%j.err",
             "benchmarkPath": dirname,
+            "scaling_check": scaling_check, 
             "rng_seed": seeds_per_condition[compute_nodes],
             "smoke_test": short_sim,
             "simtime": 250.0 if short_sim else args.simtime,
@@ -363,6 +395,8 @@ def post_process_data(sim_data: dict):
 
     # Compute max simulation time between MPI ranks and add it to the data
     for neuron in NEURONMODELS:
+        
+    
         values = sim_data[neuron]
         x = sorted(values.keys(), key=lambda k: int(k))
         for nodes in x:
@@ -390,6 +424,9 @@ def _plot_scaling_data(ax, sim_data: dict, file_prefix: str, abs_or_rel: str, sc
 
     referenceValues = sim_data[BASELINENEURON]
     for neuron in NEURONMODELS:
+        
+       
+        
         values = sim_data[neuron]
 
         x = sorted(values.keys(), key=lambda k: int(k))

@@ -1,0 +1,186 @@
+#!/bin/bash
+#SBATCH --job-name=cse_perf
+#SBATCH --partition=dc-cpu-devel
+#SBATCH --nodes=1
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=1
+#SBATCH --time=00:40:00
+#SBATCH --output=cse_perf_%j.out
+#SBATCH --error=cse_perf_%j.err
+#SBATCH --account=paj2623
+
+# NEST CSE PERFORMANCE BENCHMARK
+# Four conditions:
+# 1. AMAT baseline
+# 2. AMAT CSE
+# 3. HH baseline
+# 4. HH CSE
+
+
+
+# Each condition:
+# - 20,000 neurons
+# - exact existing profile_nest_model.py call
+# - 3 perf repetitions
+# - single CPU thread
+
+#
+
+# IMPORTANT:
+
+# Do NOT use "set -u" on JURECA.
+
+# /etc/bashrc can reference unset variables.
+
+# ============================================================
+
+set -e
+
+# ============================================================
+
+# ENVIRONMENT
+
+# ============================================================
+
+echo "============================================================"
+echo "SETTING UP ENVIRONMENT"
+echo "============================================================"
+
+module load Stages/2026
+module load GCC/14.3.0
+module load ParaStationMPI/5.13.0-1
+module load CMake/3.31.8
+module load nest-simulator/3.9
+
+source /p/project1/paj2623/gray2/venvs/amat_hpc/bin/activate
+
+# ============================================================
+
+# SINGLE-THREADED CONFIGURATION
+
+# ============================================================
+
+export OMP_NUM_THREADS=1
+export OPENBLAS_NUM_THREADS=1
+export MKL_NUM_THREADS=1
+export NUMEXPR_NUM_THREADS=1
+export SRUN_CPUS_PER_TASK=1
+
+# NEST SHARED LIBRARIES
+
+export LD_LIBRARY_PATH="/p/software/default/stages/2026/software/nest-simulator/3.9-gpsmpi-2025b/lib:${LD_LIBRARY_PATH:-}"
+
+
+# USER CONFIGURATION
+
+PROFILE_SCRIPT="/p/project1/paj2623/gray2/profile/profile_nest_model.py"
+
+NEURONS=2500 # (5000)
+
+# Number of independent perf repetitions.
+REPEATS=3
+RESULT_DIR="cse_perf_${SLURM_JOB_ID}"
+mkdir -p "${RESULT_DIR}"
+
+echo "NEST CSE PERFORMANCE BENCHMARK"
+echo "Job ID:          ${SLURM_JOB_ID}"
+echo "Host:            $(hostname)"
+echo "Date:            $(date)"
+echo "Python:          $(which python)"
+echo "Python version:"
+python --version
+echo "Profile script:  ${PROFILE_SCRIPT}"
+echo "Neurons:         ${NEURONS}"
+echo "Perf repeats:    ${REPEATS}"
+echo "OMP threads:     ${OMP_NUM_THREADS}"
+echo "Results:         ${RESULT_DIR}"
+
+# CHECKS
+if [ ! -f "${PROFILE_SCRIPT}" ]; then
+echo "ERROR: profile script not found:"
+echo "${PROFILE_SCRIPT}"
+exit 1
+fi
+
+if ! command -v perf >/dev/null 2>&1; then
+echo "ERROR: perf is not available."
+exit 1
+fi
+
+echo "perf version:"
+perf --version
+
+echo
+echo "Saving CPU information..."
+
+lscpu > "${RESULT_DIR}/lscpu.txt"
+
+echo "Saving perf event list..."
+
+perf list > "${RESULT_DIR}/perf_list.txt" 2>&1 || true
+
+echo
+
+
+# PERF EVENTS
+# These are deliberately collected in one perf invocation.
+# perf will multiplex hardware counters if the CPU cannot
+# measure all of them simultaneously.
+# ============================================================
+
+PERF_EVENTS="cycles,instructions,branches,branch-misses,cache-references,cache-misses,L1-dcache-loads,L1-dcache-load-misses,LLC-loads,LLC-load-misses,dTLB-loads,dTLB-load-misses"
+
+run_case() {
+
+MODEL="$1"
+CSE="$2"
+LABEL="$3"
+
+PERF_FILE="${RESULT_DIR}/${LABEL}_perf.txt"
+STDOUT_FILE="${RESULT_DIR}/${LABEL}_stdout.txt"
+
+echo "STARTING CASE"
+echo "Label:       ${LABEL}"
+echo "Model:       ${MODEL}"
+echo "CSE:         ${CSE}"
+echo "Neurons:     ${NEURONS}"
+echo "Repeats:     ${REPEATS}"
+echo "Start time:  $(date)"
+
+srun \
+    --ntasks=1 \
+    --cpus-per-task=1 \
+    --cpu-bind=cores \
+    perf stat \
+        -r "${REPEATS}" \
+        -x ";" \
+        -e "${PERF_EVENTS}" \
+        -o "${PERF_FILE}" \
+        -- \
+        python "${PROFILE_SCRIPT}" \
+            --model "${MODEL}" \
+            --enable_cse "${CSE}" \
+    > "${STDOUT_FILE}" 2>&1
+
+echo "FINISHED CASE"
+echo "Label:      ${LABEL}"
+echo "End time:   $(date)"
+echo
+echo "Perf file:  ${PERF_FILE}"
+
+cp "${STDOUT_FILE}" "${RESULT_DIR}/${LABEL}.log"
+}
+
+# RUN THE FOUR CONDITIONS
+echo
+echo "============================================================"
+echo "BEGINNING FOUR EXPERIMENTS"
+echo "============================================================"
+
+
+run_case "AMAT" "False" "amat_baseline"
+run_case "AMAT" "True"  "amat_cse"
+run_case "HH"   "False" "hh_baseline"
+run_case "HH"   "True"  "hh_cse"
+
+echo "ALL FOUR EXPERIMENTS FINISHED"

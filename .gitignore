@@ -4,6 +4,14 @@ src/
 
 
 # Slurm output logs
+*.log*
+*.cpp.o.d*
+*.h*
+*.make*
+*.cpp.o*
+*.cpp
+*.cmake
+*.sh
 *.txt
 *.png
 *.out

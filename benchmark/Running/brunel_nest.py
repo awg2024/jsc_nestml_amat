@@ -1,0 +1,877 @@
+# -*- coding: utf-8 -*-
+#
+# brunel_nest.py
+#
+# This file is part of NEST.
+#
+# Copyright (C) 2004 The NEST Initiative
+#
+# NEST is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 2 of the License, or
+# (at your option) any later version.
+#
+# NEST is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with NEST.  If not, see <http://www.gnu.org/licenses/>.
+
+"""
+Random balanced network (amat synapses) connected with NEST
+------------------------------------------------------------
+
+This script simulates an excitatory and an inhibitory population on
+the basis of the network used in [1]_.
+
+When connecting the network, customary synapse models are used, which
+allow for querying the number of created synapses. Using spike
+recorders, the average firing rates of the neurons in the populations
+are established. The building as well as the simulation time of the
+network are recorded, along with excitatory rate, inhibitory rate, and coefficient of variation.
+
+The script also receives arguments  specifying the neuron and synapse model to use,
+the number of nodes to run on, the network scale determining the order of neurons in the network,
+and the number of threads used to run the simulation on a single node.
+
+This script is internally called from ``benchmark.py`` which runs the benchmark for different node configurations.
+
+References
+~~~~~~~~~~
+
+.. [1] Brunel N (2000). Dynamics of sparsely connected networks of excitatory and
+       inhibitory spiking neurons. Journal of Computational Neuroscience 8,
+       183-208.
+
+"""
+
+###############################################################################
+# Import all necessary modules for simulation, analysis and plotting. Scipy
+# should be imported before nest.
+
+import time
+import matplotlib.pyplot as plt
+import nest
+import nest.raster_plot
+import numpy as np
+import scipy.special as sp
+import json
+import argparse
+import os
+
+from plotting_options import *
+
+
+###############################################################################
+# Plotting functions
+
+
+def _histogram(a, bins=10, bin_range=None, normed=False):
+    """Calculate histogram for data.
+
+    Parameters
+    ----------
+    a : list
+        Data to calculate histogram for
+    bins : int, optional
+        Number of bins
+    bin_range : TYPE, optional
+        Range of bins
+    normed : bool, optional
+        Whether distribution should be normalized
+
+    Raises
+    ------
+    ValueError
+    """
+    from numpy import asarray, concatenate, iterable, linspace, sort
+
+    a = asarray(a).ravel()
+
+    if bin_range is not None:
+        mn, mx = bin_range
+        if mn > mx:
+            raise ValueError("max must be larger than min in range parameter")
+
+    if not iterable(bins):
+        if bin_range is None:
+            bin_range = (a.min(), a.max())
+        mn, mx = [mi + 0.0 for mi in bin_range]
+        if mn == mx:
+            mn -= 0.5
+            mx += 0.5
+        bins = linspace(mn, mx, bins, endpoint=False)
+    else:
+        if (bins[1:] - bins[:-1] < 0).any():
+            raise ValueError("bins must increase monotonically")
+
+    # best block size probably depends on processor cache size
+    block = 65536
+    n = sort(a[:block]).searchsorted(bins)
+    for i in range(block, a.size, block):
+        n += sort(a[i : i + block]).searchsorted(bins)
+    n = concatenate([n, [len(a)]])
+    n = n[1:] - n[:-1]
+
+    if normed:
+        db = bins[1] - bins[0]
+        return 1.0 / (a.size * db) * n, bins
+    else:
+        return n, bins
+
+
+def raster_plot_from_device(detec, path, fname_snip, hist_binwidth=10.):
+
+    ev = detec.get("events")
+    ts, node_ids = ev["times"], ev["senders"]
+
+    if not len(ts):
+        raise Exception("No events recorded!")
+
+    xlabel = "Time (ms)"
+    ylabel = "Neuron ID"
+
+    color_marker = "."
+    color_bar = "blue"
+    color_edge = "black"
+
+    plt.figure(figsize=(6, 4))
+
+    ax1 = plt.axes([0.1, 0.3, 0.85, 0.6])
+    plotid = plt.plot(ts, node_ids, color_marker)
+    plt.ylabel(ylabel)
+    plt.xticks([])
+    xlim = plt.xlim()
+
+    plt.axes([0.1, 0.1, 0.85, 0.17])
+    t_bins = np.arange(np.amin(ts), np.amax(ts), float(hist_binwidth))
+    n, _ = _histogram(ts, bins=t_bins)
+    num_neurons = len(np.unique(node_ids))
+    heights = 1000 * n / (hist_binwidth * num_neurons)
+
+    plt.bar(t_bins, heights, width=hist_binwidth, color=color_bar, edgecolor=color_edge)
+    plt.yticks([int(x) for x in np.linspace(0.0, int(max(heights) * 1.1) + 5, 4)])
+    plt.ylabel("Rate [spikes/s]")
+    plt.xlabel(xlabel)
+    plt.xlim(xlim)
+    plt.axes(ax1)
+
+    plt.draw()
+
+    plt.tight_layout()
+    plt.savefig(f"{path}/raster_plot_{fname_snip}.png")
+    plt.savefig(f"{path}/raster_plot_{fname_snip}.pdf")
+    plt.close()
+
+
+
+###############################################################################
+# Helper functions
+
+def convert_np_arrays_to_lists(obj):
+    if isinstance(obj, dict):
+        return {k: convert_np_arrays_to_lists(v) for k, v in obj.items()}
+    elif isinstance(obj, np.ndarray):
+        return obj.tolist()
+    else:
+        return obj
+
+###############################################################################
+# Helper functions for memory benchmarking
+
+def _VmB(VmKey):
+    r"""This code is from beNNch, https://github.com/INM-6/beNNch-models/, 2024-05-18"""
+    _proc_status = "/proc/%d/status" % os.getpid()
+    _scale = {"kB": 1024.0, "mB": 1024.0 * 1024.0, "KB": 1024.0, "MB": 1024.0 * 1024.0}
+    # get pseudo file  /proc/<pid>/status
+    try:
+        t = open(_proc_status)
+        v = t.read()
+        t.close()
+    except:
+        return 0.0  # non-Linux?
+    # get VmKey line e.g. 'VmRSS:  9999  kB\n ...'
+    i = v.index(VmKey)
+    v = v[i:].split(None, 3)  # whitespace
+    if len(v) < 3:
+        return 0.0  # invalid format?
+    # convert Vm value to bytes
+    return float(v[1]) * _scale[v[2]]
+
+
+def get_vmsize(since=0.0):
+    """Return memory usage in bytes."""
+    return _VmB("VmSize:") - since
+
+
+def get_rss(since=0.0):
+    """Return resident memory usage in bytes."""
+    return _VmB("VmRSS:") - since
+
+
+def get_vmpeak(since=0.0):
+    """Return peak memory usage in bytes."""
+    return _VmB("VmPeak:") - since
+
+
+###############################################################################
+# Helper functions for ISIs/CV
+
+def compute_cv(spike_train):
+    """
+    Compute the coefficient of variation (CV) for a single spike train.
+
+    Parameters:
+    spike_train (list or numpy array): Timestamps of spikes in the spike train.
+
+    Returns:
+    float: Coefficient of variation (CV) of the inter-spike intervals.
+    """
+    # Calculate inter-spike intervals (ISI)
+    isi = np.diff(spike_train)
+
+    # Calculate mean and standard deviation of ISI
+    mean_isi = np.mean(isi)
+    std_isi = np.std(isi)
+
+    # Calculate coefficient of variation
+    cv = std_isi / mean_isi
+
+    return cv
+
+
+def compute_cv_for_neurons(spike_trains):
+    cvs = []
+    for spike_train in spike_trains:
+
+        # At least two ISIs
+        if len(spike_train) >= 3:
+            cv = compute_cv(spike_train)
+            if np.isfinite(cv):
+                cvs.append(cv)
+
+    if not cvs:
+        return np.nan
+
+    return float(np.mean(cvs))
+
+
+
+
+def plot_interspike_intervals(spike_times_list, path, fname_snip=""):
+    """
+    Plots the distribution of interspike intervals given a list of lists of spike times.
+
+    Parameters:
+    spike_times_list (list of lists): Each inner list contains spike times for one neuron or trial.
+    """
+    # Calculate interspike intervals for each list of spike times
+    interspike_intervals = []
+    for spike_times in spike_times_list:
+        intervals = np.diff(spike_times)
+        interspike_intervals.extend(intervals)
+
+    # Plot the distribution of interspike intervals
+    plt.figure(figsize=(6, 4))
+    plt.hist(interspike_intervals, bins=30, edgecolor="black", alpha=0.75)
+    plt.xlabel("Interspike Interval (ms)")
+    plt.ylabel("Frequency")
+    plt.grid(True)
+    plt.tight_layout()
+    plt.savefig(f"{path}/isi_distribution_" + fname_snip + ".png")
+    plt.savefig(f"{path}/isi_distribution_" + fname_snip + ".pdf")
+    plt.close()
+
+    np.savetxt(f"{path}/isi_distribution_" + fname_snip + "_isi_list.txt", interspike_intervals)
+
+# defining the exact flags this script will accept. read help="" for info on the flag. 
+# if arguments are not passed the script will assign default value onto it 
+
+parser = argparse.ArgumentParser(description="Run a simulation with NEST")
+
+parser.add_argument("--benchmarkPath", type=str, default="", help="Path to the nest installation")
+
+parser.add_argument("--simulated_neuron", type=str, default="amat2_psc_exp", help="Name of the model to use")
+
+parser.add_argument("--network_scale", type=int, default=50, help="Number of neurons to use")
+
+parser.add_argument("--nodes", type=int, default=1, required=False, help="Number of compute nodes to use")
+
+parser.add_argument("--threads", type=int, default=1, help="Number of threads to use")
+
+parser.add_argument("--iteration", type=int, help="iteration number used for the benchmark")
+    
+parser.add_argument("--rng_seed", type=int, help="random seed", default=123)
+
+parser.add_argument("--smoke_test",action="store_true",help="Use small-network connectivity for low-cost functional testing",)
+
+parser.add_argument("--simtime",type=float,default=250.0,help="Biological simulation time in ms",)
+
+parser.add_argument("--noConnection",action="store_true",help="Turn off all Balanced Neural Network Connectivty",)
+
+
+args = parser.parse_args() # processes arguments and flags passed by user 
+
+MODEL_VARIANTS = {
+    "amat_nestml": {
+        "module": "nestml_amat_module", # NESTML 
+        "model": "amat_neuron_nestml",
+    },
+
+    "amat_nestml_cse": {
+        "module": "nestml_amat_cse_module", # NESTML CSE 
+        "model": "amat_neuron_nestml",
+    },
+
+    "amat_nestml_cse_stdp": {
+        "module": "nestml_amat_cse_module", # NESTML CSE STDP (backend still the same just building network with NEST stdp synapses)
+        "model": "amat_neuron_nestml"
+    },
+ 
+    "amat2_psc_exp": { #  NEST 
+        "module": None,
+        "model": "amat2_psc_exp",
+    },
+   
+   "hh_nestml": {# NESTML 
+        "module": "/p/project1/paj2623/gray2/benchmark/Running/targets_hh/target/nestml_hh_module.so", 
+        "model": "hh_psc_alpha_custom_nestml"
+    },
+   
+    "hh_nestml_cse": { # NESTML CSE 
+        "module": "/p/project1/paj2623/gray2/benchmark/Running/targets_hh_optimised_cse/target/nestml_hh_cse_module.so",
+        "model": "hh_psc_alpha_custom_nestml",
+    },
+
+    "hh_nestml_cse_stdp": { # NESTML CSE (backend still the same just building network with NEST stdp synapses)
+        "module": "/p/project1/paj2623/gray2/benchmark/Running/targets_hh_optimised_cse/target/nestml_hh_cse_module.so",
+        "model": "hh_psc_alpha_custom_nestml",
+    },
+
+    "hh_psc_alpha": {#  NEST
+        "module": None,
+        "model": "hh_psc_alpha",
+    }
+}
+
+if args.simulated_neuron not in MODEL_VARIANTS:
+    raise ValueError(
+        f"Unknown benchmark variant: {args.simulated_neuron}. "
+        f"Expected one of {list(MODEL_VARIANTS)}")
+
+
+variant = MODEL_VARIANTS[args.simulated_neuron]
+module_name = variant["module"] # extracting model, module information for later nest calls 
+modelName = variant["model"]
+
+def LambertWm1(x):
+    # Using scipy to mimic the gsl_sf_lambert_Wm1 function.
+    return sp.lambertw(x, k=-1 if x < 0 else 0).real
+
+def exp_psp_norm(tau_m, C_m, tau_syn): # adjusted for the amat implementation instead of alpha- 
+    if np.isclose(tau_m, tau_syn):
+        return tau_m / (np.e * C_m)
+
+    t_peak = (
+        tau_m * tau_syn / (tau_m - tau_syn)
+        * np.log(tau_m / tau_syn)
+    )
+
+    return (
+        tau_m * tau_syn
+        / (C_m * (tau_m - tau_syn))
+        * (
+            np.exp(-t_peak / tau_m)
+            - np.exp(-t_peak / tau_syn)
+        )
+    )
+
+
+nest.ResetKernel()
+nest.local_num_threads = args.threads
+
+
+# Assigning the current time to a variable in order to determine the build
+# time of the network. 
+startbuild = time.time()
+
+# simulation resolution in ms (original value 0.1)
+dt = 0.01  
+
+# synaptic delay in ms
+delay = 1.5 
+
+# connection probability 
+epsilon = 0.1  
+
+# order or magnitude of the network 
+order = args.network_scale
+
+# defining neuronal cell coutns 
+NE = 4 * order  # number of excitatory neurons
+NI = 1 * order  # number of inhibitory neurons
+N_neurons = NE + NI  # number of neurons in total
+print(f"Number of neurons : {N_neurons}")
+
+# record from this many neurons
+N_rec_exc = min(500, NE) 
+N_rec_inh = min(100, NI) 
+
+# Calculate raw dynamic values based on network scaling
+raw_CE = int(epsilon * NE / (order / 2500))
+raw_CI = int(epsilon * NI / (order / 2500))
+
+if args.smoke_test: # if true 
+    
+    # Strict low limits for rapid smoke testing
+    CE = max(1, min(20, NE))
+    CI = max(1, min(5, NI))
+
+else: # if smoke-test is false 
+    # Production dynamic scaling with structural safeguards
+    # max ensures you never get 0 synapses, min ensures you never request more than the available neurons 
+    CE = max(1, min(raw_CE, NE))
+    CI = max(1, min(raw_CI, NI))
+
+# total connection connections of e
+C_tot = CE + CI
+
+# define common params that are accepted by amat_nestml, amat2_psc_exp 
+neuron_params = {}
+
+amat_common_params = {
+    "tau_m": 10.0,
+    "C_m": 200.0,
+    "E_L": -70.0,
+    "alpha_1": 10.0,
+    "alpha_2": 0.0}
+
+
+# hh note disparity 
+# nest = t_ref_
+# nestml = refr_t
+
+hh_common_params = { # defined in the NEST .cpp 
+    "g_Na": 12000.0,    # nS
+    "g_K": 3600.0,      # nS
+    "g_L": 30.0,        # nS
+    "C_m": 100.0,       # pF
+    "E_Na": 50.0,       # mV
+    "E_K": -77.0,       # mV
+    "E_L": -54.402,     # mV
+    "I_e": 0.0}          # pA
+
+
+if args.simulated_neuron == "amat2_psc_exp": # NEST
+    neuron_params = {**amat_common_params} # option to add in custom NEST params  
+
+elif args.simulated_neuron in ("amat_nestml","amat_nestml_cse","amat_nestml_cse_stdp"): # NESTML / CSE
+    neuron_params = {**amat_common_params}  
+
+elif args.simulated_neuron in ("hh_nestml","hh_nestml_cse","hh_nestml_cse_stdp"): # NESTML
+    neuron_params = {**hh_common_params}  
+
+elif args.simulated_neuron == "hh_psc_alpha": # NESTML
+    neuron_params = {**hh_common_params}  
+
+else:
+    
+    raise ValueError(
+        f"Unknown neuron benchmark variant: "
+        f"{args.simulated_neuron}")
+
+
+if args.simulated_neuron in ("amat_nestml","amat_nestml_cse", "amat2_psc_exp", "amat_nestml_cse_stdp"): # AMAT BLOCK 
+
+    # naming conventions differ from NEST/NESTML
+    # if args.simulated_neuron == "hh_psc_alpha":
+    #     neuron_params["XXX"] = XXX
+    # elif args.simulated_neuron in ("hh_nestml_cse", "hh_nestml", "hh_nestml_cse_stdp"):
+    #     neuron_params["XXX"] = XXX
+
+
+    # defining exc/inh params 
+    tauSynEx = 1.0      # Time constant for excitatory synapses (ms); determines how fast excitatory inputs decay
+    tauSynIn = 3.0      # Time constant for inhibitory synapses (ms); determines how fast inhibitory inputs decay
+
+    tauMem = 10.0       # Overall membrane time constant (ms); dictates how fast the total membrane charges/discharges from inputs
+    CMem = 200.0        # Membrane capacitance (pF); measures the charge storage capacity of the cell membrane
+
+    E_L = -70.0         # Resting/Leak potential (mV); the steady-state baseline voltage of the neuron when completely at rest
+    omega = -65.0       # Reset/Adaptation parameter (mV); typically the voltage target the threshold decays back toward in AMAT
+
+    target_psp_mv = 0.15 
+    g = 5.0 # ratio inhibitory weight/excitatory weight
+    eta = 0.8  # external rate relative to threshold rate 
+
+    # translates your desired biological voltage change (in millivolts) into the raw numerical synaptic weights used by the simulator.
+    norm_ex = exp_psp_norm(tauMem, CMem, tauSynEx)
+    J_ex = target_psp_mv / norm_ex # calculates the exc psp weight 
+    J_in = -g * J_ex #  calculates the inh psp weight 
+
+    # This block calculates the baseline electrical current needed to initalise and determine speed of background spikes (p_rate) 
+    baseline_current = ((omega - E_L) * CMem / tauMem)
+    p_rate = (eta * 1000.0 * baseline_current / (J_ex * tauSynEx)) #  we want a randomness of spikes (aimed hz 0-40Hz)
+
+elif args.simulated_neuron in ("hh_psc_alpha","hh_nestml_cse", "hh_nestml", "hh_nestml_cse_stdp"): # HH BLOCK
+    
+    # naming conventions differ from NEST/NESTML
+    if args.simulated_neuron == "hh_psc_alpha":
+        neuron_params["t_ref"] = 2.0
+        neuron_params["tau_syn_ex"] = 0.2
+        neuron_params["tau_syn_in"] = 2.0
+
+    elif args.simulated_neuron in ("hh_nestml_cse", "hh_nestml", "hh_nestml_cse_stdp"):
+        neuron_params["refr_t"] = 2.0  # naming convention for your custom nestml models
+        neuron_params["tau_syn_exc"] = 0.2
+        neuron_params["tau_syn_inh"] = 2.0
+
+        #import pdb; pdb.set_trace();
+    
+    if "tau_syn_ex" in neuron_params:
+        tauSynEx = neuron_params["tau_syn_ex"]
+        tauSynIn = neuron_params["tau_syn_in"]
+    else:
+        tauSynEx = neuron_params["tau_syn_exc"]
+        tauSynIn = neuron_params["tau_syn_inh"]
+    
+
+    CMem = hh_common_params["C_m"]
+    E_L = hh_common_params["E_L"]
+    g_L = hh_common_params["g_L"]
+
+    # HH has no fixed reset/threshold; leak-time-constant approximation:
+    tauMem = CMem / g_L          # ~3.33 ms with these params
+    omega = -45                # rough empirical spiking threshold, fine tuned over iterations. 
+
+    # nestml and nest spiking at different times? mismatch in the nest / nestml model...  
+    target_psp_mv = 0.3
+    g = 4.0
+    eta = 1.2
+
+    norm_ex = exp_psp_norm(tauMem, CMem, tauSynEx)
+
+
+    J_ex = target_psp_mv / norm_ex
+    J_in = -g * J_ex
+
+    baseline_current = (omega - E_L) * CMem / tauMem
+    p_rate = eta * 1000.0 * baseline_current / (J_ex * tauSynEx)
+
+    # import pdb; pdb.set_trace()
+    
+    
+    # treat as a starting guess — validate/calibrate against measured firing rate
+    # can we turn off connectivity? and make sure this fires? 
+
+
+else:
+    raise ValueError(f"Unknown neuron benchmark variant: {args.simulated_neuron}")
+
+
+# detach from args. 
+simtime = args.simtime
+
+# define nest module arguments 
+nest.resolution = dt
+nest.print_time = True
+nest.overwrite_files = True
+
+# Get the current time in milliseconds since the Unix epoch, modulo max nr of RNG seed bits in NEST (32)
+# current_time_ms = int(datetime.now().timestamp() * 1000) % 2**31         
+nest.rng_seed = args.rng_seed
+print("The RNG seed is: " + str(nest.rng_seed))
+
+if module_name is not None:  # we defined the NEST model as None 
+    print(f"installing nestml module: {module_name}")
+    nest.Install(module_name)
+
+print(f"Benchmarking variant: {args.simulated_neuron}")
+print(f"Actual NEST model: {modelName}")
+
+# Creation of the nodes using ``Create``. We store the returned handles in
+# variables for later reference. Here the excitatory and inhibitory, as well
+# as the poisson generator and two spike recorders. The spike recorders will
+# later be used to record excitatory and inhibitory spikes. Properties of the
+# nodes are specified via ``params``, which expects a dictionary.
+
+print(f"Creating the neuron model: {modelName}")
+print(f"Random seed: {args.rng_seed}")
+
+# creating population nodes 
+nodes_ex = nest.Create(modelName, NE, params=neuron_params)
+nodes_in = nest.Create(modelName, NI, params=neuron_params)
+
+# converts the random background spike rate back into a smooth, continuous electrical current value (measured in picoamperes, pA) for later debug print 
+mean_external_current = (p_rate * J_ex * tauSynEx / 1000.0)
+
+# nest.create spikes, noise 
+noise = nest.Create("poisson_generator", params={"rate": p_rate})
+espikes = nest.Create("spike_recorder")
+espikes_ascii = nest.Create("spike_recorder")
+ispikes = nest.Create("spike_recorder")
+
+e_mm = nest.Create("multimeter", params={"record_from": ["V_m"]})
+
+###############################################################################
+# Configuration of the spike recorders recording excitatory and inhibitory
+# spikes by sending parameter dictionaries to ``set``. Setting the property
+# `record_to` to *"ascii"* ensures that the spikes will be recorded to a file,
+# whose name starts with the string assigned to the property `label`.
+
+espikes_ascii.set(label="brunel-py-ex", record_to="ascii")
+ispikes.set(label="brunel-py-in", record_to="ascii")
+
+print("Connecting devices")
+
+###############################################################################
+# Definition of a synapse using ``CopyModel``, which expects the model name of
+# a pre-defined synapse, the name of the customary synapse and an optional
+# parameter dictionary. The parameters defined in the dictionary will be the
+# default parameter for the customary synapse. Here we define one synapse for
+# the excitatory and one for the inhibitory connections giving the
+# previously defined weights and equal delays.
+
+if "stdp" in modelName: # if stdp is in the model name 
+    # use plastic synapses
+    print("Using STDP synapse, model: " + args.simulated_neuron)
+   
+    if "hh_nestml_cse_stdp" in args.simulated_neuron: # nest / using a custom nestml module
+        
+        nest.CopyModel("stdp_synapse", "excitatory", {"weight": J_ex, "delay": delay, 
+        "alpha": 1.0,      # Asymmetry parameter for standard NEST STDP
+        "mu": 1.0,         # Exponent for multiplicative STDP (set to 0.0 for additive)
+        "Wmax": J_ex * 2   # Maximum weight limit typical for STDP benchmarks
+        })
+ 
+    elif "amat_nestml_cse_stdp" in args.simulated_neuron:   # built in Nest stdp model. 
+       
+        nest.CopyModel("stdp_synapse", "excitatory", {"weight": J_ex, "delay": delay, 
+        "alpha": 1.0,      # Asymmetry parameter for standard NEST STDP
+        "mu": 1.0,         # Exponent for multiplicative STDP (set to 0.0 for additive)
+        "Wmax": J_ex * 2   # Maximum weight limit typical for STDP benchmarks
+        })
+
+    elif "iaf_psc_alpha" in args.simulated_neuron: # iaf_psc_alpha 
+        nest.CopyModel("stdp_synapse_Nestml_Plastic__with_iaf_psc_alpha_neuron_Nestml_Plastic", "excitatory", {"weight": J_ex, "delay": delay, "d": delay, "lambda": 0.})
+       
+    else:
+        if "noco" in args.simulated_neuron:
+            nest.CopyModel("stdp_synapse_Nestml_Plastic_noco__with_aeif_psc_alpha_neuron_Nestml_Plastic_noco", "excitatory", {"weight": J_ex, "delay": delay, "d": delay, "lambda": 0.})
+        else:
+            print("Synapse: stdp_synapse_Nestml_Plastic__with_aeif_psc_alpha_neuron_Nestml_Plastic")
+            nest.CopyModel("stdp_synapse_Nestml_Plastic__with_aeif_psc_alpha_neuron_Nestml_Plastic", "excitatory", {"weight": J_ex, "delay": delay, "d": delay, "lambda": 0.})
+else:
+    
+    print("Using NESTML STATIC synapse, model: " + args.simulated_neuron)
+    nest.CopyModel("static_synapse", "excitatory", {"weight": J_ex, "delay": delay})
+
+nest.CopyModel("static_synapse", "excitatory_static", {"weight": J_ex, "delay": delay})
+nest.CopyModel("static_synapse", "inhibitory", {"weight": J_in, "delay": delay})
+
+#################################################################################
+# Connecting the previously defined poisson generator to the excitatory and
+# inhibitory neurons using the excitatory synapse. Since the poisson
+# generator is connected to all neurons in the population the default rule
+# (``all_to_all``) of ``Connect`` is used. The synaptic properties are inserted
+# via ``syn_spec`` which expects a dictionary when defining multiple variables or
+# a string when simply using a pre-defined synapse.
+
+nest.Connect(noise, nodes_ex, syn_spec="excitatory_static")
+nest.Connect(noise, nodes_in, syn_spec="excitatory_static")
+
+###############################################################################
+# Connecting the first ``N_rec`` nodes of the excitatory and inhibitory
+# population to the associated spike recorders using excitatory synapses.
+# Here the same shortcut for the specification of the synapse as defined
+# above is used.
+
+# Record from a fixed GLOBAL subset of neurons.
+# NEST distributes these connections correctly across MPI ranks.
+record_neurons_ex = nodes_ex[:N_rec_exc]
+record_neurons_in = nodes_in[:N_rec_inh]
+
+print(
+    "Recorded excitatory neurons:",
+    len(record_neurons_ex)
+)
+print(
+    "Recorded inhibitory neurons:",
+    len(record_neurons_in)
+)
+
+nest.Connect(
+    record_neurons_ex,
+    espikes,
+    syn_spec="excitatory_static"
+)
+
+nest.Connect(
+    record_neurons_ex,
+    espikes_ascii,
+    syn_spec="excitatory_static"
+)
+
+nest.Connect(
+    record_neurons_in,
+    ispikes,
+    syn_spec="excitatory_static"
+)
+
+# Multimeter connects TO the neuron.
+nest.Connect(
+    e_mm,
+    nodes_ex[:1],
+    syn_spec="excitatory_static"
+)
+
+
+if args.noConnection: 
+    print("[INFO] Network connectivity has been disabled. Neurons are isolated.")
+    # The recurrent connections are bypassed entirely. Neurons will still receive background Poisson noise and be recorded.
+
+else: 
+
+    print("[INFO] Establishing recurrent network connections.")
+
+    ###############################################################################
+    # Connecting the excitatory population to all neurons using the pre-defined
+    # excitatory synapse. Beforehand, the connection parameter are defined in a
+    # dictionary. Here we use the connection rule ``fixed_indegree``,
+    # which requires the definition of the indegree. Since the synapse
+    # specification is reduced to assigning the pre-defined excitatory synapse it
+    # suffices to insert a string.
+
+    conn_params_ex = {"rule": "fixed_indegree", "indegree": CE}
+    nest.Connect(nodes_ex, nodes_ex + nodes_in, conn_params_ex, "excitatory")
+
+    print("Inhibitory connections")
+
+    ###############################################################################
+    # Connecting the inhibitory population to all neurons using the pre-defined
+    # inhibitory synapse. The connection parameter as well as the synapse
+    # parameter are defined analogously to the connection from the excitatory
+    # population defined above.
+
+    conn_params_in = {"rule": "fixed_indegree", "indegree": CI}
+    nest.Connect(nodes_in, nodes_ex + nodes_in, conn_params_in, "inhibitory")
+
+###############################################################################
+# Storage of the time point after the buildup of the network in a variable.
+
+endbuild = time.time()
+
+###############################################################################
+# Simulation of the network.
+
+print("Simulating")
+
+nest.Simulate(simtime)
+
+###############################################################################
+# Storage of the time point after the simulation of the network in a variable.
+
+endsimulate = time.time()
+
+###############################################################################
+# Reading out the total number of spikes received from the spike recorder
+# connected to the excitatory population and the inhibitory population.
+
+events_ex = espikes_ascii.n_events
+events_in = ispikes.n_events
+
+###############################################################################
+# Calculation of the average firing rate of the excitatory and the inhibitory
+# neurons by dividing the total number of recorded spikes by the number of
+# neurons recorded from and the simulation time. The multiplication by 1000.0
+# converts the unit 1/ms to 1/s=Hz.
+
+rate_ex = events_ex / simtime * 1000.0 / N_rec_exc
+rate_in = events_in / simtime * 1000.0 / N_rec_inh
+
+###############################################################################
+# Reading out the number of connections established using the excitatory and
+# inhibitory synapse model. The numbers are summed up resulting in the total
+# number of synapses.
+
+num_synapses_ex = nest.GetDefaults("excitatory")["num_connections"]
+num_synapses_in = nest.GetDefaults("inhibitory")["num_connections"]
+num_synapses = num_synapses_ex + num_synapses_in
+
+###############################################################################
+# Establishing the time it took to build and simulate the network by taking
+# the difference of the pre-defined time variables.
+
+build_time = endbuild - startbuild
+sim_time = endsimulate - endbuild
+
+###############################################################################
+# analysis
+
+exc_events = espikes.events
+exc_spikes = [exc_events["times"][exc_events["senders"] == neuron_idx] for neuron_idx in np.unique(exc_events["senders"])]
+cv_exc = compute_cv_for_neurons(exc_spikes)
+
+
+###############################################################################
+# Printing the network properties, firing rates and building times.
+
+print("Brunel network simulation (Python)")
+print(f"Model             : {args.simulated_neuron}")
+print(f"                CE: {CE}")
+print(f"                CI: {CI}")
+print(f"Number of synapses: {num_synapses}")
+print(f"       Excitatory : {num_synapses_ex}")
+print(f"       Inhibitory : {num_synapses_in}")
+print(f"Excitatory CV     : {cv_exc:.2f}")
+print(f"Excitatory rate   : {rate_ex:.2f} Hz")
+print(f"Inhibitory rate   : {rate_in:.2f} Hz")
+print(f"Mean ext current  : {mean_external_current:.2f} pA")
+print(f"Poisson rate      : {p_rate:.2f} Hz")
+print(f"simtime           : {simtime} ms")
+
+for i in range(min(50, len(exc_events["times"]))):
+    sender = exc_events["senders"][i]
+    spike_time = exc_events["times"][i]
+    print(f"Neuron {sender} spiked at {spike_time:.2f} ms")
+
+print(f"Building time     : {build_time:.2f} s")
+print(f"Simulation time   : {sim_time:.2f} s")
+
+if args.benchmarkPath != "":
+    path = args.benchmarkPath
+    status = nest.GetKernelStatus()
+    status = convert_np_arrays_to_lists(status)
+    status["memory_benchmark"] = {"rss": get_rss(),
+                                  "vmsize": get_vmsize(),
+                                  "vmpeak": get_vmpeak()}
+    status["num_synapses"] = num_synapses  #len(conns)
+    status["firing_rate_exc"] = rate_ex
+    status["firing_rate_inh"] = rate_in
+    status["build_time"] = build_time
+    status["sim_time"] = sim_time
+    status["cv_exc"] = cv_exc
+
+    if not os.path.exists(path):
+        os.makedirs(path)
+
+    fname_snip = f"[simulated_neuron={args.simulated_neuron}]_[network_scale={args.network_scale}]_[iteration={args.iteration}]_[nodes={args.nodes}]_[threads={args.threads}]_[rank={nest.Rank()}]"
+
+    with open(f"{path}/timing_{fname_snip}.json", "w") as f:
+        json.dump(status, f, indent=4)
+        f.close()
+
+    #nest.raster_plot.from_device(espikes, hist=True, title="", figsize=(6, 4))
+    raster_plot_from_device(espikes, path, fname_snip)
+
+    fig, ax = plt.subplots()
+    ax.plot(e_mm.get()["events"]["times"], e_mm.get()["events"]["V_m"])
+    plt.tight_layout()
+    plt.savefig(f"{path}/V_m_{fname_snip}.png")
+    plt.savefig(f"{path}/V_m_{fname_snip}.pdf")
+    plt.close()
+
+    plot_interspike_intervals(exc_spikes, path, fname_snip=fname_snip)
+
