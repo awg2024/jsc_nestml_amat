@@ -30,7 +30,7 @@ Usage:
     python benchmark.py --enable_mpi
 """
 
-
+import glob
 import argparse
 import datetime
 import jinja2
@@ -74,8 +74,6 @@ runSim = args.noRunSim
 enable_profile = args.enable_profiling
 short_sim = args.short_sim
 enable_mpi = args.enable_mpi
-scaling_check = args.scaling_check
-
 
 
 # benchmarking parameters for the HH model
@@ -143,6 +141,8 @@ MPI_WEAK_SCALE_NEURONS = 500 # The order of neurons in the Brunel network, fixed
 
 STRONGSCALINGFOLDERNAME = "timings_strong_scaling_mpi" # output dir 
 WEAKSCALINGFOLDERNAME = "timings_weak_scaling_mpi" # output dir 
+
+SCALINGCHECKFOLDERNAME = "scaling_check"
 
 # thread-based benchmarks
 NETWORK_BASE_SCALE = 500 # thread multiplier for weak-scaling (compute scales with network)
@@ -217,13 +217,12 @@ def start_strong_scaling_benchmark_threads(iteration):
                      "name": f"{neuronmodel},threads={n_threads},network_scale={MPI_STRONG_SCALE_NEURONS}",
                      "rng_seed": seeds_per_condition[n_threads],
                      "smoke_test": short_sim,
-                     "scaling_check": scaling_check,
                      "simtime": 250.0 if short_sim else args.simtime,
                      } for neuronmodel in NEURONMODELS for n_threads in N_THREADS]
 
     for combination in combinations:
 
-        command = ["bash", "-c", f'source {PATHTOSTARTFILE} && python3 {PATHTOFILE} --simulated_neuron {combination["neuronmodel"]} --network_scale {MPI_STRONG_SCALE_NEURONS} --threads {combination["n_threads"]} --iteration {iteration} --rng_seed {rng_seed} --benchmarkPath {dirname} --simtime {combination["simtime"]} --scaling_check {combination["scaling_check"]}']
+        command = ["bash", "-c", f'source {PATHTOSTARTFILE} && python3 {PATHTOFILE} --simulated_neuron {combination["neuronmodel"]} --network_scale {MPI_STRONG_SCALE_NEURONS} --threads {combination["n_threads"]} --iteration {iteration} --rng_seed {rng_seed} --benchmarkPath {dirname} --simtime {combination["simtime"]}']
         log(combination["name"])
         combined = combination["name"]
 
@@ -275,7 +274,6 @@ def start_strong_scaling_benchmark_mpi(iteration):
             "benchmarkPath": dirname,
             "rng_seed": seeds_per_condition[compute_nodes],
             "smoke_test": short_sim,
-            "scaling_check": scaling_check,
             "simtime": 250.0 if short_sim else args.simtime,
         } for neuronmodel in NEURONMODELS for compute_nodes in MPI_SCALES]
 
@@ -307,14 +305,13 @@ def start_weak_scaling_benchmark_threads(iteration):
             "networksize": NETWORK_BASE_SCALE * n_threads, # scaling network size for weak scaling 
             "smoke_test": short_sim,
             "rng_seed": seeds_per_condition[n_threads],
-            "scaling_check": scaling_check,
             "simtime": 250.0 if short_sim else args.simtime,
             } for neuronmodel in NEURONMODELS for n_threads in N_THREADS]
     log(f"\033[93mWeak Scaling Benchmark {iteration}\033[0m")
 
     for combination in combinations:
         
-        command = ["bash", "-c", f'source {PATHTOSTARTFILE} && python3 {PATHTOFILE} --simulated_neuron {combination["neuronmodel"]} --network_scale {NETWORK_BASE_SCALE * combination["n_threads"]} --threads {combination["n_threads"]} --rng_seed {rng_seed} --iteration {iteration} --benchmarkPath {dirname} --simtime {combination["simtime"]} -scaling_check {combination["scaling_check"]}']
+        command = ["bash", "-c", f'source {PATHTOSTARTFILE} && python3 {PATHTOFILE} --simulated_neuron {combination["neuronmodel"]} --network_scale {NETWORK_BASE_SCALE * combination["n_threads"]} --threads {combination["n_threads"]} --rng_seed {rng_seed} --iteration {iteration} --benchmarkPath {dirname} --simtime {combination["simtime"]}']
 
         combined = combination["neuronmodel"]+","+str(combination["n_threads"])+","+str(combination["networksize"])
         log(f"\033[93m{combined}\033[0m" if DEBUG else combined)
@@ -363,7 +360,6 @@ def start_weak_scaling_benchmark_mpi(iteration):
             "output_file": f"slurm_outputs/run_simulation_{neuronmodel}_{compute_nodes}_{MPI_WEAK_SCALE_NEURONS * compute_nodes}_{iteration}_%j.out",
             "error_file": f"slurm_outputs/run_simulation_{neuronmodel}_{compute_nodes}_{MPI_WEAK_SCALE_NEURONS * compute_nodes}_{iteration}_%j.err",
             "benchmarkPath": dirname,
-            "scaling_check": scaling_check, 
             "rng_seed": seeds_per_condition[compute_nodes],
             "smoke_test": short_sim,
             "simtime": 250.0 if short_sim else args.simtime,
@@ -383,6 +379,20 @@ def start_weak_scaling_benchmark_mpi(iteration):
         command = ["sbatch", f"{filename}"]
         result = subprocess.run(command, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
+
+def submit_sbatch(filename):
+
+    result = subprocess.run(["sbatch", "--parsable", filename], text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+    if result.returncode != 0: 
+        raise RuntimeError(f"sbatch failed for {filename}:{result.stderr}")
+    
+    # jureca returning job id 
+    job_id = result.stdout.strip().split(";")[0]
+
+    log(f"submitted {filename} as job {job_id}")
+
+    return job_id
 
 
 def extract_value_from_filename(filename, key):
@@ -680,6 +690,168 @@ def process_data(dir_name: str, mode="MPI"):
 
     return scaling_data
 
+def run_scaling_check_mpi():
+
+    print("RUNNING STRONG/WEAK SCALING SANITY CHECK")
+    strong_scale = MPI_STRONG_SCALE_NEURONS # These MUST coincide at one node.
+    weak_scale = MPI_WEAK_SCALE_NEURONS
+
+    if strong_scale != weak_scale:
+        raise RuntimeError(
+            "Scaling check cannot be performed because the "
+            "1-node strong and weak network sizes differ:\n"
+            f"strong = {strong_scale}\n"
+            f"weak   = {weak_scale}")
+
+    check_root = os.path.join(output_folder, SCALINGCHECKFOLDERNAME) # os checks essential for log comparisions
+    strong_dir = os.path.join(check_root, "strong")
+    weak_dir = os.path.join(check_root, "weak")
+
+    os.makedirs(strong_dir, exist_ok=True)
+    os.makedirs(weak_dir, exist_ok=True)
+    os.makedirs(os.path.join(strong_dir, "sbatch"), exist_ok=True)
+    os.makedirs(os.path.join(weak_dir, "sbatch"), exist_ok=True)
+
+    check_seed = int(rng.integers(0, max_int32)) # ONE seed shared between strong and weak for this check. 
+
+    log(f"Scaling check RNG seed: {check_seed}")
+    job_ids = []
+
+    for neuronmodel in NEURONMODELS:
+
+        for scaling_type, dirname in [("strong", strong_dir),("weak", weak_dir)]:
+
+            combination = { # combination code from mpi functions to be passed into the slurm 
+                "nodes": 1,
+                "simulated_neuron": neuronmodel,
+                "network_scale": strong_scale,
+                "threads": NUMTHREADS,
+                "iteration": 0,
+                "output_file": f"slurm_outputs/scaling_check_{scaling_type}_{neuronmodel}_%j.out",
+                "error_file": f"slurm_outputs/scaling_check_{scaling_type}_{neuronmodel}_%j.err",
+                "benchmarkPath": dirname,
+                "rng_seed": check_seed,
+                "smoke_test": short_sim,
+                "simtime": (250.0 if short_sim else args.simtime)}
+                
+
+            filename = os.path.join(
+                dirname,
+                "sbatch",
+                f"scaling_check_{scaling_type}_"
+                f"{neuronmodel}.sh")
+
+            render_sbatch_template(combination, filename)
+            job_id = submit_sbatch(filename)
+            job_ids.append(job_id)
+
+    # Do NOT proceed until all checks are done, we can kill the program if it's not matching 
+    wait_for_jobs(job_ids)
+
+    print("Scaling-check simulations completed.")
+    print("Comparing strong vs weak results...")
+    compare_scaling_check_results(strong_dir, weak_dir) # load .json files to compare 
+
+
+def load_scaling_check_result(dirname, neuronmodel): # load .json file produced from checks 
+
+    pattern = os.path.join(dirname, f"timing_[simulated_neuron={neuronmodel}]_[network_scale={MPI_STRONG_SCALE_NEURONS}]_[iteration=0]_[nodes=1]_[threads={NUMTHREADS}]_[rank=0].json")
+    matches = glob.glob(pattern)
+    if len(matches) != 1:
+        raise RuntimeError(f"Expected exactly one scaling-check result for {neuronmodel}, found {len(matches)}: {pattern}") 
+    with open(matches[0], "r") as f:
+        return json.load(f) # return json contents 
+
+def compare_scaling_check_results(strong_dir, weak_dir):
+
+    failed = []
+    for neuronmodel in NEURONMODELS:
+
+        strong = load_scaling_check_result(strong_dir, neuronmodel)
+        weak = load_scaling_check_result(weak_dir, neuronmodel)
+        print(f"[SCALING CHECK] {neuronmodel}")
+
+        # Structural checks must equal 
+        exact_keys = ["num_synapses", "events_ex", "events_in", "NE", "NI", "CE", "CI", "rng_seed"]
+        model_passed = True
+
+        for key in exact_keys:
+            a = strong[key]
+            b = weak[key]
+            passed = a == b
+            print(f"  {key:<20} strong={a}  weak={b}  {'PASS' if passed else 'FAIL'}")
+            if not passed:
+                model_passed = False
+
+        # Floating-point biological metrics.
+        float_keys = ["firing_rate_exc","firing_rate_inh","cv_exc"]
+
+        for key in float_keys:
+            a = strong[key]
+            b = weak[key]
+            passed = np.isclose(a,b,rtol=1e-10,atol=1e-12,equal_nan=True) # numerical precision checks, relative differences and absolute differences
+
+            print(f"  {key:<20} strong={a:.12g}  weak={b:.12g}  {'PASS' if passed else 'FAIL'}")
+            if not passed:
+                model_passed = False
+
+        if model_passed:
+            print(f"  ==> {neuronmodel}: PASS")
+        else:
+            print(f"  ==> {neuronmodel}: FAIL")
+            failed.append(neuronmodel)
+
+    if failed:
+        raise RuntimeError(
+            "\nSCALING CHECK FAILED.\n"
+            "Strong and weak scaling do not produce the same "
+            "1-node network behaviour.\n\n"
+            "Failed models:\n  - "
+            + "\n  - ".join(failed)
+            + "\n\nFull scaling benchmark has NOT been submitted.")
+
+    print("SCALING CHECK PASSED")
+    print("1-node strong and weak results agree for all models.")
+    print("Proceeding with full benchmark.")
+
+def wait_for_jobs(job_ids):
+    job_ids = [str(job_id) for job_id in job_ids]
+
+    while True:
+        result = subprocess.run(
+            [
+                "squeue",
+                "-h",
+                "-j",
+                ",".join(job_ids),
+                "-o",
+                "%A",
+            ],
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+
+        if result.returncode != 0:
+            raise RuntimeError(
+                f"squeue failed:\n{result.stderr}"
+            )
+
+        running_jobs = [
+            line.strip()
+            for line in result.stdout.splitlines()
+            if line.strip()
+        ]
+
+        if not running_jobs:
+            break
+
+        log(
+            f"Scaling check: {len(running_jobs)} "
+            f"Slurm jobs still active"
+        )
+
+        time.sleep(10)
 
 def plot_strong_scaling_benchmark():
     weak_scaling_data = process_data(WEAKSCALINGFOLDERNAME)
@@ -908,6 +1080,10 @@ if __name__ == "__main__":
     # Run simulation
     if runSim:
         deleteDat()
+        if args.scaling_check:
+            if not args.enable_mpi:
+                raise RuntimeError("--scaling check requires --enable_mpi")
+            run_scaling_check_mpi()
         for i in range(ITERATIONS):
             if args.enable_mpi:
                 start_strong_scaling_benchmark_mpi(i)

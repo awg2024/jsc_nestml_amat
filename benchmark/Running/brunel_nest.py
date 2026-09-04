@@ -854,6 +854,20 @@ if args.benchmarkPath != "":
     status["sim_time"] = sim_time
     status["cv_exc"] = cv_exc
 
+    # implementing more status point for scaling_sanity check
+    status["events_ex"] = args.events_ex
+    status["events_in"] = args.events_in
+    status["network_scale"] = args.network_scale
+    status["nodes"] = args.nodes
+    status["threads"] = args.threads
+    status["rng_seed"] = args.rng_seed
+    status["simtime"] = simtime
+
+    status["NE"] = NE
+    status["NI"] = NI
+    status["CE"] = CE
+    status["CI"] = CI
+
     if not os.path.exists(path):
         os.makedirs(path)
 
