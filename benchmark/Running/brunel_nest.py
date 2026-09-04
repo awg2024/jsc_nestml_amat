@@ -305,11 +305,20 @@ parser.add_argument("--iteration", type=int, help="iteration number used for the
     
 parser.add_argument("--rng_seed", type=int, help="random seed", default=123)
 
-parser.add_argument("--smoke_test",action="store_true",help="Use small-network connectivity for low-cost functional testing",)
+parser.add_argument("--smoke_test",action="store_true",help="Use small-network connectivity for low-cost functional testing",) # XXX to do, remove smoke_test redundant code 
 
 parser.add_argument("--simtime",type=float,default=250.0,help="Biological simulation time in ms",)
 
 parser.add_argument("--noConnection",action="store_true",help="Turn off all Balanced Neural Network Connectivty",)
+
+parser.add_argument("--connectivity_mode", choices=["fixed_indegree","fixed_probability"], default="fixed_probability", help="Connection type for the brunel balanced neural network")
+
+parser.add_argument("--profile_run", action="store_true", help="disable expensive plotting during hardware profiling affecting the statistics")
+
+
+
+
+
 
 
 args = parser.parse_args() # processes arguments and flags passed by user 
@@ -415,43 +424,26 @@ NI = 1 * order  # number of inhibitory neurons
 N_neurons = NE + NI  # number of neurons in total
 print(f"Number of neurons : {N_neurons}")
 
-# record from this many neurons
-N_rec_exc = min(500, NE) 
-N_rec_inh = min(100, NI) 
+# connectivity specification 
+if args.connectivity_mode == "fixed_indegree": # fixed incoming connections 
 
-# Calculate raw dynamic values based on network scaling
-raw_CE = int(epsilon * NE / (order / 2500))
-raw_CI = int(epsilon * NI / (order / 2500))
+    CE = min(1000, NE) # number of synapses remains the same despite order of network
+    CI = min(250, NI)
 
-if args.smoke_test: # if true 
-    
-    # Strict low limits for rapid smoke testing
-    CE = max(1, min(20, NE))
-    CI = max(1, min(5, NI))
+elif args.connectivity_mode == "fixed_probability": # fixed probability is maintained (default argument)
 
-else: # if smoke-test is false 
-    # Production dynamic scaling with structural safeguards
-    # max ensures you never get 0 synapses, min ensures you never request more than the available neurons 
-    CE = max(1, min(raw_CE, NE))
-    CI = max(1, min(raw_CI, NI))
+    CE = max(1, int(epsilon * NE)) # as network size increases so does the synaptic connections (strong scaling)
+    CI = max(1, int(epsilon * NI))
 
-# total connection connections of e
-C_tot = CE + CI
 
 # define common params that are accepted by amat_nestml, amat2_psc_exp 
 neuron_params = {}
-
 amat_common_params = {
     "tau_m": 10.0,
     "C_m": 200.0,
     "E_L": -70.0,
     "alpha_1": 10.0,
     "alpha_2": 0.0}
-
-
-# hh note disparity 
-# nest = t_ref_
-# nestml = refr_t
 
 hh_common_params = { # defined in the NEST .cpp 
     "g_Na": 12000.0,    # nS
@@ -463,7 +455,7 @@ hh_common_params = { # defined in the NEST .cpp
     "E_L": -54.402,     # mV
     "I_e": 0.0}          # pA
 
-
+# assign common params
 if args.simulated_neuron == "amat2_psc_exp": # NEST
     neuron_params = {**amat_common_params} # option to add in custom NEST params  
 
@@ -477,7 +469,6 @@ elif args.simulated_neuron == "hh_psc_alpha": # NESTML
     neuron_params = {**hh_common_params}  
 
 else:
-    
     raise ValueError(
         f"Unknown neuron benchmark variant: "
         f"{args.simulated_neuron}")
@@ -490,7 +481,6 @@ if args.simulated_neuron in ("amat_nestml","amat_nestml_cse", "amat2_psc_exp", "
     #     neuron_params["XXX"] = XXX
     # elif args.simulated_neuron in ("hh_nestml_cse", "hh_nestml", "hh_nestml_cse_stdp"):
     #     neuron_params["XXX"] = XXX
-
 
     # defining exc/inh params 
     tauSynEx = 1.0      # Time constant for excitatory synapses (ms); determines how fast excitatory inputs decay
@@ -579,7 +569,7 @@ nest.resolution = dt
 nest.print_time = True
 nest.overwrite_files = True
 
-# Get the current time in milliseconds since the Unix epoch, modulo max nr of RNG seed bits in NEST (32)
+# Get the current time in milliseconds since the Unix epoch, modulo max nr of RNG F bits in NEST (32)
 # current_time_ms = int(datetime.now().timestamp() * 1000) % 2**31         
 nest.rng_seed = args.rng_seed
 print("The RNG seed is: " + str(nest.rng_seed))
@@ -877,15 +867,18 @@ if args.benchmarkPath != "":
         json.dump(status, f, indent=4)
         f.close()
 
-    #nest.raster_plot.from_device(espikes, hist=True, title="", figsize=(6, 4))
-    raster_plot_from_device(espikes, path, fname_snip)
 
-    fig, ax = plt.subplots()
-    ax.plot(e_mm.get()["events"]["times"], e_mm.get()["events"]["V_m"])
-    plt.tight_layout()
-    plt.savefig(f"{path}/V_m_{fname_snip}.png")
-    plt.savefig(f"{path}/V_m_{fname_snip}.pdf")
-    plt.close()
+    if not args.profile_run: # disable expensive plotting during hardware profiling and affecting the statistics 
 
-    plot_interspike_intervals(exc_spikes, path, fname_snip=fname_snip)
+        #nest.raster_plot.from_device(espikes, hist=True, title="", figsize=(6, 4))
+        raster_plot_from_device(espikes, path, fname_snip)
+
+        fig, ax = plt.subplots()
+        ax.plot(e_mm.get()["events"]["times"], e_mm.get()["events"]["V_m"])
+        plt.tight_layout()
+        plt.savefig(f"{path}/V_m_{fname_snip}.png")
+        plt.savefig(f"{path}/V_m_{fname_snip}.pdf")
+        plt.close()
+
+        plot_interspike_intervals(exc_spikes, path, fname_snip=fname_snip)
 

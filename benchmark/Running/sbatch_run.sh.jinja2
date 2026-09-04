@@ -1,9 +1,9 @@
 #!/bin/bash
 
 #SBATCH --job-name=nestml_amat_benchmark
-#SBATCH --account=paj2623 
+#SBATCH --account=paj2623
 #SBATCH --partition=dc-cpu
-#SBATCH --time=01:00:00
+#SBATCH --time=00:10:00
 
 #SBATCH --nodes={{nodes}}
 #SBATCH --ntasks-per-node=1
@@ -16,7 +16,6 @@
 
 set -e
 
-# --ntasks-per-node={{ntasks_per_node}} removed for this medium test. 
 module load Stages/2026
 module load GCC/14.3.0
 module load ParaStationMPI/5.13.0-1
@@ -29,9 +28,10 @@ export LD_LIBRARY_PATH="${PWD}/Running/targets_amat/target:${PWD}/Running/target
 
 export MPLBACKEND=Agg
 export PYTHONUNBUFFERED=1
-export OMP_PROC_BIND=TRUE
 
+export OMP_PROC_BIND=TRUE
 export SRUN_CPUS_PER_TASK=${SLURM_CPUS_PER_TASK}
+
 
 export PROGRAM="python3 Running/brunel_nest.py \
 --simulated_neuron {{ combination['simulated_neuron'] }} \
@@ -42,6 +42,34 @@ export PROGRAM="python3 Running/brunel_nest.py \
 --benchmarkPath {{ combination['benchmarkPath'] }} \
 --rng_seed {{ combination['rng_seed'] }} \
 --simtime {{ combination['simtime'] }} \
-{% if combination['smoke_test'] %}--smoke_test{% endif %}"
+{% if enable_profile %}--profile_run{% endif %}"
+
+
+{% if enable_profile %}
+
+PERF_DIR="{{ combination['benchmarkPath'] }}/perf"
+mkdir -p "${PERF_DIR}"
+
+PERF_OUT="${PERF_DIR}/perf_{{ combination['simulated_neuron'] }}_nodes{{ combination['nodes'] }}_scale{{ combination['network_scale'] }}_iter{{ combination['iteration'] }}_job${SLURM_JOB_ID}.csv"
+
+echo "Hardware profiling enabled"
+echo "Model      : {{ combination['simulated_neuron'] }}"
+echo "Nodes      : {{ combination['nodes'] }}"
+echo "Scale      : {{ combination['network_scale'] }}"
+echo "Iteration  : {{ combination['iteration'] }}"
+echo "Perf output: ${PERF_OUT}"
+echo "Events     : {{ perf_events }}"
+
+srun perf stat \
+    --no-big-num \
+    -x, \
+    -e "{{ perf_events }}" \
+    -o "${PERF_OUT}" \
+    -- \
+    $PROGRAM
+
+{% else %}
 
 srun $PROGRAM
+
+{% endif %}

@@ -63,7 +63,7 @@ max_int32 = np.iinfo(np.int32).max
 # if not passed it pass the default 
 parser = argparse.ArgumentParser(description="Run a Benchmark with NEST")
 parser.add_argument("--noRunSim", action="store_false", help="Skip running simulations, only do plotting")
-parser.add_argument("--enable_profiling", action="store_true", help="Run the benchmark with profiling enabled with AMDuProf")
+parser.add_argument("--enable_profile", action="store_true", help="Run hardware-counter profiling using linux perf stat")
 parser.add_argument("--short_sim", action="store_true", help="Run benchmark with profiling on 2 nodes with 2 iterations")
 parser.add_argument("--enable_mpi", action="store_true", default=False, help="Run benchmark with MPI (default: thread-based benchmarking)")
 parser.add_argument("--simtime", type=float, default=999.0, help="Specify simulation time")
@@ -71,7 +71,7 @@ parser.add_argument("--scaling_check", action="store_true", help="Run a sanity c
 
 args = parser.parse_args()
 runSim = args.noRunSim
-enable_profile = args.enable_profiling
+enable_profile = args.enable_profile
 short_sim = args.short_sim
 enable_mpi = args.enable_mpi
 
@@ -107,10 +107,10 @@ BASELINENEURON = "amat2_psc_exp"
 
 # nestml cse stdp, nestml cse comparision
 NEURONMODELS = [
-    "amat_nestml_cse_stdp",
+ #   "amat_nestml_cse_stdp",
     "amat_nestml_cse",
     "amat_nestml",
-    BASELINENEURON
+ #   BASELINENEURON
 ]
 
 legend = {
@@ -127,6 +127,12 @@ colors = {
     "amat_nestml_cse_stdp": 3
 }
 
+
+# Perf events to collect for profiling supported by JURECA 
+PERF_EVENTS = ["cycles", "instructions", "branches", "branch-misses", "cache-references", "cache-misses", "L1-dcache-loads", "L1-dcache-load-misses", "dTLB-loads", "dTLB-load-misses"]
+PERF_EVENT_STRING = ",".join(PERF_EVENTS) # jureca is AMD-EPYC based so we may need AMD L3 specific hardware 
+
+
 # MPI scaling
 DEBUG = True
 
@@ -142,32 +148,26 @@ MPI_WEAK_SCALE_NEURONS = 500 # The order of neurons in the Brunel network, fixed
 STRONGSCALINGFOLDERNAME = "timings_strong_scaling_mpi" # output dir 
 WEAKSCALINGFOLDERNAME = "timings_weak_scaling_mpi" # output dir 
 
-SCALINGCHECKFOLDERNAME = "scaling_check"
-
 # thread-based benchmarks
 NETWORK_BASE_SCALE = 500 # thread multiplier for weak-scaling (compute scales with network)
 N_THREADS = np.array([1]) # 1,2,4,16,32,64
-
-# if dont add short_sim to iteration clashes 
 ITERATIONS = 1 # init define 
 
-# MPI Strong scaling
-if enable_mpi:
-    if enable_profile:
+# MPI Strong scaling condition
+if args.enable_mpi:
+    if enable_profile: # for profiling one fixed node and repeated measurements
         MPI_SCALES = [1] 
-        ITERATIONS = 3 # keeping iterations to 1 for profiling runs
+        ITERATIONS = 3
+    elif short_sim: 
+        MPI_SCALES = [1] 
+        ITERATIONS = 1 
     else:
-        if short_sim: 
-            MPI_SCALES = [1] # original (MPI_SCALES = [2])
-            ITERATIONS = 1 # keeping iterations to 1 for smoke test (original value 3) 
-        else:
-            MPI_SCALES = np.array([1])
-            ITERATIONS = 3 # 3 iterations for stable production metrics 
-else:
+        MPI_SCALES = np.array([1])
+        ITERATIONS = 1 
+else: # disable mpi running on local 
     if short_sim:
         N_THREADS = np.array([1])
         ITERATIONS = 1 # keeping iterations to 1 for short-sims 
-
 
 PATHTOSTARTFILE = os.path.join(current_dir, "start.sh")
 
@@ -194,6 +194,7 @@ def render_sbatch_template(combination, filename): # render sbatch template for 
     namespace["cpus_per_task"] = combination["threads"]
     namespace["combination"] = combination
     namespace["enable_profile"] = enable_profile
+    namespace["per_events"] = PERF_EVENT_STRING
 
     file = template.render(namespace)
     
@@ -288,7 +289,7 @@ def start_strong_scaling_benchmark_mpi(iteration):
         # Create the sbatch file
         render_sbatch_template(combination, filename)
         command = ["sbatch", f"{filename}"]
-        result = subprocess.run(command, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        result = subprocess.run(command, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE) # submit sbash
 
 
 def start_weak_scaling_benchmark_threads(iteration):
@@ -703,9 +704,8 @@ def run_scaling_check_mpi():
             f"strong = {strong_scale}\n"
             f"weak   = {weak_scale}")
 
-    check_root = os.path.join(output_folder, SCALINGCHECKFOLDERNAME) # os checks essential for log comparisions
-    strong_dir = os.path.join(check_root, "strong")
-    weak_dir = os.path.join(check_root, "weak")
+    strong_dir = os.path.join(output_folder, WEAKSCALINGFOLDERNAME)
+    weak_dir = os.path.join(check_root, STRONGSCALINGFOLDERNAME)
 
     os.makedirs(strong_dir, exist_ok=True)
     os.makedirs(weak_dir, exist_ok=True)
@@ -1086,14 +1086,21 @@ if __name__ == "__main__":
             run_scaling_check_mpi()
         for i in range(ITERATIONS):
             if args.enable_mpi:
-                start_strong_scaling_benchmark_mpi(i)
-                start_weak_scaling_benchmark_mpi(i)
+                if args.enable_profile:
+                    start_strong_scaling_benchmark_mpi(i) # profiling is performed at one controlled fixed configuration.
+                else:
+                    start_strong_scaling_benchmark_mpi(i)
+                    start_weak_scaling_benchmark_mpi(i)
             else:
                 start_strong_scaling_benchmark_threads(i)
                 start_weak_scaling_benchmark_threads(i)
 
     if args.enable_mpi:
         check_for_completion()
+
+    if enable_profile:
+        log("Profiling benchmark complete")
+        raise SystemExit(0)
 
     log("Finished")
     deleteDat()
