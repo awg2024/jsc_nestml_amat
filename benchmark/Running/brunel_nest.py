@@ -328,17 +328,17 @@ MODEL_VARIANTS = {
    
    "hh_nestml": {# NESTML 
         "module": "/p/project1/paj2623/gray2/benchmark/Running/targets_hh/target/nestml_hh_module.so", 
-        "model": "hh_psc_alpha_custom_nestml"
+        "model": "hh_psc_alpha_neuron_nestml"
     },
    
     "hh_nestml_cse": { # NESTML CSE 
         "module": "/p/project1/paj2623/gray2/benchmark/Running/targets_hh_optimised_cse/target/nestml_hh_cse_module.so",
-        "model": "hh_psc_alpha_custom_nestml",
+        "model": "hh_psc_alpha_neuron_nestml",
     },
 
     "hh_nestml_cse_stdp": { # NESTML CSE (backend still the same just building network with NEST stdp synapses)
         "module": "/p/project1/paj2623/gray2/benchmark/Running/targets_hh_optimised_cse/target/nestml_hh_cse_module.so",
-        "model": "hh_psc_alpha_custom_nestml",
+        "model": "hh_psc_alpha_neuron_nestml",
     },
 
     "hh_psc_alpha": {#  NEST
@@ -437,7 +437,7 @@ hh_common_params = { # defined in the NEST .cpp
     "E_Na": 50.0,       # mV
     "E_K": -77.0,       # mV
     "E_L": -54.402,     # mV
-    "I_e": 0.0}          # pA
+    "I_e": 0.0}          # pA 
 
 # assign common params
 if args.simulated_neuron == "amat2_psc_exp": # NEST
@@ -489,41 +489,41 @@ if args.simulated_neuron in ("amat_nestml","amat_nestml_cse", "amat2_psc_exp", "
     baseline_current = ((omega - E_L) * CMem / tauMem)
     p_rate = (eta * 1000.0 * baseline_current / (J_ex * tauSynEx)) #  we want a randomness of spikes (aimed hz 0-40Hz)
 
-elif args.simulated_neuron in ("hh_psc_alpha","hh_nestml_cse", "hh_nestml", "hh_nestml_cse_stdp"): # HH BLOCK
+elif args.simulated_neuron in ("hh_psc_alpha","hh_nestml_cse", "hh_nestml","hh_nestml_cse_stdp"): # HH BLOCK
     
     # naming conventions differ from NEST/NESTML
     if args.simulated_neuron == "hh_psc_alpha":
         neuron_params["t_ref"] = 2.0
-        neuron_params["tau_syn_ex"] = 0.2
+        neuron_params["tau_syn_ex"] = 0.5
         neuron_params["tau_syn_in"] = 2.0
 
     elif args.simulated_neuron in ("hh_nestml_cse", "hh_nestml", "hh_nestml_cse_stdp"):
-        neuron_params["refr_t"] = 2.0  # naming convention for your custom nestml models
-        neuron_params["tau_syn_exc"] = 0.2
+        neuron_params["refr_T"] = 2.0  # naming convention for your custom nestml models
+        neuron_params["tau_syn_exc"] = 0.5
         neuron_params["tau_syn_inh"] = 2.0
 
         #import pdb; pdb.set_trace();
-    
+        
     if "tau_syn_ex" in neuron_params:
         tauSynEx = neuron_params["tau_syn_ex"]
         tauSynIn = neuron_params["tau_syn_in"]
     else:
         tauSynEx = neuron_params["tau_syn_exc"]
         tauSynIn = neuron_params["tau_syn_inh"]
-    
+        
 
     CMem = hh_common_params["C_m"]
-    E_L = hh_common_params["E_L"]
+    E_L = hh_common_params["E_L"] # -54
     g_L = hh_common_params["g_L"]
 
     # HH has no fixed reset/threshold; leak-time-constant approximation:
     tauMem = CMem / g_L          # ~3.33 ms with these params
-    omega = -45                # rough empirical spiking threshold, fine tuned over iterations. 
+    omega = -45              # rough empirical spiking threshold, fine tuned over iterations. 
 
     # nestml and nest spiking at different times? mismatch in the nest / nestml model...  
-    target_psp_mv = 0.3
-    g = 4.0
-    eta = 1.2
+    target_psp_mv = 4.0
+    g = 2.0
+    eta = 3.5
 
     norm_ex = exp_psp_norm(tauMem, CMem, tauSynEx)
 
@@ -533,14 +533,9 @@ elif args.simulated_neuron in ("hh_psc_alpha","hh_nestml_cse", "hh_nestml", "hh_
 
     baseline_current = (omega - E_L) * CMem / tauMem
     p_rate = eta * 1000.0 * baseline_current / (J_ex * tauSynEx)
+    p_rate = 1000.0
 
-    # import pdb; pdb.set_trace()
-    
-    
-    # treat as a starting guess — validate/calibrate against measured firing rate
-    # can we turn off connectivity? and make sure this fires? 
-
-
+        # import pdb; pdb.set_trace()
 else:
     raise ValueError(f"Unknown neuron benchmark variant: {args.simulated_neuron}")
 
@@ -573,6 +568,8 @@ print(f"Actual NEST model: {modelName}")
 
 print(f"Creating the neuron model: {modelName}")
 print(f"Random seed: {args.rng_seed}")
+
+#import pdb; pdb.set_trace()
 
 # creating population nodes 
 nodes_ex = nest.Create(modelName, NE, params=neuron_params)
@@ -653,8 +650,9 @@ nest.CopyModel("static_synapse", "inhibitory", {"weight": J_in, "delay": delay})
 # via ``syn_spec`` which expects a dictionary when defining multiple variables or
 # a string when simply using a pre-defined synapse.
 
-nest.Connect(noise, nodes_ex, syn_spec="excitatory_static")
-nest.Connect(noise, nodes_in, syn_spec="excitatory_static")
+if not args.noConnection: # no poisson input 
+    nest.Connect(noise, nodes_ex, syn_spec="excitatory_static")
+    nest.Connect(noise, nodes_in, syn_spec="excitatory_static")
 
 ###############################################################################
 # Connecting the first ``N_rec`` nodes of the excitatory and inhibitory

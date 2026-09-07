@@ -24,7 +24,6 @@ module load nest-simulator/3.9
 
 source /p/project1/paj2623/gray2/venvs/amat_hpc/bin/activate
 
-echo "=== .py env === "
 which python
 which python3
 which pip
@@ -39,7 +38,6 @@ python3 --version p
 python3 -c "import sys; print('Python executable:', sys.executable)" 
 python3 -c "import matplotlib; print('Matplotlib:', matplotlib.__version__); print('Location:', matplotlib.__file__)" 
 python3 -c "import matplotlib.pyplot as plt; print('pyplot import OK')"
-echo "=== .py env === "
 
 export LD_LIBRARY_PATH="${PWD}/Running/targets_amat/target:${PWD}/Running/targets_amat_optimised_cse/target:${LD_LIBRARY_PATH:-}"
 

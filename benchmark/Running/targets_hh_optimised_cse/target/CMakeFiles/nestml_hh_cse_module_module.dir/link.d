@@ -1,6 +1,6 @@
 nestml_hh_cse_module.so: \
   /lib/../lib64/crti.o \
-  /p/software/fs/jurecadc/stages/2026/software/GCCcore/14.3.0/bin/../lib/gcc/x86_64-pc-linux-gnu/14.3.0/crtbeginS.o \
+  /p/software/fs/jusuf/stages/2026/software/GCCcore/14.3.0/bin/../lib/gcc/x86_64-pc-linux-gnu/14.3.0/crtbeginS.o \
   /p/software/default/stages/2026/software/nest-simulator/3.9-gpsmpi-2025b/lib/nest/libnest.so \
   /p/software/default/stages/2026/software/nest-simulator/3.9-gpsmpi-2025b/lib/nest/libsli.so \
   /p/software/default/stages/2026/software/libtool/2.5.4-GCCcore-14.3.0/lib/libltdl.so \
@@ -13,9 +13,9 @@ nestml_hh_cse_module.so: \
   /p/software/default/stages/2026/software/GCCcore/14.3.0/lib64/libgomp.so \
   /lib64/libpthread.a \
   CMakeFiles/nestml_hh_cse_module_module.dir/nestml_hh_cse_module.cpp.o \
-  CMakeFiles/nestml_hh_cse_module_module.dir/hh_psc_alpha_custom_nestml.cpp.o \
-  /p/software/fs/jurecadc/stages/2026/software/psmpi/5.13.0-1-GCC-14.3.0/lib/libmpicxx.so \
-  /p/software/fs/jurecadc/stages/2026/software/psmpi/5.13.0-1-GCC-14.3.0/lib/libmpi.so \
+  CMakeFiles/nestml_hh_cse_module_module.dir/hh_psc_alpha_neuron_nestml.cpp.o \
+  /p/software/fs/jusuf/stages/2026/software/psmpi/5.13.0-1-GCC-14.3.0/lib/libmpicxx.so \
+  /p/software/fs/jusuf/stages/2026/software/psmpi/5.13.0-1-GCC-14.3.0/lib/libmpi.so \
   /p/software/default/stages/2026/software/GCCcore/14.3.0/lib64/../lib64/libstdc++.so \
   /lib/../lib64/libm.so \
   /lib/../lib64/libm.so \
@@ -26,7 +26,7 @@ nestml_hh_cse_module.so: \
   /p/software/default/stages/2026/software/GCCcore/14.3.0/lib64/../lib64/libgcc_s.so \
   /p/software/default/stages/2026/software/GCCcore/14.3.0/lib64/../lib64/libgcc_s.so \
   /p/software/default/stages/2026/software/GCCcore/14.3.0/lib64/../lib64/libgcc_s.so.1 \
-  /p/software/fs/jurecadc/stages/2026/software/GCCcore/14.3.0/bin/../lib/gcc/x86_64-pc-linux-gnu/14.3.0/libgcc.a \
+  /p/software/fs/jusuf/stages/2026/software/GCCcore/14.3.0/bin/../lib/gcc/x86_64-pc-linux-gnu/14.3.0/libgcc.a \
   /lib/../lib64/libc.so \
   /lib/../lib64/libc.so \
   /lib/../lib64/libc.so \
@@ -37,13 +37,13 @@ nestml_hh_cse_module.so: \
   /p/software/default/stages/2026/software/GCCcore/14.3.0/lib64/../lib64/libgcc_s.so \
   /p/software/default/stages/2026/software/GCCcore/14.3.0/lib64/../lib64/libgcc_s.so \
   /p/software/default/stages/2026/software/GCCcore/14.3.0/lib64/../lib64/libgcc_s.so.1 \
-  /p/software/fs/jurecadc/stages/2026/software/GCCcore/14.3.0/bin/../lib/gcc/x86_64-pc-linux-gnu/14.3.0/libgcc.a \
-  /p/software/fs/jurecadc/stages/2026/software/GCCcore/14.3.0/bin/../lib/gcc/x86_64-pc-linux-gnu/14.3.0/crtendS.o \
+  /p/software/fs/jusuf/stages/2026/software/GCCcore/14.3.0/bin/../lib/gcc/x86_64-pc-linux-gnu/14.3.0/libgcc.a \
+  /p/software/fs/jusuf/stages/2026/software/GCCcore/14.3.0/bin/../lib/gcc/x86_64-pc-linux-gnu/14.3.0/crtendS.o \
   /lib/../lib64/crtn.o
 
 /lib/../lib64/crti.o:
 
-/p/software/fs/jurecadc/stages/2026/software/GCCcore/14.3.0/bin/../lib/gcc/x86_64-pc-linux-gnu/14.3.0/crtbeginS.o:
+/p/software/fs/jusuf/stages/2026/software/GCCcore/14.3.0/bin/../lib/gcc/x86_64-pc-linux-gnu/14.3.0/crtbeginS.o:
 
 /p/software/default/stages/2026/software/nest-simulator/3.9-gpsmpi-2025b/lib/nest/libnest.so:
 
@@ -69,11 +69,11 @@ nestml_hh_cse_module.so: \
 
 CMakeFiles/nestml_hh_cse_module_module.dir/nestml_hh_cse_module.cpp.o:
 
-CMakeFiles/nestml_hh_cse_module_module.dir/hh_psc_alpha_custom_nestml.cpp.o:
+CMakeFiles/nestml_hh_cse_module_module.dir/hh_psc_alpha_neuron_nestml.cpp.o:
 
-/p/software/fs/jurecadc/stages/2026/software/psmpi/5.13.0-1-GCC-14.3.0/lib/libmpicxx.so:
+/p/software/fs/jusuf/stages/2026/software/psmpi/5.13.0-1-GCC-14.3.0/lib/libmpicxx.so:
 
-/p/software/fs/jurecadc/stages/2026/software/psmpi/5.13.0-1-GCC-14.3.0/lib/libmpi.so:
+/p/software/fs/jusuf/stages/2026/software/psmpi/5.13.0-1-GCC-14.3.0/lib/libmpi.so:
 
 /p/software/default/stages/2026/software/GCCcore/14.3.0/lib64/../lib64/libstdc++.so:
 
@@ -95,7 +95,7 @@ CMakeFiles/nestml_hh_cse_module_module.dir/hh_psc_alpha_custom_nestml.cpp.o:
 
 /p/software/default/stages/2026/software/GCCcore/14.3.0/lib64/../lib64/libgcc_s.so.1:
 
-/p/software/fs/jurecadc/stages/2026/software/GCCcore/14.3.0/bin/../lib/gcc/x86_64-pc-linux-gnu/14.3.0/libgcc.a:
+/p/software/fs/jusuf/stages/2026/software/GCCcore/14.3.0/bin/../lib/gcc/x86_64-pc-linux-gnu/14.3.0/libgcc.a:
 
 /lib/../lib64/libc.so:
 
@@ -117,8 +117,8 @@ CMakeFiles/nestml_hh_cse_module_module.dir/hh_psc_alpha_custom_nestml.cpp.o:
 
 /p/software/default/stages/2026/software/GCCcore/14.3.0/lib64/../lib64/libgcc_s.so.1:
 
-/p/software/fs/jurecadc/stages/2026/software/GCCcore/14.3.0/bin/../lib/gcc/x86_64-pc-linux-gnu/14.3.0/libgcc.a:
+/p/software/fs/jusuf/stages/2026/software/GCCcore/14.3.0/bin/../lib/gcc/x86_64-pc-linux-gnu/14.3.0/libgcc.a:
 
-/p/software/fs/jurecadc/stages/2026/software/GCCcore/14.3.0/bin/../lib/gcc/x86_64-pc-linux-gnu/14.3.0/crtendS.o:
+/p/software/fs/jusuf/stages/2026/software/GCCcore/14.3.0/bin/../lib/gcc/x86_64-pc-linux-gnu/14.3.0/crtendS.o:
 
 /lib/../lib64/crtn.o:

@@ -144,16 +144,16 @@ DEBUG = True
 NUMTHREADS = 16  # Total number of threads per node (128)
 
 # MPI Strong scaling  
-MPI_STRONG_SCALE_NEURONS = 500  # The order of neurons in the Brunel network, scaled dynamically as compute increases (past values: 50, 500, 2500, 5,000, 10,000)
+MPI_STRONG_SCALE_NEURONS = 1000  # The order of neurons in the Brunel network, scaled dynamically as compute increases (past values: 50, 500, 2500, 5,000, 10,000)
 
 # MPI Weak scaling
-MPI_WEAK_SCALE_NEURONS = 500 # The order of neurons in the Brunel network, fixed base scale as compute increases  (past values: 50, 500, 2500, 5,000, 10,000) 
+MPI_WEAK_SCALE_NEURONS = 1000 # The order of neurons in the Brunel network, fixed base scale as compute increases  (past values: 50, 500, 2500, 5,000, 10,000) 
 
 STRONGSCALINGFOLDERNAME = "timings_strong_scaling_mpi" # output dir 
 WEAKSCALINGFOLDERNAME = "timings_weak_scaling_mpi" # output dir 
 
 # thread-based benchmarks
-NETWORK_BASE_SCALE = 250 # thread multiplier for weak-scaling (compute scales with network)
+NETWORK_BASE_SCALE = 1000 # thread multiplier for weak-scaling (compute scales with network)
 N_THREADS = np.array([1]) # 1,2,4,16,32,64
 ITERATIONS = 1 # init define 
 
