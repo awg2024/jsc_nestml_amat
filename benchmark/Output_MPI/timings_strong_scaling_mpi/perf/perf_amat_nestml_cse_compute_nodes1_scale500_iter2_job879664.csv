@@ -1,0 +1,6 @@
+# started on Mon Sep  7 10:07:18 2026
+
+41714458845,,cycles:u,13669716368,100.00,,
+83189092325,,instructions:u,13669716368,100.00,1.99,insn per cycle
+8380802602,,branches:u,13669716368,100.00,,
+163210828,,branch-misses:u,13669716368,100.00,1.95,of all branches

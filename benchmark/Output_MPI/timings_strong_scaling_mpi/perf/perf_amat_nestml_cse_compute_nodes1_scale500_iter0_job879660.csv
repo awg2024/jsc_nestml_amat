@@ -1,0 +1,6 @@
+# started on Mon Sep  7 10:07:17 2026
+
+41306901957,,cycles:u,13573388057,100.00,,
+83202459306,,instructions:u,13573388057,100.00,2.01,insn per cycle
+8385140085,,branches:u,13573388057,100.00,,
+163187941,,branch-misses:u,13573388057,100.00,1.95,of all branches

@@ -64,6 +64,7 @@ max_int32 = np.iinfo(np.int32).max
 parser = argparse.ArgumentParser(description="Run a Benchmark with NEST")
 parser.add_argument("--noRunSim", action="store_false", help="Skip running simulations, only do plotting")
 parser.add_argument("--enable_profile", action="store_true", help="Run hardware-counter profiling using linux perf stat")
+parser.add_argument("--perf_phase", choices=["compute","cache","t1b","all"], default="all", help="Hardware-counter profiling phase to run") 
 parser.add_argument("--short_sim", action="store_true", help="Run benchmark with profiling on 2 nodes with 2 iterations")
 parser.add_argument("--enable_mpi", action="store_true", default=False, help="Run benchmark with MPI (default: thread-based benchmarking)")
 parser.add_argument("--simtime", type=float, default=999.0, help="Specify simulation time")
@@ -72,6 +73,7 @@ parser.add_argument("--scaling_check", action="store_true", help="Run a sanity c
 args = parser.parse_args()
 runSim = args.noRunSim
 enable_profile = args.enable_profile
+perf_phase = args.perf_phase
 short_sim = args.short_sim
 enable_mpi = args.enable_mpi
 
@@ -127,17 +129,19 @@ colors = {
     "amat_nestml_cse_stdp": 3
 }
 
-
 # Perf events to collect for profiling supported by JURECA 
-PERF_EVENTS = ["cycles", "instructions", "branches", "branch-misses", "cache-references", "cache-misses", "L1-dcache-loads", "L1-dcache-load-misses", "dTLB-loads", "dTLB-load-misses"]
-PERF_EVENT_STRING = ",".join(PERF_EVENTS) # jureca is AMD-EPYC based so we may need AMD L3 specific hardware 
+PERF_EVENT_GROUPS = {
+    "compute": ["cycles","instructions","branches","branch-misses"], 
+    "cache": ["cache-references","cache-misses","L1-dcache-loads","L1-dcache-load-misses"],
+    "t1b":["dTLB-loads","dTLB-load-misses"]}
 
+PERF_EVENT_GROUPS["all"] = (PERF_EVENT_GROUPS["compute"] + PERF_EVENT_GROUPS["cache"] + PERF_EVENT_GROUPS["t1b"])
 
 # MPI scaling
 DEBUG = True
 
-# smoke test settings 
-NUMTHREADS = 10  # Total number of threads per node (128)
+# test settings 
+NUMTHREADS = 16  # Total number of threads per node (128)
 
 # MPI Strong scaling  
 MPI_STRONG_SCALE_NEURONS = 500  # The order of neurons in the Brunel network, scaled dynamically as compute increases (past values: 50, 500, 2500, 5,000, 10,000)
@@ -149,7 +153,7 @@ STRONGSCALINGFOLDERNAME = "timings_strong_scaling_mpi" # output dir
 WEAKSCALINGFOLDERNAME = "timings_weak_scaling_mpi" # output dir 
 
 # thread-based benchmarks
-NETWORK_BASE_SCALE = 500 # thread multiplier for weak-scaling (compute scales with network)
+NETWORK_BASE_SCALE = 250 # thread multiplier for weak-scaling (compute scales with network)
 N_THREADS = np.array([1]) # 1,2,4,16,32,64
 ITERATIONS = 1 # init define 
 
@@ -186,6 +190,7 @@ def log(message):
 
 
 def render_sbatch_template(combination, filename): # render sbatch template for benchmarking 
+    
     template = setup_template_env()
     
     namespace = {}
@@ -193,8 +198,9 @@ def render_sbatch_template(combination, filename): # render sbatch template for 
     namespace["ntasks_per_node"] = 1     # Low-cost initial workflow   #namespace["cpus_per_task"] = int(combination["threads"] / 2)  
     namespace["cpus_per_task"] = combination["threads"]
     namespace["combination"] = combination
+
     namespace["enable_profile"] = enable_profile
-    namespace["per_events"] = PERF_EVENT_STRING
+    namespace["perf_phase"] = perf_phase
 
     file = template.render(namespace)
     
@@ -217,7 +223,6 @@ def start_strong_scaling_benchmark_threads(iteration):
                      "neuronmodel": neuronmodel,
                      "name": f"{neuronmodel},threads={n_threads},network_scale={MPI_STRONG_SCALE_NEURONS}",
                      "rng_seed": seeds_per_condition[n_threads],
-                     "smoke_test": short_sim,
                      "simtime": 250.0 if short_sim else args.simtime,
                      } for neuronmodel in NEURONMODELS for n_threads in N_THREADS]
 
@@ -274,7 +279,6 @@ def start_strong_scaling_benchmark_mpi(iteration):
             "error_file": f"slurm_outputs/run_simulation_{neuronmodel}_{compute_nodes}_{iteration}_%j.err",
             "benchmarkPath": dirname,
             "rng_seed": seeds_per_condition[compute_nodes],
-            "smoke_test": short_sim,
             "simtime": 250.0 if short_sim else args.simtime,
         } for neuronmodel in NEURONMODELS for compute_nodes in MPI_SCALES]
 
@@ -304,7 +308,6 @@ def start_weak_scaling_benchmark_threads(iteration):
             "n_threads": n_threads,
             "neuronmodel": f"{neuronmodel}",
             "networksize": NETWORK_BASE_SCALE * n_threads, # scaling network size for weak scaling 
-            "smoke_test": short_sim,
             "rng_seed": seeds_per_condition[n_threads],
             "simtime": 250.0 if short_sim else args.simtime,
             } for neuronmodel in NEURONMODELS for n_threads in N_THREADS]
@@ -362,7 +365,6 @@ def start_weak_scaling_benchmark_mpi(iteration):
             "error_file": f"slurm_outputs/run_simulation_{neuronmodel}_{compute_nodes}_{MPI_WEAK_SCALE_NEURONS * compute_nodes}_{iteration}_%j.err",
             "benchmarkPath": dirname,
             "rng_seed": seeds_per_condition[compute_nodes],
-            "smoke_test": short_sim,
             "simtime": 250.0 if short_sim else args.simtime,
         } for neuronmodel in NEURONMODELS for compute_nodes in MPI_SCALES]
 
@@ -731,7 +733,6 @@ def run_scaling_check_mpi():
                 "error_file": f"slurm_outputs/scaling_check_{scaling_type}_{neuronmodel}_%j.err",
                 "benchmarkPath": dirname,
                 "rng_seed": check_seed,
-                "smoke_test": short_sim,
                 "simtime": (250.0 if short_sim else args.simtime)}
                 
 
@@ -853,6 +854,13 @@ def wait_for_jobs(job_ids):
 
         time.sleep(10)
 
+def get_perf_event_groups():
+
+    if perf_phase == "all":
+        return PERF_EVENT_GROUPS
+    return {perf_phase: PERF_EVENT_GROUPS[perf_phase]}
+
+
 def plot_strong_scaling_benchmark():
     weak_scaling_data = process_data(WEAKSCALINGFOLDERNAME)
     post_process_data(weak_scaling_data)
@@ -891,7 +899,7 @@ def deleteJson():
 def setup_template_env():
     template_file = "sbatch_run.sh.jinja2"
     template_dir = os.path.realpath(os.path.join(os.path.dirname(__file__)))
-    env = jinja2.Environment(loader=jinja2.FileSystemLoader(template_dir))
+    env = jinja2.Environment(loader=jinja2.FileSystemLoader(template_dir), undefined=jinja2.StrictUndefined) # strict crash if undefined variables
     env.globals.update(zip=zip)    # make zip() available in templates
     template = env.get_template(template_file)
     return template

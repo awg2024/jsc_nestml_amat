@@ -1,13 +1,13 @@
 #!/bin/bash
 
 #SBATCH --job-name=nestml_amat_benchmark
-#SBATCH --account=paj2623
-#SBATCH --partition=dc-cpu
+#SBATCH --account=gsp26
+#SBATCH --partition=batch
 #SBATCH --time=00:10:00
 
-#SBATCH --nodes={{nodes}}
+#SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
-#SBATCH --cpus-per-task={{cpus_per_task}}
+#SBATCH --cpus-per-task=16
 #SBATCH --hint=nomultithread
 
 #SBATCH --output={{combination["output_file"]}}
@@ -24,6 +24,23 @@ module load nest-simulator/3.9
 
 source /p/project1/paj2623/gray2/venvs/amat_hpc/bin/activate
 
+echo "=== .py env === "
+which python
+which python3
+which pip
+
+echo "PATH=$PATH" 
+echo "VIRTUAL_ENV=${VIRTUAL_ENV:-NOT_SET}" 
+which python 
+which python3 
+which pip 
+
+python3 --version p
+python3 -c "import sys; print('Python executable:', sys.executable)" 
+python3 -c "import matplotlib; print('Matplotlib:', matplotlib.__version__); print('Location:', matplotlib.__file__)" 
+python3 -c "import matplotlib.pyplot as plt; print('pyplot import OK')"
+echo "=== .py env === "
+
 export LD_LIBRARY_PATH="${PWD}/Running/targets_amat/target:${PWD}/Running/targets_amat_optimised_cse/target:${LD_LIBRARY_PATH:-}"
 
 export MPLBACKEND=Agg
@@ -31,9 +48,9 @@ export PYTHONUNBUFFERED=1
 
 export OMP_PROC_BIND=TRUE
 export SRUN_CPUS_PER_TASK=${SLURM_CPUS_PER_TASK}
+export PYTHON="/p/project1/paj2623/gray2/venvs/amat_hpc/bin/python3"
 
-
-export PROGRAM="python3 Running/brunel_nest.py \
+export PROGRAM="$PYTHON Running/brunel_nest.py \
 --simulated_neuron {{ combination['simulated_neuron'] }} \
 --network_scale {{ combination['network_scale'] }} \
 --nodes {{ combination['nodes'] }} \
@@ -44,32 +61,67 @@ export PROGRAM="python3 Running/brunel_nest.py \
 --simtime {{ combination['simtime'] }} \
 {% if enable_profile %}--profile_run{% endif %}"
 
-
 {% if enable_profile %}
 
 PERF_DIR="{{ combination['benchmarkPath'] }}/perf"
 mkdir -p "${PERF_DIR}"
 
-PERF_OUT="${PERF_DIR}/perf_{{ combination['simulated_neuron'] }}_nodes{{ combination['nodes'] }}_scale{{ combination['network_scale'] }}_iter{{ combination['iteration'] }}_job${SLURM_JOB_ID}.csv"
+COMPUTE_EVENTS="cycles,instructions,branches,branch-misses"
+CACHE_EVENTS="cache-references,cache-misses,L1-dcache-loads,L1-dcache-load-misses"
+TLB_EVENTS="dTLB-loads,dTLB-load-misses"
 
-echo "Hardware profiling enabled"
-echo "Model      : {{ combination['simulated_neuron'] }}"
-echo "Nodes      : {{ combination['nodes'] }}"
-echo "Scale      : {{ combination['network_scale'] }}"
-echo "Iteration  : {{ combination['iteration'] }}"
-echo "Perf output: ${PERF_OUT}"
-echo "Events     : {{ perf_events }}"
 
-srun perf stat \
-    --no-big-num \
-    -x, \
-    -e "{{ perf_events }}" \
-    -o "${PERF_OUT}" \
-    -- \
-    $PROGRAM
+run_perf()
+{
+    PHASE=$1
+    EVENTS=$2
+
+    PERF_OUT="${PERF_DIR}/perf_{{ combination['simulated_neuron'] }}_${PHASE}_nodes{{ combination['nodes'] }}_scale{{ combination['network_scale'] }}_iter{{ combination['iteration'] }}_job${SLURM_JOB_ID}.csv"
+
+    echo "========================================="
+    echo "Hardware profiling enabled"
+    echo "Model      : {{ combination['simulated_neuron'] }}"
+    echo "Nodes      : {{ combination['nodes'] }}"
+    echo "Scale      : {{ combination['network_scale'] }}"
+    echo "Iteration  : {{ combination['iteration'] }}"
+    echo "Phase      : ${PHASE}"
+    echo "Events     : ${EVENTS}"
+    echo "Perf output: ${PERF_OUT}"
+    echo "========================================="
+
+    srun perf stat \
+        --no-big-num \
+        -x, \
+        -e "${EVENTS}" \
+        -o "${PERF_OUT}" \
+        -- \
+        $PROGRAM
+}
+
+
+{% if perf_phase == "compute" %}
+
+run_perf "compute" "${COMPUTE_EVENTS}"
+
+{% elif perf_phase == "cache" %}
+
+run_perf "cache" "${CACHE_EVENTS}"
+
+{% elif perf_phase == "tlb" %}
+
+run_perf "tlb" "${TLB_EVENTS}"
+
+{% elif perf_phase == "all" %}
+
+run_perf "compute" "${COMPUTE_EVENTS}"
+run_perf "cache" "${CACHE_EVENTS}"
+run_perf "tlb" "${TLB_EVENTS}"
+
+{% endif %}
 
 {% else %}
 
 srun $PROGRAM
 
 {% endif %}
+

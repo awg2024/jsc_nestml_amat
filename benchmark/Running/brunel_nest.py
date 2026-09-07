@@ -52,6 +52,7 @@ References
 # should be imported before nest.
 
 import time
+import matplotlib
 import matplotlib.pyplot as plt
 import nest
 import nest.raster_plot
@@ -290,36 +291,17 @@ def plot_interspike_intervals(spike_times_list, path, fname_snip=""):
 # if arguments are not passed the script will assign default value onto it 
 
 parser = argparse.ArgumentParser(description="Run a simulation with NEST")
-
 parser.add_argument("--benchmarkPath", type=str, default="", help="Path to the nest installation")
-
 parser.add_argument("--simulated_neuron", type=str, default="amat2_psc_exp", help="Name of the model to use")
-
 parser.add_argument("--network_scale", type=int, default=50, help="Number of neurons to use")
-
 parser.add_argument("--nodes", type=int, default=1, required=False, help="Number of compute nodes to use")
-
 parser.add_argument("--threads", type=int, default=1, help="Number of threads to use")
-
 parser.add_argument("--iteration", type=int, help="iteration number used for the benchmark")
-    
 parser.add_argument("--rng_seed", type=int, help="random seed", default=123)
-
-parser.add_argument("--smoke_test",action="store_true",help="Use small-network connectivity for low-cost functional testing",) # XXX to do, remove smoke_test redundant code 
-
 parser.add_argument("--simtime",type=float,default=250.0,help="Biological simulation time in ms",)
-
 parser.add_argument("--noConnection",action="store_true",help="Turn off all Balanced Neural Network Connectivty",)
-
 parser.add_argument("--connectivity_mode", choices=["fixed_indegree","fixed_probability"], default="fixed_probability", help="Connection type for the brunel balanced neural network")
-
 parser.add_argument("--profile_run", action="store_true", help="disable expensive plotting during hardware profiling affecting the statistics")
-
-
-
-
-
-
 
 args = parser.parse_args() # processes arguments and flags passed by user 
 
@@ -423,6 +405,8 @@ NE = 4 * order  # number of excitatory neurons
 NI = 1 * order  # number of inhibitory neurons
 N_neurons = NE + NI  # number of neurons in total
 print(f"Number of neurons : {N_neurons}")
+N_rec_exc = min(500, NE) # record from this many neurons 
+N_rec_inh = min(100, NI) 
 
 # connectivity specification 
 if args.connectivity_mode == "fixed_indegree": # fixed incoming connections 
@@ -845,8 +829,8 @@ if args.benchmarkPath != "":
     status["cv_exc"] = cv_exc
 
     # implementing more status point for scaling_sanity check
-    status["events_ex"] = args.events_ex
-    status["events_in"] = args.events_in
+    status["events_ex"] = events_ex
+    status["events_in"] = events_in
     status["network_scale"] = args.network_scale
     status["nodes"] = args.nodes
     status["threads"] = args.threads

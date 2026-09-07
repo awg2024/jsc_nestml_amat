@@ -1,0 +1,6 @@
+# started on Mon Sep  7 10:07:21 2026
+
+41492089146,,cycles:u,13693580183,100.00,,
+83167335357,,instructions:u,13693580183,100.00,2.00,insn per cycle
+8373348383,,branches:u,13693580183,100.00,,
+163172734,,branch-misses:u,13693580183,100.00,1.95,of all branches
