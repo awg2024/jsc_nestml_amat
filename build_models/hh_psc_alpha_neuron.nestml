@@ -62,7 +62,7 @@
 # You should have received a copy of the GNU General Public License
 # along with NEST.  If not, see <http://www.gnu.org/licenses/>.
 #
-model hh_psc_alpha_custom:
+model hh_psc_alpha_neuron:
     state:
         V_m mV = V_m_init        # Membrane potential
         V_m_old mV = V_m_init    # Membrane potential at previous timestep for threshold check

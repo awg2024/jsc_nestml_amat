@@ -12,7 +12,7 @@ os.makedirs(hh_cse_path, exist_ok=True)
 
 # nestml amat generation  
 NESTCodeGeneratorUtils.generate_code_for(
-   "hh_psc_alpha_custom.nestml",
+   "hh_psc_alpha_neuron.nestml",
    target_path=hh_path,
    module_name="nestml_hh_module",
    logging_level="DEBUG",
@@ -23,7 +23,7 @@ NESTCodeGeneratorUtils.generate_code_for(
 print("HH NESTML .cpp script produced!")
 
 NESTCodeGeneratorUtils.generate_code_for(
-   "hh_psc_alpha_custom.nestml",
+   "hh_psc_alpha_neuron.nestml",
    target_path=hh_cse_path,
    module_name="nestml_hh_cse_module",
    logging_level="DEBUG",

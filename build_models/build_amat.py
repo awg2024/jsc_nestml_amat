@@ -10,18 +10,17 @@ amat_cse_path = os.path.join(base_dir, "targets_amat_optimised_cse/target")
 os.makedirs(amat_path, exist_ok=True)
 os.makedirs(amat_cse_path, exist_ok=True)
 
-
 # nestml amat generation  
-NESTCodeGeneratorUtils.generate_code_for(
-   "amat_neuron.nestml",
-   target_path=amat_path,
-   module_name="nestml_amat_module",
-   logging_level="DEBUG",
-   codegen_opts={
-    "enable_cse": False
-   }
-)
-print("AMAT NESTML .cpp script produced!")
+# NESTCodeGeneratorUtils.generate_code_for(
+#    "amat_neuron.nestml",
+#    target_path=amat_path,
+#    module_name="nestml_amat_module",
+#    logging_level="DEBUG",
+#    codegen_opts={
+#     "enable_cse": False
+#    }
+# )
+# print("AMAT NESTML .cpp script produced!")
 
 NESTCodeGeneratorUtils.generate_code_for(
    "amat_neuron.nestml",
