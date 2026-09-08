@@ -302,6 +302,8 @@ parser.add_argument("--simtime",type=float,default=250.0,help="Biological simula
 parser.add_argument("--noConnection",action="store_true",help="Turn off all Balanced Neural Network Connectivty",)
 parser.add_argument("--connectivity_mode", choices=["fixed_indegree","fixed_probability"], default="fixed_probability", help="Connection type for the brunel balanced neural network")
 parser.add_argument("--profile_run", action="store_true", help="disable expensive plotting during hardware profiling affecting the statistics")
+parser.add_argument("--noNoise",action="store_true",help="Disable Poisson background input")
+
 
 args = parser.parse_args() # processes arguments and flags passed by user 
 
@@ -430,6 +432,7 @@ amat_common_params = {
     "alpha_2": 0.0}
 
 hh_common_params = { # defined in the NEST .cpp 
+    "V_m": -65, 
     "g_Na": 12000.0,    # nS
     "g_K": 3600.0,      # nS
     "g_L": 30.0,        # nS
@@ -521,21 +524,22 @@ elif args.simulated_neuron in ("hh_psc_alpha","hh_nestml_cse", "hh_nestml","hh_n
     omega = -45              # rough empirical spiking threshold, fine tuned over iterations. 
 
     # nestml and nest spiking at different times? mismatch in the nest / nestml model...  
-    target_psp_mv = 4.0
-    g = 2.0
-    eta = 3.5
+    target_psp_mv = 0.5
+    g = 7.0
+    eta = 0.5
 
     norm_ex = exp_psp_norm(tauMem, CMem, tauSynEx)
-
-
     J_ex = target_psp_mv / norm_ex
     J_in = -g * J_ex
 
     baseline_current = (omega - E_L) * CMem / tauMem
     p_rate = eta * 1000.0 * baseline_current / (J_ex * tauSynEx)
-    p_rate = 1000.0
+    p_rate = 160.0 # XXX terrible hack, please change so the stats reflect this  
 
-        # import pdb; pdb.set_trace()
+    # 150.0 gives us just firing behaviour 
+    # 37.92 hz is a bit high? although what's the expected behaviour for HH?
+    # nestml doesn't respond ? again something wrong with stats, just before exc_n building check what the nest stats are? 
+    # import pdb; pdb.set_trace()
 else:
     raise ValueError(f"Unknown neuron benchmark variant: {args.simulated_neuron}")
 
@@ -575,6 +579,22 @@ print(f"Random seed: {args.rng_seed}")
 nodes_ex = nest.Create(modelName, NE, params=neuron_params)
 nodes_in = nest.Create(modelName, NI, params=neuron_params)
 
+
+print("\n=== ACTUAL NESTML PARAMETERS ===")
+print(nest.GetStatus(nodes_ex[:1], [
+    "V_m",
+    "I_e",
+    "g_Na",
+    "g_K",
+    "g_L",
+    "C_m",
+    "E_Na",
+    "E_K",
+    "E_L",
+]))
+
+
+
 # converts the random background spike rate back into a smooth, continuous electrical current value (measured in picoamperes, pA) for later debug print 
 mean_external_current = (p_rate * J_ex * tauSynEx / 1000.0)
 
@@ -605,7 +625,7 @@ print("Connecting devices")
 # the excitatory and one for the inhibitory connections giving the
 # previously defined weights and equal delays.
 
-if "stdp" in modelName: # if stdp is in the model name 
+if "stdp" in args.simulated_neuron: # if stdp is in the model name 
     # use plastic synapses
     print("Using STDP synapse, model: " + args.simulated_neuron)
    
@@ -650,9 +670,11 @@ nest.CopyModel("static_synapse", "inhibitory", {"weight": J_in, "delay": delay})
 # via ``syn_spec`` which expects a dictionary when defining multiple variables or
 # a string when simply using a pre-defined synapse.
 
-if not args.noConnection: # no poisson input 
+if not args.noNoise:
     nest.Connect(noise, nodes_ex, syn_spec="excitatory_static")
     nest.Connect(noise, nodes_in, syn_spec="excitatory_static")
+else:
+    print("[INFO] Poisson background noise has been disabled.")
 
 ###############################################################################
 # Connecting the first ``N_rec`` nodes of the excitatory and inhibitory
@@ -753,6 +775,12 @@ endsimulate = time.time()
 
 events_ex = espikes_ascii.n_events
 events_in = ispikes.n_events
+
+vm = e_mm.events["V_m"]
+
+print("VM MIN:", np.min(vm))
+print("VM MAX:", np.max(vm))
+print("VM FINAL:", vm[-1])
 
 ###############################################################################
 # Calculation of the average firing rate of the excitatory and the inhibitory
