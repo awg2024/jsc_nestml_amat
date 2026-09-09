@@ -390,8 +390,8 @@ nest.local_num_threads = args.threads
 # time of the network. 
 startbuild = time.time()
 
-# simulation resolution in ms (original value 0.1)
-dt = 0.01  
+# simulation resolution in ms 
+dt = 0.1  
 
 # synaptic delay in ms
 delay = 1.5 
@@ -579,22 +579,6 @@ print(f"Random seed: {args.rng_seed}")
 nodes_ex = nest.Create(modelName, NE, params=neuron_params)
 nodes_in = nest.Create(modelName, NI, params=neuron_params)
 
-
-print("\n=== ACTUAL NESTML PARAMETERS ===")
-print(nest.GetStatus(nodes_ex[:1], [
-    "V_m",
-    "I_e",
-    "g_Na",
-    "g_K",
-    "g_L",
-    "C_m",
-    "E_Na",
-    "E_K",
-    "E_L",
-]))
-
-
-
 # converts the random background spike rate back into a smooth, continuous electrical current value (measured in picoamperes, pA) for later debug print 
 mean_external_current = (p_rate * J_ex * tauSynEx / 1000.0)
 
@@ -775,12 +759,6 @@ endsimulate = time.time()
 
 events_ex = espikes_ascii.n_events
 events_in = ispikes.n_events
-
-vm = e_mm.events["V_m"]
-
-print("VM MIN:", np.min(vm))
-print("VM MAX:", np.max(vm))
-print("VM FINAL:", vm[-1])
 
 ###############################################################################
 # Calculation of the average firing rate of the excitatory and the inhibitory

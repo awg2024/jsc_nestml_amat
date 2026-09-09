@@ -80,54 +80,54 @@ enable_mpi = args.enable_mpi
 
 # benchmarking parameters for the HH model
 # https://github.com/nest/nest-simulator/blob/main/models/hh_psc_alpha.cpp (few versions)
-# BASELINENEURON = "hh_psc_alpha"
+BASELINENEURON = "hh_psc_alpha"
 
-# NEURONMODELS = [
-#     "hh_nestml_cse_stdp",
-#     "hh_nestml_cse",
-#     "hh_nestml",
-#     BASELINENEURON
-# ]
-
-# legend = {
-#     "hh_nestml_cse_stdp": "NESTML/CSE/STDP"
-#     "hh_nestml": "NESTML",
-#     "hh_nestml_cse": "NESTML/CSE",
-#     BASELINENEURON: "NEST"
-# }
-
-# colors = {
-#     BASELINENEURON: 0,
-#     "hh_nestml": 1,
-#     "hh_nestml_cse": 2,
-#     "hh_nestml_cse_stdp": 3
-# }
-
-
-# benchmarking parameters for the AMAT model 
-BASELINENEURON = "amat2_psc_exp"
-
-# nestml cse stdp, nestml cse comparision
 NEURONMODELS = [
- #   "amat_nestml_cse_stdp",
-    "amat_nestml_cse",
-    "amat_nestml",
- #   BASELINENEURON
+#    "hh_nestml_cse_stdp",
+    "hh_nestml_cse",
+    "hh_nestml",
+    BASELINENEURON
 ]
 
 legend = {
-    "amat_nestml_cse_stdp" : "NESTML/CSE/STDP",
-    "amat_nestml": "NESTML",
-    "amat_nestml_cse": "NESTML/CSE",
+#    "hh_nestml_cse_stdp": "NESTML/CSE/STDP"
+    "hh_nestml": "NESTML",
+    "hh_nestml_cse": "NESTML/CSE",
     BASELINENEURON: "NEST"
 }
 
 colors = {
     BASELINENEURON: 0,
-    "amat_nestml": 1,
-    "amat_nestml_cse": 2,
-    "amat_nestml_cse_stdp": 3
+    "hh_nestml": 1,
+    "hh_nestml_cse": 2,
+ #   "hh_nestml_cse_stdp": 3
 }
+
+
+# # benchmarking parameters for the AMAT model 
+# BASELINENEURON = "amat2_psc_exp"
+
+# # nestml cse stdp, nestml cse comparision
+# NEURONMODELS = [
+#  #   "amat_nestml_cse_stdp",
+#     "amat_nestml_cse",
+#     "amat_nestml",
+#     BASELINENEURON
+# ]
+
+# legend = {
+#  #   "amat_nestml_cse_stdp" : "NESTML/CSE/STDP",
+#     "amat_nestml": "NESTML",
+#     "amat_nestml_cse": "NESTML/CSE",
+#     BASELINENEURON: "NEST"
+# }
+
+# colors = {
+#     BASELINENEURON: 0,
+#     "amat_nestml": 1,
+#     "amat_nestml_cse": 2,
+# #    "amat_nestml_cse_stdp": 3
+# }
 
 # Perf events to collect for profiling supported by JURECA 
 PERF_EVENT_GROUPS = {
@@ -144,16 +144,16 @@ DEBUG = True
 NUMTHREADS = 16  # Total number of threads per node (128)
 
 # MPI Strong scaling  
-MPI_STRONG_SCALE_NEURONS = 1000  # The order of neurons in the Brunel network, scaled dynamically as compute increases (past values: 50, 500, 2500, 5,000, 10,000)
+MPI_STRONG_SCALE_NEURONS = 2500  # The order of neurons in the Brunel network, scaled dynamically as compute increases (past values: 50, 500, 2500, 5,000, 10,000)
 
 # MPI Weak scaling
-MPI_WEAK_SCALE_NEURONS = 1000 # The order of neurons in the Brunel network, fixed base scale as compute increases  (past values: 50, 500, 2500, 5,000, 10,000) 
+MPI_WEAK_SCALE_NEURONS = 2500 # The order of neurons in the Brunel network, fixed base scale as compute increases  (past values: 50, 500, 2500, 5,000, 10,000) 
 
 STRONGSCALINGFOLDERNAME = "timings_strong_scaling_mpi" # output dir 
 WEAKSCALINGFOLDERNAME = "timings_weak_scaling_mpi" # output dir 
 
 # thread-based benchmarks
-NETWORK_BASE_SCALE = 1000 # thread multiplier for weak-scaling (compute scales with network)
+NETWORK_BASE_SCALE = 2500 # thread multiplier for weak-scaling (compute scales with network)
 N_THREADS = np.array([1]) # 1,2,4,16,32,64
 ITERATIONS = 1 # init define 
 
@@ -166,8 +166,8 @@ if args.enable_mpi:
         MPI_SCALES = [1] 
         ITERATIONS = 1 
     else:
-        MPI_SCALES = np.array([1])
-        ITERATIONS = 1 
+        MPI_SCALES = np.array([2, 4, 8])
+        ITERATIONS = 5 
 else: # disable mpi running on local 
     if short_sim:
         N_THREADS = np.array([1])
@@ -484,6 +484,8 @@ def _plot_scaling_data(ax, sim_data: dict, file_prefix: str, abs_or_rel: str, sc
         min_y = min(min_y, np.amin(_y))
         max_y = max(max_y, np.amax(_y))
 
+        #import pdb; pdb.set_trace()
+
     
     if ("amat_nestml" in absolute_values and "amat_nestml_cse" and "amat2_psc_exp" in absolute_values):
         speedup_cse = (absolute_values["amat_nestml"] / absolute_values["amat_nestml_cse"])
@@ -492,6 +494,16 @@ def _plot_scaling_data(ax, sim_data: dict, file_prefix: str, abs_or_rel: str, sc
               + " ".join(f"{nodes}:{speedup:.2f}x" for nodes, speedup in zip(x, speedup_cse)))
         print(f"{scaling_type.capitalize()} scaling ({abs_or_rel}) | NEST vs NESTML: "
               + " ".join(f"{nodes}:{speedup:.2f}x" for nodes, speedup in zip(x, speedup_nest)))
+
+    if ("hh_nestml" in absolute_values and "hh_nestml_cse" and "hh_psc_alpha" in absolute_values):
+        speedup_cse = (absolute_values["hh_nestml"] / absolute_values["hh_nestml_cse"])
+        speedup_nest = (absolute_values["hh_nestml"] / absolute_values["hh_psc_alpha"])
+        print(f"{scaling_type.capitalize()} scaling ({abs_or_rel}) | CSE vs NESTML: "
+              + " ".join(f"{nodes}:{speedup:.2f}x" for nodes, speedup in zip(x, speedup_cse)))
+        print(f"{scaling_type.capitalize()} scaling ({abs_or_rel}) | NEST vs NESTML: "
+              + " ".join(f"{nodes}:{speedup:.2f}x" for nodes, speedup in zip(x, speedup_nest)))
+    
+    #import pdb; pdb.set_trace()
 
 
     return min_y, max_y
@@ -982,6 +994,9 @@ def analyze_isi_data(data, bin_size):
         if len(isi_list) == 0:
             raise Exception("ISI list is empty")
         for isi in isi_list:
+            
+            #import pdb; pdb.set_trace()
+            
             min_val = min(min_val, min(isi))
             max_val = max(max_val, max(isi))
 

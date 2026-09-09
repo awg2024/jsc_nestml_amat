@@ -3,7 +3,7 @@
 #SBATCH --job-name=nestml_amat_benchmark
 #SBATCH --account=gsp26
 #SBATCH --partition=batch
-#SBATCH --time=00:10:00
+#SBATCH --time=00:30:00
 
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
@@ -57,6 +57,7 @@ export PROGRAM="$PYTHON Running/brunel_nest.py \
 --benchmarkPath {{ combination['benchmarkPath'] }} \
 --rng_seed {{ combination['rng_seed'] }} \
 --simtime {{ combination['simtime'] }} \
+--noConnection \
 {% if enable_profile %}--profile_run{% endif %}"
 
 {% if enable_profile %}
