@@ -17,7 +17,7 @@ NESTCodeGeneratorUtils.generate_code_for(
    module_name="nestml_aeif_module",
    logging_level="DEBUG",
    codegen_opts={
-    "enable_cse": False,
+    "disable_cse": True,
    }
 )
 print("AEIF NESTML .cpp script produced!")
@@ -28,7 +28,6 @@ NESTCodeGeneratorUtils.generate_code_for(
    module_name="nestml_aeif_cse_module",
    logging_level="DEBUG",
    codegen_opts={
-    "enable_cse": True,
     "preserve_expressions": False,
    }
 )

@@ -41,11 +41,9 @@ def run_fi_curve(model_name, module_to_install=None, model_params=None):
 
     return amplitudes, event_freqs
 
-amp_native, freq_native = run_fi_curve("hh_psc_alpha")
-amp_nestml, freq_nestml = run_fi_curve(
-    "aeif_psc_alpha_neuron_nestml",  
-    module_to_install="/p/project1/paj2623/gray2/benchmark/Running/targets_aeif/target/nestml_aeif_module.so"
-)
+
+amp_native, freq_native = run_fi_curve("hh_psc_alpha") # NEST 
+amp_nestml, freq_nestml = run_fi_curve("hh_psc_alpha",  module_to_install="/p/project1/paj2623/gray2/benchmark/Running/targets_hh/target/nestml_hh_module.so") # NESTML 
 
 
 plt.plot(amp_native, freq_native, label="aeif_psc_alpha", marker=".")

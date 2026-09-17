@@ -11,16 +11,16 @@ os.makedirs(hh_path, exist_ok=True)
 os.makedirs(hh_cse_path, exist_ok=True)
 
 # nestml amat generation  
-# NESTCodeGeneratorUtils.generate_code_for(
-#    "hh_psc_alpha_neuron.nestml",
-#    target_path=hh_path,
-#    module_name="nestml_hh_module",
-#    logging_level="DEBUG",
-#    codegen_opts={
-#     "enable_cse": False,
-#    }
-# )
-#print("HH NESTML .cpp script produced!")
+NESTCodeGeneratorUtils.generate_code_for(
+   "hh_psc_alpha_neuron.nestml",
+   target_path=hh_path,
+   module_name="nestml_hh_module",
+   logging_level="DEBUG",
+   codegen_opts={
+    "disable_cse": True,
+   }
+)
+print("HH NESTML .cpp script produced!")
 
 NESTCodeGeneratorUtils.generate_code_for(
    "hh_psc_alpha_neuron.nestml",
@@ -28,7 +28,6 @@ NESTCodeGeneratorUtils.generate_code_for(
    module_name="nestml_hh_cse_module",
    logging_level="DEBUG",
    codegen_opts={
-    "enable_cse": True,
     "preserve_expressions": False,
    }
 )

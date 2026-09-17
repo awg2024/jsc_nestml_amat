@@ -78,56 +78,55 @@ short_sim = args.short_sim
 enable_mpi = args.enable_mpi
 
 
-# benchmarking parameters for the HH model
-# https://github.com/nest/nest-simulator/blob/main/models/hh_psc_alpha.cpp (few versions)
-BASELINENEURON = "hh_psc_alpha"
+# # benchmarking parameters for the HH model
+# BASELINENEURON = "hh_psc_alpha"
 
-NEURONMODELS = [
-#    "hh_nestml_cse_stdp",
-    "hh_nestml_cse",
-    "hh_nestml",
-    BASELINENEURON
-]
-
-legend = {
-#    "hh_nestml_cse_stdp": "NESTML/CSE/STDP"
-    "hh_nestml": "NESTML",
-    "hh_nestml_cse": "NESTML/CSE",
-    BASELINENEURON: "NEST"
-}
-
-colors = {
-    BASELINENEURON: 0,
-    "hh_nestml": 1,
-    "hh_nestml_cse": 2,
- #   "hh_nestml_cse_stdp": 3
-}
-
-
-# # benchmarking parameters for the AMAT model 
-# BASELINENEURON = "amat2_psc_exp"
-
-# # nestml cse stdp, nestml cse comparision
 # NEURONMODELS = [
-#  #   "amat_nestml_cse_stdp",
-#     "amat_nestml_cse",
-#     "amat_nestml",
+# #    "hh_nestml_cse_stdp",
+#     "hh_nestml_cse",
+#     "hh_nestml",
 #     BASELINENEURON
 # ]
 
 # legend = {
-#  #   "amat_nestml_cse_stdp" : "NESTML/CSE/STDP",
-#     "amat_nestml": "NESTML",
-#     "amat_nestml_cse": "NESTML/CSE",
+# #    "hh_nestml_cse_stdp": "NESTML/CSE/STDP"
+#     "hh_nestml": "NESTML",
+#     "hh_nestml_cse": "NESTML/CSE",
 #     BASELINENEURON: "NEST"
 # }
 
 # colors = {
 #     BASELINENEURON: 0,
-#     "amat_nestml": 1,
-#     "amat_nestml_cse": 2,
-# #    "amat_nestml_cse_stdp": 3
+#     "hh_nestml": 1,
+#     "hh_nestml_cse": 2,
+#  #   "hh_nestml_cse_stdp": 3
 # }
+
+
+# benchmarking parameters for the AMAT model 
+BASELINENEURON = "amat2_psc_exp"
+
+# nestml cse stdp, nestml cse comparision
+NEURONMODELS = [
+ #   "amat_nestml_cse_stdp",
+ #    "amat_nestml_cse",
+    "amat_nestml",
+    BASELINENEURON
+]
+
+legend = {
+ #   "amat_nestml_cse_stdp" : "NESTML/CSE/STDP",
+    "amat_nestml": "NESTML",
+#     "amat_nestml_cse": "NESTML/CSE",
+    BASELINENEURON: "NEST"
+}
+
+colors = {
+    BASELINENEURON: 0,
+    "amat_nestml": 1,
+#     "amat_nestml_cse": 2,
+#    "amat_nestml_cse_stdp": 3
+}
 
 # Perf events to collect for profiling supported by JURECA 
 PERF_EVENT_GROUPS = {
@@ -167,7 +166,7 @@ if args.enable_mpi:
         ITERATIONS = 1 
     else:
         MPI_SCALES = np.array([2, 4, 8])
-        ITERATIONS = 5 
+        ITERATIONS = 3 
 else: # disable mpi running on local 
     if short_sim:
         N_THREADS = np.array([1])

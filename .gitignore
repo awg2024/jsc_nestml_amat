@@ -1,5 +1,11 @@
 # NESTML generated artifacts
 ode-toolbox-cse/
+nestml_pr1420/
+jupyter/
+report/
+software/
+target/
+venvs/
 src/
 
 
